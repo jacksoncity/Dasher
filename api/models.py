@@ -8,8 +8,9 @@ class Drive(db.Model):
     restaurant_arrival = db.Column(db.DateTime)
     restaurant_leave = db.Column(db.DateTime)
     end = db.Column(db.DateTime)
-    restaurant = db.Column(db.String(75))
+    restaurant = db.Column(db.Float) #needs to go in as a float but IDK how were gonna do that yet
     pay = db.Column(db.Float)
     delivery_time = db.Column(db.Float)
     restaurant_time = db.Column(db.Float)
     distance = db.Column(db.Float)
+    rate = db.Column(db.Float)
