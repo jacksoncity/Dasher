@@ -14,3 +14,8 @@ class Drive(db.Model):
     restaurant_time = db.Column(db.Float)
     distance = db.Column(db.Float)
     rate = db.Column(db.Float)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20)) #username must be 20 characters
+    password = db.Column(db.String(30)) 
