@@ -17,5 +17,6 @@ class Drive(db.Model):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20)) #username must be 20 characters
-    password = db.Column(db.String(30)) 
+    username = db.Column(db.String(20), unique = True) #username cant go over 20 char
+    email = db.Column(db.String(50), unique = True) #email cant go over 50 char
+    password = db.Column(db.String(40)) #password cant go over 40 char
