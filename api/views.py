@@ -18,7 +18,9 @@ def home():
 
 
 '''
-Method to add a drive to the drive database
+Method to add a drive to the drive database.
+------REMEMBER------
+WHEN PUTTING IN RESTAURATNS, USE INTS!!! (not strings)
 '''
 @main.route('/add_drive', methods=["POST"])
 def add_drive():
@@ -39,6 +41,7 @@ def add_drive():
 
 '''
 Method to display all the drives that are in the database as of now
+Will show, restaurant, distance, pay and rate
 '''
 @main.route('/drives')
 def drives():
@@ -54,8 +57,11 @@ def drives():
             'rate' : drive.rate})
 
     return jsonify({'drives': drives}), 201
+
+
 '''
-Method to remove everything from the database and then let you know how much was deleted
+Method to remove everything from the database and then let you know how much was deleted.
+This is more just for testing purposes so that you can remove everything and start again
 '''
 @main.route('/remove')
 def remove():
@@ -66,7 +72,12 @@ def remove():
     return str(deleted) + " deleted", 201
 
 '''
-Method to actually get the optimzation for the input you just got
+This method is the actual linear regression that will be happening
+This will check to see if the optimization will be accurate or not because of 
+how much past data the driver has and will let the driver know and stuff.
+Will get the from the database
+@param newData: new data that the driver just inputed to get estimation on, should be in the form of
+a json request with the attributes distance, pay and restaurant
 '''
 @main.route('/get_recommendation', methods=["POST"])
 def get_recommendation():
