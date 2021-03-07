@@ -20,7 +20,7 @@ function LoginScreen({ navigation }) {
       <TextInput
       style={styles.textbox}
       placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      onChangeText = {(text) => setUsername(text)}
+      //onChangeText = {(text) => setUsername(text)}
       />
 
       <TextInput
