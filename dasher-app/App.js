@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
 
 import { StatusBar } from 'expo-status-bar';
-//import React from 'react';
 import * as React from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+//Login screen
 function LoginScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -19,12 +19,30 @@ function LoginScreen({ navigation }) {
   );
 }
 
+//Main menu screen
 function MainScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Main Screen</Text>
       <Button
         title="Go to Main... again"
+        onPress={() => navigation.navigate('Main')}
+      />
+      <Button
+        title="Go to Recommendations"
+        onPress={() => navigation.navigate('Recommendations')}
+      />
+    </View>
+  );
+}
+
+//GetRecommendations screen
+function RecommendScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Recommendations Screen</Text>
+      <Button
+        title="Go to Main"
         onPress={() => navigation.navigate('Main')}
       />
     </View>
@@ -39,6 +57,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
+        <Stack.Screen name="Recommendations" component={RecommendScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 
