@@ -13,7 +13,7 @@ function LoginScreen({ navigation }) {
   //const [username, setUsername] = useState("");
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <Text style={styles.title}> 
       Welcome to Dasher!</Text>
 
@@ -45,16 +45,34 @@ function LoginScreen({ navigation }) {
 //Main menu screen
 function MainScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Main Screen</Text>
-      <Button
-        title="Go to Main... again"
-        onPress={() => navigation.navigate('Main')}
-      />
-      <Button
-        title="Go to Recommendations"
+    <View style={styles.container}>
+      <Text style={styles.title}> 
+      Main Menu</Text>
+      
+      <TouchableOpacity
         onPress={() => navigation.navigate('Recommendations')}
-      />
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Get recommendation</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('RecordDrive')}
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Record a new drive</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Statistics')}
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>View statistics</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        //onPress={() => navigation.navigate('Recommendations')}
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>View/edit past drives</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -62,12 +80,50 @@ function MainScreen({ navigation }) {
 //GetRecommendations screen
 function RecommendScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Recommendations Screen</Text>
-      <Button
-        title="Go to Main"
-        onPress={() => navigation.navigate('Main')}
+    <View style={styles.container}>
+      <Text style={styles.title}> 
+      Get Recommendation</Text>
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Restaurant name" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
       />
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Driving distance" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Expected payment" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+    </View>
+  );
+}
+
+//RecordDrive screen
+function RecordDriveScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}> 
+      Record Drive</Text>
+      
+    </View>
+  );
+}
+
+//Statistics screen
+function StatisticsScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}> 
+      Statistics</Text>
+
     </View>
   );
 }
@@ -81,6 +137,8 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Recommendations" component={RecommendScreen} />
+        <Stack.Screen name="RecordDrive" component={RecordDriveScreen} />
+        <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 
@@ -94,14 +152,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#21a35e',
+    backgroundColor: '#1ddf6e',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     color: 'black',
     fontSize: 30,
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
     marginHorizontal: 15, 
     marginVertical: 20,
     padding: 7,
@@ -112,7 +170,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 20,
     marginHorizontal: 10,
-    marginVertical: 10, 
+    marginVertical: 10,
     borderRadius: 5,
   },
   textbox: {
@@ -128,7 +186,11 @@ const styles = StyleSheet.create({
   },
 });
 
-
-//
 //1ddf6e - traffic light green
-//21a35e - darker green
+//21a35e - spinach green
+//3fb659 - grass green
+
+//<Button
+  //title="Go to Main... again"
+  //onPress={() => navigation.navigate('Main')}
+///>
