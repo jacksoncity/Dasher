@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 //import * as React from 'react';
 import React, { useState } from 'react';
-import { StyleSheet, Button, Text, View } from 'react-native';
+import { StyleSheet, Button, Text, View, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView, TextInput, TouchableOpacity} from 'react-native';
@@ -195,3 +195,27 @@ const styles = StyleSheet.create({
   //title="Go to Main... again"
   //onPress={() => navigation.navigate('Main')}
 ///>
+
+      /**
+      <Text style = {styles.text}>Time</Text>
+      <Text style = {styles.time}>00:00:00</Text>
+      <Image source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/1D_line.svg/2000px-1D_line.svg.png"}} 
+        style={{ width: 400, height: 30}} />
+      <Text style = { styles.text }>Press the record buton to start your drive!</Text>
+      <StatusBar style="auto" />
+      <TouchableOpacity style = {styles.button}
+        onPress={startButton} 
+        style={{ backgroundColor: 'white'}}>
+        <Text style={ styles.buttonText}>Start Recording</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style = {styles.button}
+        onPress={saveDrive} 
+        style={{ backgroundColor: 'white'}}>
+        <Text style={ styles.buttonText}>Save Drive</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style = {styles.button}
+        onPress={deleteDrive} 
+        style={{ backgroundColor: 'white'}}>
+        <Text style={ styles.buttonText}>Delete Drive</Text>
+      </TouchableOpacity>
+*/
