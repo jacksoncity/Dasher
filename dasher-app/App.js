@@ -102,6 +102,12 @@ function RecommendScreen({ navigation }) {
       //onChangeText = {(text) => setUsername(text)}
       />
 
+      <TouchableOpacity
+        //onPress={() => navigation.navigate('Statistics')}
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Go</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -112,7 +118,7 @@ function RecordDriveScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}> 
       Record Drive</Text>
-      
+
     </View>
   );
 }
@@ -141,11 +147,6 @@ export default function App() {
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-
-    /*<View style={styles.container}>
-      <Text>This will be the Dasher app!</Text>
-      <StatusBar style="auto" />
-    </View>*/
   );
 }
 
