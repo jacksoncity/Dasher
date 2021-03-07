@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>This will be the Dasher app!</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -14,8 +14,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#21a35e',
     alignItems: 'center',
     justifyContent: 'center',
   },
 });
+
+
+//
+//1ddf6e - traffic light green
+//21a35e - darker green
