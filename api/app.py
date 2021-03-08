@@ -106,8 +106,14 @@ This method is the actual linear regression that will be happening
 This will check to see if the optimization will be accurate or not because of 
 how much past data the driver has and will let the driver know and stuff.
 Will get the from the database
-@param newData: new data that the driver just inputed to get estimation on, should be in the form of
-a json request with the attributes distance, pay and restaurant
+@param newData: TYPE - json request, ATTRIBUTES - 'distance', 'pay', 'restaurant'
+@return message: TYPE - json, ATTRIBUTES - 'prediction', 'message'
+message: 
+    'Not enough recorded drives to make a prediction' - when there is less than 10 drives in database, 
+    no prediction will be returned
+    'Prediction may be innacurate' - when there is at least 10 drives but less than 50 in the database,
+    inaccurate prediction will be returned
+    'None' - when at least 50 drives are in the database, accurate prediction will be returned
 '''
 @app.route('/get_recommendation', methods=["POST"])
 def get_recommendation():
@@ -192,6 +198,10 @@ def login():
 '''
 This method is the gernal purpose signup that allows the user to be able to login to the app
 should the input credentials be valid
+@param user_input: TYPE - json ATTRIBUTES - 'username', 'email', 'password'
+@return message: TYPE - json ATTRIBUTES - 'message'
+message:
+    'user created' - if it was a successful signup
 '''
 @app.route('/signup', methods=['POST'])
 def signup():
