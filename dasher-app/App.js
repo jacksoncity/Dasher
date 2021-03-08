@@ -7,6 +7,8 @@ import { StyleSheet, Button, Text, View, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView, TextInput, TouchableOpacity} from 'react-native';
+import { useForm, Controller } from "react-hook-form";
+
 
 //Login screen
 function LoginScreen({ navigation }) {
@@ -79,35 +81,63 @@ function MainScreen({ navigation }) {
 
 //GetRecommendations screen
 function RecommendScreen({ navigation }) {
+  const { control, handleSubmit, errors } = useForm();
+  const onSubmit = data => console.log(data);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> 
-      Get Recommendation</Text>
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Restaurant name" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
+      <Text style={styles.title}>Restaurant</Text>
+      <Controller
+        control={control}
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
+            value={value}
+          />
+        )}
+        name="restaurant"
+        rules={{ required: true }}
+        defaultValue=""
       />
+      {errors.restaurant && <Text>This is required.</Text>}
 
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Driving distance" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
+      <Text style={styles.title}>Distance</Text>
+      <Controller
+        control={control}
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
+            value={value}
+          />
+        )}
+        name="distance"
+        rules={{ required: true }}
+        defaultValue=""
       />
+      {errors.distance && <Text>This is required.</Text>}
 
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Expected payment" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
+      <Text style={styles.title}>Pay</Text>
+      <Controller
+        control={control}
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
+            value={value}
+          />
+        )}
+        name="pay"
+        rules={{ required: true }}
+        defaultValue=""
       />
+      {errors.pay && <Text>This is required.</Text>}
 
-      <TouchableOpacity
-        //onPress={() => navigation.navigate('Statistics')}
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Go</Text>
-      </TouchableOpacity>
-
+      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 }
@@ -223,6 +253,13 @@ const styles = StyleSheet.create({
     color: '#000',
     alignContent: 'center',
   },
+  input: {
+    backgroundColor: 'white',
+    height: 40,
+    padding: 10,
+    width: 100,
+    borderRadius: 4,
+  }
 });
 
 //1ddf6e - traffic light green
