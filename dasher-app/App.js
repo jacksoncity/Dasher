@@ -90,6 +90,36 @@ function MainScreen({ navigation }) {
 function RecommendScreen({ navigation }) {
   const [recMessage, setRecMessage] = useState("");
   const [prediction, setPrediction] = useState(0.0);
+
+  return{
+    <TextInput
+      style={styles.textbox}
+      placeholder = "Restaurant name" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Driving distance" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Expected payment" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TouchableOpacity
+        //onPress={() => navigation.navigate('Statistics')}
+        // onPress={() => }
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Go</Text>
+      </TouchableOpacity>
+  }
+    
+  /*const [recMessage, setRecMessage] = useState("");
+  const [prediction, setPrediction] = useState(0.0);
    
   return (
     <View style={styles.container}>
@@ -101,15 +131,15 @@ function RecommendScreen({ navigation }) {
         onNewRec={toReturn =>
           setRecMessage(toReturn.message)
         }
-        /*onNewRec={message =>
+        onNewRec={message =>
           setRecMessage(message)
-        }*/
+        }
       />
       <RecommendForm recMessage={recMessage} />
 
 
     </View>
-  );
+  );*/
 }
 
 //RecordDrive screen
