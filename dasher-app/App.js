@@ -257,6 +257,3 @@ const styles = StyleSheet.create({
   //title="Go to Main... again"
   //onPress={() => navigation.navigate('Main')}
 ///>
-
-
-
