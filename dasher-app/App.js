@@ -1,16 +1,25 @@
 import 'react-native-gesture-handler';
 
 import { StatusBar } from 'expo-status-bar';
-//import * as React from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Button, Text, View, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView, TextInput, TouchableOpacity} from 'react-native';
+import { RecommendForm } from "./RecommendForm";
 
 //Login screen
 function LoginScreen({ navigation }) {
-  //const [username, setUsername] = useState("");
+  const [username, setUsername] = useState([]);
+
+  /** 
+  useEffect(() => {
+    fetch("/signup").then(response =>
+      response.json().then(data => {
+        set(data.movies);
+      })
+    );
+  }, []); */
 
   return (
     <View style={styles.container}>
@@ -20,7 +29,7 @@ function LoginScreen({ navigation }) {
       <TextInput
       style={styles.textbox}
       placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
+      onChangeText = {(text) => setUsername(text)}
       />
 
       <TextInput
@@ -79,34 +88,25 @@ function MainScreen({ navigation }) {
 
 //GetRecommendations screen
 function RecommendScreen({ navigation }) {
+  const [recMessage, setRecMessage] = useState("");
+  const [prediction, setPrediction] = useState(0.0);
+   
   return (
     <View style={styles.container}>
       <Text style={styles.title}> 
       Get Recommendation</Text>
 
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Restaurant name" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
+      
+      <RecommendForm
+        onNewRec={toReturn =>
+          setRecMessage(toReturn.message)
+        }
+        /*onNewRec={message =>
+          setRecMessage(message)
+        }*/
       />
+      <RecommendForm recMessage={recMessage} />
 
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Driving distance" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Expected payment" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      //onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TouchableOpacity
-        //onPress={() => navigation.navigate('Statistics')}
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Go</Text>
-      </TouchableOpacity>
 
     </View>
   );
@@ -233,3 +233,30 @@ const styles = StyleSheet.create({
   //title="Go to Main... again"
   //onPress={() => navigation.navigate('Main')}
 ///>
+
+/**
+ * <TextInput
+      style={styles.textbox}
+      placeholder = "Restaurant name" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Driving distance" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Expected payment" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      //onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TouchableOpacity
+        //onPress={() => navigation.navigate('Statistics')}
+        // onPress={() => }
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Go</Text>
+      </TouchableOpacity>
+ */
