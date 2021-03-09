@@ -110,7 +110,7 @@ function MainScreen ({ navigation }) {
 //GetRecommendations screen
 function RecommendScreen({ navigation }) {
   const { control, handleSubmit, errors } = useForm();
-  const onSubmit = data => console.log(data);
+  const onSubmit = data => console.log(data.value);
 
   return (
     
