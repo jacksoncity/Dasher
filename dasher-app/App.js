@@ -9,10 +9,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { RecommendForm } from './RecommendForm'
 import ReactDOM from 'react-dom'
 
-require('react-dom');
-window.React2 = require('react');
-console.log(window.React1 === window.React2);
-
 export default function App () {
   return (
 	<NavigationContainer>
@@ -110,7 +106,7 @@ function MainScreen ({ navigation }) {
 //GetRecommendations screen
 function RecommendScreen({ navigation }) {
   const { control, handleSubmit, errors } = useForm();
-  const onSubmit = data => console.log(data.value);
+  const onSubmit = data => console.log(data);
 
   return (
     
