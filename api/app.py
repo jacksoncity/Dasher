@@ -37,7 +37,7 @@ class User(db.Model):
 Can add things up here that are like global variables for all of the views
 However, it will go away whenever the server restarts, not to be used as a database
 '''
-current_user = None
+
 
 '''
 Just a placeholder that does not matter
