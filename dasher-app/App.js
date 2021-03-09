@@ -271,12 +271,3 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   }
 });
-
-//1ddf6e - traffic light green
-//21a35e - spinach green
-//3fb659 - grass green
-
-//<Button
-  //title="Go to Main... again"
-  //onPress={() => navigation.navigate('Main')}
-///>
