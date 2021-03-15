@@ -72,32 +72,11 @@ function LoginScreen ({ navigation }) {
     // make sure to reset values
   }
 
-  
-/**
-  useEffect(() => {
-    async function fetchData() {
-      // mode: no cors is because fetch was blocked
-      const response = await fetch("http://127.0.0.1:5000/login", 
-        {
-          method: 'POST',
-          mode: 'no-cors'
-        })
-        .catch(err => console.error(err))
-      const p = await response.json()
-      // .then(response => response.json())
-      // .then(console.log(response))
-      console.log(response)
-      console.log(p)
-      reset(response)
-    }
-    }
-  )
-  */
-
 
   return (
     <View style={styles.container}>
       <View>
+        <Text style={styles.title}>Welcome!</Text>
         <Text style={styles.label}>Username</Text>
         <Controller 
           name="username" 
@@ -107,14 +86,13 @@ function LoginScreen ({ navigation }) {
           render={(props) => 
             <TextInput {...props} 
               
-              style={styles.input}
+              style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
               }}
               ref={usernameInputRef}
             />
           }
-          
         />
       </View>
       <View>
@@ -127,7 +105,7 @@ function LoginScreen ({ navigation }) {
           render={(props) => 
             <TextInput {...props} 
               
-              style={styles.input}
+              style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
               }}
@@ -319,7 +297,8 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   textbox: {
-  	backgroundColor: 'rgba(0,0,0,0.1)',
+    // backgroundColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: 'white',
   	height: 40,
   	width: 200,
   	marginTop: 0,
