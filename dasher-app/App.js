@@ -27,44 +27,123 @@ const Stack = createStackNavigator()
 
 // Login screen
 function LoginScreen ({ navigation }) {
-  const [username, setUsername] = useState([])
+  // useState initializes username and returns array, reactive variable
+  // const [username, setUsername] = useState([])
 
-  /**
-  useEffect(() => {
-    fetch("/signup").then(response =>
-      response.json().then(data => {
-        set(data.movies);
+  // useForm allows us to validate inputs and build forms
+  const {control, handleSubmit, errors} = useForm()
+  const usernameInputRef = React.useRef()
+  const passwordInputRef = React.useRef()
+
+  useEffect(() =>{
+    async function fetchData () {
+      const result = await fetch(
+        "http://127.0.0.1:5000/login"
+      )
+    }
+    // fetchData()
+  }, [])
+
+  const onSubmit = (d) => { 
+    // Once handleSubmit validates the inputs in onPress in button, this code is executed
+    const json = JSON.parse(JSON.stringify(d))
+    const username = json["username"]
+    const password = json["password"]
+
+    /**
+    const response = async() => {
+      // need to effectively be able to block the CORS error
+      const result = await fetch("http://127.0.0.1:5000/users", {
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       })
-    );
-  }, []); */
+      .then(result => result.json())
+      console.log(result)
+      
+      // result = JSON.parse(JSON.stringify(result))
+    }
+    response()
+    */
+
+    navigation.navigate('Main')
+    // make sure to reset values
+  }
+
+  
+/**
+  useEffect(() => {
+    async function fetchData() {
+      // mode: no cors is because fetch was blocked
+      const response = await fetch("http://127.0.0.1:5000/login", 
+        {
+          method: 'POST',
+          mode: 'no-cors'
+        })
+        .catch(err => console.error(err))
+      const p = await response.json()
+      // .then(response => response.json())
+      // .then(console.log(response))
+      console.log(response)
+      console.log(p)
+      reset(response)
+    }
+    }
+  )
+  */
+
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-      Welcome to Dasher!</Text>
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TextInput
-      secureTextEntry={true}
-      style={styles.textbox}
-      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      />
-
-      <TouchableOpacity
-        // onPress={() => alert(`You are logged in as ${username}`)}
-        onPress={() => navigation.navigate('Main')}
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Login</Text>
-      </TouchableOpacity>
-
-      <StatusBar style="auto" />
+      <View>
+        <Text style={styles.label}>Username</Text>
+        <Controller 
+          name="username" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              
+              style={styles.input}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={usernameInputRef}
+            />
+          }
+          
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Password</Text>
+        <Controller 
+          name="password" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              
+              style={styles.input}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={usernameInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Button color="black" title="Log In" 
+          // handleSubmit validates inputs before calling onSubmit
+          onPress={handleSubmit(onSubmit)} 
+          // onPress={() => navigation.navigate('Main')}
+          />
+      </View>
     </View>
-
   )
 }
 
@@ -271,3 +350,31 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   }
 });
+
+    /**
+    <View style={styles.container}>
+      <Text style={styles.title}>
+      Welcome to Dasher!</Text>
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      secureTextEntry={true}
+      style={styles.textbox}
+      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      />
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Main')
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Login</Text>
+        
+      </TouchableOpacity>
+
+      <StatusBar style="auto" />
+    </View>
+    */
