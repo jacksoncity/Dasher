@@ -187,11 +187,101 @@ function MainScreen ({ navigation }) {
 //GetRecommendations screen
 function RecommendScreen({ navigation }) {
   const { control, handleSubmit, errors } = useForm();
-  const onSubmit = data => console.log(data);
+  const restaurantInputRef = React.useRef()
+  const distanceInputRef = React.useRef()
+  const payInputRef = React.useRef()
+  
+  
+  const onSubmit = async (data) => { 
+    // Once handleSubmit validates the inputs in onPress in button, this code is executed
+    const json = JSON.parse(JSON.stringify(data))
+    const restaurant = json["restaurant"]
+    const distance = json["distance"]
+    const pay = json["pay"]
+    const drive = {restaurant, distance, pay}
+    console.log(drive)
+    const response = await fetch("http://127.0.0.1:5000/get_recommendation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(drive)
+    });
+    console.log(response.json())
+  }
+
 
   return (
-    
+
     <View style={styles.container}>
+      <View>
+        <Text style={styles.title}>Get Recommendation!</Text>
+        <Text style={styles.label}>Restaurant</Text>
+        <Controller 
+          name="restaurant" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={restaurantInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Distance</Text>
+        <Controller 
+          name="distance" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }} 
+              ref={distanceInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Pay</Text>
+        <Controller 
+          name="pay" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }} 
+              ref={payInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Button color="black" title="Get Recommendation" 
+          // handleSubmit validates inputs before calling onSubmit
+          onPress={handleSubmit(onSubmit)} 
+          // onPress={() => navigation.navigate('Main')}
+          />
+      </View>
+    </View>
+    
+    /*<View style={styles.container}>
       <Text style={styles.title}>Restaurant</Text>
       <Controller
         control={control}
@@ -244,7 +334,7 @@ function RecommendScreen({ navigation }) {
       {errors.pay && <Text>This is required.</Text>}
 
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-    </View>
+    </View>*/
     
   );
 }

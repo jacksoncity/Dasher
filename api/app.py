@@ -6,11 +6,14 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 db.app = app
+app.config['CORS_HEADERS'] = "Content-Type"
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # models for this databasee
 class Drive(db.Model):
@@ -116,6 +119,7 @@ message:
     'None' - when at least 50 drives are in the database, accurate prediction will be returned
 '''
 @app.route('/get_recommendation', methods=["POST"])
+@cross_origin()
 def get_recommendation():
 
     input_data = request.get_json()
