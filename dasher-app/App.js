@@ -31,7 +31,7 @@ function LoginScreen ({ navigation }) {
   // const [username, setUsername] = useState([])
 
   // useForm allows us to validate inputs and build forms
-  const {control, handleSubmit, errors} = useForm()
+  const {control, handleSubmit, setError, errors} = useForm( { criteriaMode: 'all' })
   const usernameInputRef = React.useRef()
   const passwordInputRef = React.useRef()
 
@@ -50,6 +50,29 @@ function LoginScreen ({ navigation }) {
     const username = json["username"]
     const password = json["password"]
 
+    if (!username) {
+      Alert.alert(
+        "Login Error",
+        "Username is required.",
+        [{
+          text: "OK",
+          onPress: () => console.log("OK Pressed"),
+          style: "cancel"
+        }]
+      )
+    }
+    if (!password) {
+      Alert.alert(
+        "Login Error",
+        "Password is required.",
+        [{
+          text: "OK",
+          onPress: () => console.log("OK Pressed"),
+          style: "cancel"
+        }]
+      )
+    }
+
     /**
     const response = async() => {
       // need to effectively be able to block the CORS error
@@ -67,10 +90,11 @@ function LoginScreen ({ navigation }) {
     }
     response()
     */
-
     navigation.navigate('Main')
     // make sure to reset values
   }
+
+  const onError = (errors, e) => console.log(errors, e)
 
 
   return (
@@ -104,7 +128,7 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              
+              secureTextEntry={true}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -117,7 +141,7 @@ function LoginScreen ({ navigation }) {
       <View>
         <Button color="black" title="Log In" 
           // handleSubmit validates inputs before calling onSubmit
-          onPress={handleSubmit(onSubmit)} 
+          onPress={handleSubmit(onSubmit, onError)} 
           // onPress={() => navigation.navigate('Main')}
           />
       </View>
