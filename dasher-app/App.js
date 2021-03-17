@@ -286,62 +286,7 @@ function RecommendScreen({ navigation }) {
       </View>
     </View>
     
-    /*<View style={styles.container}>
-      <Text style={styles.title}>Restaurant</Text>
-      <Controller
-        control={control}
-        render={({ onChange, onBlur, value }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={value => onChange(value)}
-            value={value}
-          />
-        )}
-        name="restaurant"
-        rules={{ required: true }}
-        defaultValue=""
-      />
-      {errors.restaurant && <Text>This is required.</Text>}
-
-      <Text style={styles.title}>Distance</Text>
-      <Controller
-        control={control}
-        render={({ onChange, onBlur, value }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={value => onChange(value)}
-            value={value}
-          />
-        )}
-        name="distance"
-        rules={{ required: true }}
-        defaultValue=""
-      />
-      {errors.distance && <Text>This is required.</Text>}
-
-      <Text style={styles.title}>Pay</Text>
-      <Controller
-        control={control}
-        render={({ onChange, onBlur, value }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={value => onChange(value)}
-            value={value}
-          />
-        )}
-        name="pay"
-        rules={{ required: true }}
-        defaultValue=""
-      />
-      {errors.pay && <Text>This is required.</Text>}
-
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-    </View>*/
-    
-  );
+  )
 }
 
 // RecordDrive screen
