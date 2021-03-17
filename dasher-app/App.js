@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Button, Text, View, Image, Alert, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { RecommendForm } from './RecommendForm'
@@ -182,8 +182,13 @@ function RecommendScreen({ navigation }) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(drive)
+    }).then((response) => response.json())
+    .then(data => {
+        return data;
     });
-    console.log(response.json())
+    const prediction = response.message.prediction
+    const message = response.message.message
+    console.log("message: " + message+ ", prediction: " + prediction)
   }
 
 
