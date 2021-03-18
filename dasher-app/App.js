@@ -27,73 +27,39 @@ const Stack = createStackNavigator()
 
 // Login screen
 function LoginScreen ({ navigation }) {
-  // useState initializes username and returns array, reactive variable
-  // const [username, setUsername] = useState([])
 
   // useForm allows us to validate inputs and build forms
   const {control, handleSubmit, setError, errors} = useForm( { criteriaMode: 'all' })
   const usernameInputRef = React.useRef()
   const passwordInputRef = React.useRef()
 
-  useEffect(() =>{
-    async function fetchData () {
-      const result = await fetch(
-        "http://127.0.0.1:5000/login"
-      )
-    }
-    // fetchData()
-  }, [])
-
-  const onSubmit = (d) => { 
+  const onSubmit = async (data) => { 
     // Once handleSubmit validates the inputs in onPress in button, this code is executed
-    const json = JSON.parse(JSON.stringify(d))
+    const json = JSON.parse(JSON.stringify(data))
     const username = json["username"]
     const password = json["password"]
-
-    if (!username) {
-      Alert.alert(
-        "Login Error",
-        "Username is required.",
-        [{
-          text: "OK",
-          onPress: () => console.log("OK Pressed"),
-          style: "cancel"
-        }]
-      )
+    const user = {username, password}
+    console.log(JSON.stringify(user))
+    const response = await fetch("http://127.0.0.1:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).then((response) => response.json())
+    .then(data => {
+        return data;
+    });
+    if (response.message == "login successfull") {
+      navigation.navigate('Main');
+    } else {
+      //clear the input fields and display message
     }
-    if (!password) {
-      Alert.alert(
-        "Login Error",
-        "Password is required.",
-        [{
-          text: "OK",
-          onPress: () => console.log("OK Pressed"),
-          style: "cancel"
-        }]
-      )
-    }
-
-    /**
-    const response = async() => {
-      // need to effectively be able to block the CORS error
-      const result = await fetch("http://127.0.0.1:5000/users", {
-        method: "GET",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(result => result.json())
-      console.log(result)
-      
-      // result = JSON.parse(JSON.stringify(result))
-    }
-    response()
-    */
-    navigation.navigate('Main')
-    // make sure to reset values
+    console.log(response)
+    
   }
 
+  
   const onError = (errors, e) => console.log(errors, e)
 
 
@@ -133,7 +99,7 @@ function LoginScreen ({ navigation }) {
               onChangeText={(value) => {
                 props.onChange(value)
               }}
-              ref={usernameInputRef}
+              ref={passwordInputRef}
             />
           }
         />

@@ -40,7 +40,7 @@ class User(db.Model):
 Can add things up here that are like global variables for all of the views
 However, it will go away whenever the server restarts, not to be used as a database
 '''
-
+current_user = None
 
 '''
 Just a placeholder that does not matter
@@ -175,29 +175,20 @@ credentials of the login be valid, otherwise it fails the login and they are ret
 to a blank login page again.
 '''
 @app.route('/login', methods=['POST'])
+@cross_origin()
 def login():
     
     input_data = request.get_json()
 
     user = User.query.filter_by(username=input_data['username']).first()
-    if check_password_hash(user.password, input_data['data']):
+    if user == None:
+        return jsonify({'message': 'user not found'})
+    # need to check the string of password and username
+    if check_password_hash(user.password, input_data['password']):
         current_user = user
-        login_user(user, remember=input_data['remember'])
+        # login_user(current_user)
         return jsonify({'message': 'login successfull'}), 201
     return jsonify({'message': 'login failed'}), 404
-
-    '''
-    form = LoginForm()
-    
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if check_password_hash(user.password, form.password.data):
-                login_user(user, remember=form.remember.data)
-                return redirect(url_for('appmenu')) #this needs to return the user to the app page but idk how to do that quite yet lmao
-    return "login failed"
-    '''
-
 
 '''
 This method is the gernal purpose signup that allows the user to be able to login to the app
@@ -208,13 +199,14 @@ message:
     'user created' - if it was a successful signup
 '''
 @app.route('/signup', methods=['POST'])
+@cross_origin()
 def signup():
     input_data = request.get_json()
 
-    new_user = User(username=input_data['username'], email=input_data['email'], password=input_data['password'])
+    new_user = User(username=input_data['username'], email=input_data['email'], password=generate_password_hash(input_data['password']))
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message': 'user created'}), 201#then needs to return the user to the login page
+    return jsonify({'message': 'user created'}), 201 #then needs to return the user to the login page
 
     #return jsonify({'message': 'user creation error'}) #needs to return the user to the login page
 
@@ -231,7 +223,7 @@ def users():
     for user in user_list:
         users.append({
             'username' : user.username, 
-            'password' : user.password, 
+            'password' : user.password,
             'email' : user.email})
 
     return jsonify({'users': users}), 201
