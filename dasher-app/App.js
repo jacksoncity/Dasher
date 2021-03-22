@@ -128,17 +128,26 @@ function MainScreen ({ navigation }) {
         <Text style={styles.button}>Get recommendation</Text>
       </TouchableOpacity>
 
+      <Text style={styles.text}>
+        </Text>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('RecordDrive')}
         style={{ backgroundColor: '#fff' }}>
         <Text style={styles.button}>Record a new drive</Text>
       </TouchableOpacity>
 
+      <Text style={styles.text}>
+        </Text>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('Statistics')}
         style={{ backgroundColor: '#fff' }}>
         <Text style={styles.button}>View statistics</Text>
       </TouchableOpacity>
+
+      <Text style={styles.text}>
+        </Text>
 
       <TouchableOpacity
         // onPress={() => navigation.navigate('Recommendations')}
@@ -269,17 +278,26 @@ function RecordDriveScreen ({ navigation }) {
       <Text style = { styles.text }>Press the record button to start your drive!</Text>
       <StatusBar style="auto" />
 
+      <Text style={styles.text}>
+        </Text>
+
       <TouchableOpacity style = {styles.button}
         // onPress={startButton}
         style={{ backgroundColor: 'white' }}>
         <Text style={ styles.button}>Start Recording</Text>
       </TouchableOpacity>
 
+      <Text style={styles.text}>
+        </Text>
+
       <TouchableOpacity style = {styles.button}
         // onPress={saveDrive}
         style={{ backgroundColor: 'white' }}>
         <Text style={ styles.button}>Save Drive</Text>
       </TouchableOpacity>
+
+      <Text style={styles.text}>
+        </Text>
 
       <TouchableOpacity style = {styles.button}
         // onPress={deleteDrive}
