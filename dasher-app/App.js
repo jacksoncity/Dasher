@@ -7,8 +7,8 @@ import { StyleSheet, Button, Text, View, Image, Alert, TextInput, TouchableOpaci
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-// import { RecommendForm } from './RecommendForm'
-// import ReactDOM from 'react-dom'
+import { RecommendForm } from './RecommendForm'
+import ReactDOM from 'react-dom'
 
 export default function App () {
   return (
