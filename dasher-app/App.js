@@ -73,7 +73,7 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              
+              autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -191,8 +191,10 @@ function RecommendScreen({ navigation }) {
   return (
 
     <View style={styles.container}>
+      
+      <Text style={styles.title}>Get Recommendation!</Text>
+      
       <View>
-        <Text style={styles.title}>Get Recommendation!</Text>
         <Text style={styles.label}>Restaurant</Text>
         <Controller 
           name="restaurant" 
@@ -205,12 +207,13 @@ function RecommendScreen({ navigation }) {
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
-              }}
+              }} 
               ref={restaurantInputRef}
             />
           }
         />
       </View>
+
       <View>
         <Text style={styles.label}>Distance</Text>
         <Controller 
@@ -230,6 +233,7 @@ function RecommendScreen({ navigation }) {
           }
         />
       </View>
+
       <View>
         <Text style={styles.label}>Pay</Text>
         <Controller 
@@ -250,11 +254,13 @@ function RecommendScreen({ navigation }) {
         />
       </View>
       <View>
-        <Button color="black" title="Get Recommendation" 
+        <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit)} 
           // onPress={() => navigation.navigate('Main')}
-          />
+          style={{ backgroundColor: 'gray', margin: 10 }}>
+        <Text style={ styles.button}>Get Recommendation</Text>
+      </TouchableOpacity>
       </View>
     </View>
     
@@ -338,7 +344,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     // backgroundColor: 'white',
     marginHorizontal: 15,
-    marginVertical: 20,
+    marginVertical: 15,
     padding: 7,
     paddingHorizontal: 20,
     borderRadius: 5
@@ -355,7 +361,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   	height: 40,
   	width: 200,
-  	marginTop: 0,
+  	marginTop: 10,
   	marginBottom: 20,
   	borderRadius: 5,
   	borderColor: 'white',
@@ -385,18 +391,6 @@ const styles = StyleSheet.create({
     fontSize: 45,
     color: '#B9AAFF'
   },
-  timerText: {
-      color: '#fff',
-      fontSize: 90,
-      marginBottom: 20
-  },
-  buttonReset: {
-      marginTop: 20,
-      borderColor: "#FF851B"
-  },
-  buttonTextReset: {
-    color: "#FF851B"
-  }
 });
 
     /**
