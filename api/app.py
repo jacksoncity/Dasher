@@ -227,6 +227,16 @@ def users():
             'email' : user.email})
 
     return jsonify({'users': users}), 201
+'''
+Method to actually store the times from the drive passed by the user through the 'Record Drive' function
+@param user_input: TYPE - json ATTRIBUTES - 'start_time', 'restaurant_arrival', 'restaurant_leave', 'end'
+@return there will be no return, might change later to something letting the user know 
+if it was recorded or not
+'''
+@app.route('/record_drive', methods=['POST'])
+@cross_origin()
+def record_drive():
+    return
 
 '''
 Method to logout of the account
