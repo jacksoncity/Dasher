@@ -2,12 +2,13 @@ import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Button, Text, View, Image, Alert, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Button, Text, View, Image, Alert, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native'
+// import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { RecommendForm } from './RecommendForm'
-import ReactDOM from 'react-dom'
+// import { RecommendForm } from './RecommendForm'
+// import ReactDOM from 'react-dom'
 
 export default function App () {
   return (
@@ -50,7 +51,7 @@ function LoginScreen ({ navigation }) {
     .then(data => {
         return data;
     });
-    if (response.message == "login successfull") {
+    if (response.message == "loginƒs successfull") {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
@@ -59,9 +60,7 @@ function LoginScreen ({ navigation }) {
     
   }
 
-  
   const onError = (errors, e) => console.log(errors, e)
-
 
   return (
     <View style={styles.container}>
@@ -257,13 +256,23 @@ function RecommendScreen({ navigation }) {
 
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
+  
+  const stopwatch = () => {
+    const [isTimerStart, setIsTimerStart] = useState(false);
+    const [isStopwatchStart, setIsStopwatchStart] = useState(false);
+    const [timerDuration, setTimerDuration] = useState(90000);
+    const [resetTimer, setResetTimer] = useState(false);
+    const [resetStopwatch, setResetStopwatch] = useState(false);
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-      Record Drive</Text>
+        <Text style={styles.title}>
+        Record Drive</Text>
 
-      <Text style = {styles.text}>Time</Text>
-      <Text style = {styles.time}>00:00:00</Text>
+        <Text style = {styles.text}>Time</Text>
+        <Text style = {styles.time}>00:00:00</Text>
+        
       <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/1D_line.svg/2000px-1D_line.svg.png' }}
         style={{ width: 400, height: 30 }} />
       <Text style = { styles.text }>Press the record button to start your drive!</Text>
@@ -289,6 +298,7 @@ function RecordDriveScreen ({ navigation }) {
 
     </View>
   )
+  
 }
 
 // Statistics screen
@@ -357,7 +367,11 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 100,
     borderRadius: 4,
-  }
+  },
+  buttonText: {
+    fontSize: 20,
+    marginTop: 10,
+  },
 });
 
     /**
