@@ -75,7 +75,7 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              
+              autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -190,12 +190,13 @@ function RecommendScreen({ navigation }) {
     console.log("message: " + message+ ", prediction: " + prediction)
   }
 
-
   return (
 
     <View style={styles.container}>
+      
+      <Text style={styles.title}>Get Recommendation!</Text>
+      
       <View>
-        <Text style={styles.title}>Get Recommendation!</Text>
         <Text style={styles.label}>Restaurant</Text>
         <Controller 
           name="restaurant" 
@@ -208,12 +209,13 @@ function RecommendScreen({ navigation }) {
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
-              }}
+              }} 
               ref={restaurantInputRef}
             />
           }
         />
       </View>
+
       <View>
         <Text style={styles.label}>Distance</Text>
         <Controller 
@@ -233,6 +235,7 @@ function RecommendScreen({ navigation }) {
           }
         />
       </View>
+
       <View>
         <Text style={styles.label}>Pay</Text>
         <Controller 
@@ -253,11 +256,13 @@ function RecommendScreen({ navigation }) {
         />
       </View>
       <View>
-        <Button color="black" title="Get Recommendation" 
+        <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit)} 
           // onPress={() => navigation.navigate('Main')}
-          />
+          style={{ backgroundColor: 'gray', margin: 10 }}>
+        <Text style={ styles.button}>Get Recommendation</Text>
+      </TouchableOpacity>
       </View>
     </View>
     
@@ -293,7 +298,7 @@ function RecordDriveScreen ({ navigation }) {
       <TouchableOpacity style = {styles.button}
         // onPress={saveDrive}
         style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Save Drive</Text>
+        <Text style={ styles.button}>Pause Drive</Text>
       </TouchableOpacity>
 
       <Text style={styles.text}>
@@ -332,7 +337,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     // backgroundColor: 'white',
     marginHorizontal: 15,
-    marginVertical: 20,
+    marginVertical: 15,
     padding: 7,
     paddingHorizontal: 20,
     borderRadius: 5
@@ -349,14 +354,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   	height: 40,
   	width: 200,
-  	marginTop: 0,
+  	marginTop: 10,
   	marginBottom: 20,
   	borderRadius: 5,
   	borderColor: 'white',
   	borderWidth: 1,
   	padding: 5
   },
-
   text: {
     fontSize: 20,
     color: 'black',
@@ -377,31 +381,3 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   }
 });
-
-    /**
-    <View style={styles.container}>
-      <Text style={styles.title}>
-      Welcome to Dasher!</Text>
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TextInput
-      secureTextEntry={true}
-      style={styles.textbox}
-      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      />
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Main')
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Login</Text>
-        
-      </TouchableOpacity>
-
-      <StatusBar style="auto" />
-    </View>
-    */
