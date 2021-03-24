@@ -1,9 +1,8 @@
 import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Button, Text, View, Image, Alert, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native'
-// import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
+import React, { useEffect, useState, Component } from 'react'
+import { StyleSheet, Button, Text, View, Image, Alert, TextInput, TouchableOpacity, Dimensions} from 'react-native'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -277,61 +276,59 @@ function RecommendScreen({ navigation }) {
     
   )
 }
+// For formatting the time, ensuring the zeros in front of the time
+// Slice -2 means selecting from the end of the array
+const formatNumber = number => `0${number}`.slice(-2);
+
+// For getting minutes and seconds from a time passed
+const getRemaining = (time) => {
+  const mins = Math.floor(time / 60);
+  const secs = time - mins * 60;
+  return { mins: formatNumber(mins), secs: formatNumber(secs) };
+}
 
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
-  
-  const stopwatch = () => {
-    const [isTimerStart, setIsTimerStart] = useState(false);
-    const [isStopwatchStart, setIsStopwatchStart] = useState(false);
-    const [timerDuration, setTimerDuration] = useState(90000);
-    const [resetTimer, setResetTimer] = useState(false);
-    const [resetStopwatch, setResetStopwatch] = useState(false);
+  // Storing a variable remainingSecs
+  const [remainingSecs, setRemainingSecs] = useState(0);
+  // Storing a variable isActive
+  const [isActive, setIsActive] = useState(false);
+  // Calling getRemaining to get time passed
+  const { mins, secs } = getRemaining(remainingSecs);
+  // Called when pressing start/pause button
+  const toggle = () => {
+    setIsActive(!isActive);
   }
+  // Resets the time back to initial state
+  const reset = () => {
+    setRemainingSecs(0);
+    setIsActive(false);
+  }
+  
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setRemainingSecs(remainingSecs => remainingSecs + 1);
+      }, 1000);
+    } else if (!isActive && remainingSecs !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, remainingSecs]);
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>
-        Record Drive</Text>
-
-        <Text style = {styles.text}>Time</Text>
-        <Text style = {styles.time}>00:00:00</Text>
-        
-      <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/1D_line.svg/2000px-1D_line.svg.png' }}
-        style={{ width: 400, height: 30 }} />
-      <Text style = { styles.text }>Press the record button to start your drive!</Text>
-      <StatusBar style="auto" />
-
-      <Text style={styles.text}>
-        </Text>
-
-      <TouchableOpacity style = {styles.button}
-        // onPress={startButton}
-        style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Start Recording</Text>
+      <StatusBar barStyle="light-content" />
+      <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
+      <TouchableOpacity onPress={toggle} style={styles.button}>
+          <Text style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</Text>
       </TouchableOpacity>
-
-      <Text style={styles.text}>
-        </Text>
-
-      <TouchableOpacity style = {styles.button}
-        // onPress={saveDrive}
-        style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Pause Drive</Text>
+      <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
+          <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
       </TouchableOpacity>
-
-      <Text style={styles.text}>
-        </Text>
-
-      <TouchableOpacity style = {styles.button}
-        // onPress={deleteDrive}
-        style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Delete Drive</Text>
-      </TouchableOpacity>
-
     </View>
-  )
-  
+  );
 }
 
 // Statistics screen
@@ -401,7 +398,43 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   buttonText: {
-    fontSize: 20,
-    marginTop: 10,
+    fontSize: 45,
+    // color: '#B9AAFF'
+    color: 'black',
   },
+  buttonTextReset: {
+    fontSize: 45,
+    color: 'black',
+  },
+  timerText: {
+    fontSize: 80,
+  }
 });
+
+    /**
+    <View style={styles.container}>
+      <Text style={styles.title}>
+      Welcome to Dasher!</Text>
+
+      <TextInput
+      style={styles.textbox}
+      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      onChangeText = {(text) => setUsername(text)}
+      />
+
+      <TextInput
+      secureTextEntry={true}
+      style={styles.textbox}
+      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
+      />
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Main')
+        style={{ backgroundColor: '#fff' }}>
+        <Text style={styles.button}>Login</Text>
+        
+      </TouchableOpacity>
+
+      <StatusBar style="auto" />
+    </View>
+    */
