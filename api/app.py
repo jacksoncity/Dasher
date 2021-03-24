@@ -191,7 +191,7 @@ def login():
     return jsonify({'message': 'login failed'}), 404
 
 '''
-This method is the gernal purpose signup that allows the user to be able to login to the app
+This method is the general purpose signup that allows the user to be able to login to the app
 should the input credentials be valid
 @param user_input: TYPE - json ATTRIBUTES - 'username', 'email', 'password'
 @return message: TYPE - json ATTRIBUTES - 'message'

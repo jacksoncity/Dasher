@@ -164,6 +164,8 @@ function RecommendScreen({ navigation }) {
   const restaurantInputRef = React.useRef()
   const distanceInputRef = React.useRef()
   const payInputRef = React.useRef()
+  //const prediction = React.useRef()
+  //const message = React.useRef()
   
   
   const onSubmit = async (data) => { 
@@ -258,10 +260,18 @@ function RecommendScreen({ navigation }) {
         <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit)} 
-          // onPress={() => navigation.navigate('Main')}
+          //onPress={() => navigation.navigate('RecordDrive')}
+          onPress={() => alert(`Your prediction is... this!`)}
+
+          /*onPress={() => 
+            <Text style={styles.label}>Experiment...</Text>
+          }*/
+
           style={{ backgroundColor: 'gray', margin: 10 }}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
+
+          
       </View>
     </View>
     
