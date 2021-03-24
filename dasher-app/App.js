@@ -190,6 +190,9 @@ function RecommendScreen({ navigation }) {
     console.log("message: " + message+ ", prediction: " + prediction)
   }
 
+  //Variable to print prediction
+  const [myPrediction, setMyPrediction] = useState(`__`);
+
   return (
 
     <View style={styles.container}>
@@ -258,11 +261,11 @@ function RecommendScreen({ navigation }) {
       <View>
         <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
-          onPress={handleSubmit(onSubmit)} 
+          onPress={handleSubmit(onSubmit)}
 
-          //TO DO: OnPress will eventually make the textbox display the recommendation number
-          //Probably need to set a variable here
-          onPress={() => alert(`Your prediction is... this!`)}
+          //Sets display variable to prediction
+          //onPress= {(myPrediction) => setMyPrediction(`##`)}
+          //Current issue: Can't get onPress to do both at the same time
 
           //TO DO: OnPress will also enable the accept and reject drive buttons
 
@@ -272,7 +275,7 @@ function RecommendScreen({ navigation }) {
       </View>
 
       <View>
-      <Text style={styles.text}>will display rec</Text>
+      <Text style={styles.text}>{`Prediction: ${myPrediction}/hour`}</Text>
       </View>
 
       <View>
@@ -280,14 +283,15 @@ function RecommendScreen({ navigation }) {
           style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
           <Text style={styles.button}>Accept Drive</Text>    
       </TouchableOpacity>
+
       <Text style={styles.label}>  </Text>
+
       <TouchableOpacity 
-      //TO DO: OnPress should clear the textboxes and disable the accept button
+      //TO DO: OnPress should clear the textboxes and disable the accept button (or just refresh the page entirely)
+          onPress= {(myPrediction) => setMyPrediction(`__`)}
           style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
           <Text style={styles.button}>Reject Drive</Text>
       </TouchableOpacity>
-      
-      
       </View>
   
     </View>
