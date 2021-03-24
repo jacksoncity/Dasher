@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Button, Text, View, Image, Alert, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState, Component } from 'react'
+import { StyleSheet, Button, Text, View, Image, Alert, TextInput, TouchableOpacity, Dimensions} from 'react-native'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -59,9 +59,7 @@ function LoginScreen ({ navigation }) {
     
   }
 
-  
   const onError = (errors, e) => console.log(errors, e)
-
 
   return (
     <View style={styles.container}>
@@ -75,7 +73,7 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              
+              autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -128,17 +126,26 @@ function MainScreen ({ navigation }) {
         <Text style={styles.button}>Get recommendation</Text>
       </TouchableOpacity>
 
+      <Text style={styles.text}>
+        </Text>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('RecordDrive')}
         style={{ backgroundColor: '#fff' }}>
         <Text style={styles.button}>Record a new drive</Text>
       </TouchableOpacity>
 
+      <Text style={styles.text}>
+        </Text>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('Statistics')}
         style={{ backgroundColor: '#fff' }}>
         <Text style={styles.button}>View statistics</Text>
       </TouchableOpacity>
+
+      <Text style={styles.text}>
+        </Text>
 
       <TouchableOpacity
         // onPress={() => navigation.navigate('Recommendations')}
@@ -156,6 +163,10 @@ function RecommendScreen({ navigation }) {
   const restaurantInputRef = React.useRef()
   const distanceInputRef = React.useRef()
   const payInputRef = React.useRef()
+
+  //Possible variables to save prediction and message
+  const [prediction, setPrediction] = useState(0);
+  const [message, setMessage] = useState('');
   
   
   const onSubmit = async (data) => { 
@@ -176,17 +187,24 @@ function RecommendScreen({ navigation }) {
     .then(data => {
         return data;
     });
+    
+    //{(prediction) => setPrediction(response.message.prediction)}
+    //{(message) => setPMessage(response.message.message)}
     const prediction = response.message.prediction
     const message = response.message.message
     console.log("message: " + message+ ", prediction: " + prediction)
   }
 
+  //Variable to print prediction
+  const [myPrediction, setMyPrediction] = useState(`__`);
 
   return (
 
     <View style={styles.container}>
+      
+      <Text style={styles.title}>Get Recommendation!</Text>
+      
       <View>
-        <Text style={styles.title}>Get Recommendation!</Text>
         <Text style={styles.label}>Restaurant</Text>
         <Controller 
           name="restaurant" 
@@ -199,12 +217,13 @@ function RecommendScreen({ navigation }) {
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
-              }}
+              }} 
               ref={restaurantInputRef}
             />
           }
         />
       </View>
+
       <View>
         <Text style={styles.label}>Distance</Text>
         <Controller 
@@ -224,6 +243,7 @@ function RecommendScreen({ navigation }) {
           }
         />
       </View>
+
       <View>
         <Text style={styles.label}>Pay</Text>
         <Controller 
@@ -244,51 +264,99 @@ function RecommendScreen({ navigation }) {
         />
       </View>
       <View>
-        <Button color="black" title="Get Recommendation" 
+        <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
-          onPress={handleSubmit(onSubmit)} 
-          // onPress={() => navigation.navigate('Main')}
-          />
+          onPress={handleSubmit(onSubmit)}
+
+          //Sets display variable to prediction
+          //onPress= {(myPrediction) => setMyPrediction(`##`)}
+          //Current issue: Can't get onPress to do both at the same time
+
+          //TO DO: OnPress will also enable the accept and reject drive buttons
+
+          style={{ backgroundColor: 'cyan', margin: 10 }}>
+        <Text style={ styles.button}>Get Recommendation</Text>
+      </TouchableOpacity>
       </View>
+
+      <View>
+      <Text style={styles.text}>{`Prediction: ${myPrediction}/hour`}</Text>
+      </View>
+
+      <View>
+      <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
+          style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
+          <Text style={styles.button}>Accept Drive</Text>    
+      </TouchableOpacity>
+
+      <Text style={styles.label}>  </Text>
+
+      <TouchableOpacity 
+      //TO DO: OnPress should clear the textboxes and disable the accept button (or just refresh the page entirely)
+          onPress= {(myPrediction) => setMyPrediction(`__`)}
+          style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
+          <Text style={styles.button}>Reject Drive</Text>
+      </TouchableOpacity>
+      </View>
+  
     </View>
     
   )
 }
 
+// For formatting the time, ensuring the zeros in front of the time
+// Slice -2 means selecting from the end of the array
+const formatNumber = number => `0${number}`.slice(-2);
+
+// For getting minutes and seconds from a time passed
+const getRemaining = (time) => {
+  const mins = Math.floor(time / 60);
+  const secs = time - mins * 60;
+  return { mins: formatNumber(mins), secs: formatNumber(secs) };
+}
+
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
+  // Storing a variable remainingSecs
+  const [remainingSecs, setRemainingSecs] = useState(0);
+  // Storing a variable isActive
+  const [isActive, setIsActive] = useState(false);
+  // Calling getRemaining to get time passed
+  const { mins, secs } = getRemaining(remainingSecs);
+  // Called when pressing start/pause button
+  const toggle = () => {
+    setIsActive(!isActive);
+  }
+  // Resets the time back to initial state
+  const reset = () => {
+    setRemainingSecs(0);
+    setIsActive(false);
+  }
+  
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setRemainingSecs(remainingSecs => remainingSecs + 1);
+      }, 1000);
+    } else if (!isActive && remainingSecs !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, remainingSecs]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-      Record Drive</Text>
-
-      <Text style = {styles.text}>Time</Text>
-      <Text style = {styles.time}>00:00:00</Text>
-      <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/1D_line.svg/2000px-1D_line.svg.png' }}
-        style={{ width: 400, height: 30 }} />
-      <Text style = { styles.text }>Press the record button to start your drive!</Text>
-      <StatusBar style="auto" />
-
-      <TouchableOpacity style = {styles.button}
-        // onPress={startButton}
-        style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Start Recording</Text>
+      <StatusBar barStyle="light-content" />
+      <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
+      <TouchableOpacity onPress={toggle} style={styles.button}>
+          <Text style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style = {styles.button}
-        // onPress={saveDrive}
-        style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Save Drive</Text>
+      <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
+          <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style = {styles.button}
-        // onPress={deleteDrive}
-        style={{ backgroundColor: 'white' }}>
-        <Text style={ styles.button}>Delete Drive</Text>
-      </TouchableOpacity>
-
     </View>
-  )
+  );
 }
 
 // Statistics screen
@@ -314,7 +382,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     // backgroundColor: 'white',
     marginHorizontal: 15,
-    marginVertical: 20,
+    marginVertical: 15,
     padding: 7,
     paddingHorizontal: 20,
     borderRadius: 5
@@ -327,18 +395,17 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   textbox: {
-    // backgroundColor: 'rgba(0,0,0,0.1)',
+    //backgroundColor: 'rgba(150,150,150,1)',
     backgroundColor: 'white',
   	height: 40,
   	width: 200,
-  	marginTop: 0,
+  	marginTop: 10,
   	marginBottom: 20,
   	borderRadius: 5,
   	borderColor: 'white',
   	borderWidth: 1,
   	padding: 5
   },
-
   text: {
     fontSize: 20,
     color: 'black',
@@ -357,33 +424,22 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 100,
     borderRadius: 4,
+  },
+  buttonText: {
+    fontSize: 45,
+    // color: '#B9AAFF'
+    color: 'black',
+  },
+  buttonTextReset: {
+    fontSize: 45,
+    color: 'black',
+  },
+  timerText: {
+    fontSize: 80,
   }
 });
 
-    /**
-    <View style={styles.container}>
-      <Text style={styles.title}>
-      Welcome to Dasher!</Text>
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TextInput
-      secureTextEntry={true}
-      style={styles.textbox}
-      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      />
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Main')
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Login</Text>
-        
-      </TouchableOpacity>
-
-      <StatusBar style="auto" />
-    </View>
-    */
+/*colors!
+Main background green: '#1ddf6e'
+Reject drive red: `rgba(203, 59, 59, 1)`
+*/
