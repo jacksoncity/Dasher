@@ -260,8 +260,11 @@ function RecommendScreen({ navigation }) {
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit)} 
 
-          //OnPress will eventually make the textbox display the recommendation number
+          //TO DO: OnPress will eventually make the textbox display the recommendation number
+          //Probably need to set a variable here
           onPress={() => alert(`Your prediction is... this!`)}
+
+          //TO DO: OnPress will also enable the accept and reject drive buttons
 
           style={{ backgroundColor: 'cyan', margin: 10 }}>
         <Text style={ styles.button}>Get Recommendation</Text>
@@ -274,13 +277,12 @@ function RecommendScreen({ navigation }) {
 
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
-      //Still need to find a way to disable this button before GetRecommendation is activated
           style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
           <Text style={styles.button}>Accept Drive</Text>    
       </TouchableOpacity>
       <Text style={styles.label}>  </Text>
       <TouchableOpacity 
-      //OnPress should clear the textboxes
+      //TO DO: OnPress should clear the textboxes and disable the accept button
           style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
           <Text style={styles.button}>Reject Drive</Text>
       </TouchableOpacity>
