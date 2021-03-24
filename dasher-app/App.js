@@ -163,8 +163,10 @@ function RecommendScreen({ navigation }) {
   const restaurantInputRef = React.useRef()
   const distanceInputRef = React.useRef()
   const payInputRef = React.useRef()
-  //const prediction = React.useRef()
-  //const message = React.useRef()
+
+  //Possible variables to save prediction and message
+  const [prediction, setPrediction] = useState(0);
+  const [message, setMessage] = useState('');
   
   
   const onSubmit = async (data) => { 
@@ -185,6 +187,9 @@ function RecommendScreen({ navigation }) {
     .then(data => {
         return data;
     });
+    
+    //{(prediction) => setPrediction(response.message.prediction)}
+    //{(message) => setPMessage(response.message.message)}
     const prediction = response.message.prediction
     const message = response.message.message
     console.log("message: " + message+ ", prediction: " + prediction)
