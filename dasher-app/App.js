@@ -163,6 +163,10 @@ function RecommendScreen({ navigation }) {
   const restaurantInputRef = React.useRef()
   const distanceInputRef = React.useRef()
   const payInputRef = React.useRef()
+
+  //Possible variables to save prediction and message
+  const [prediction, setPrediction] = useState(0);
+  const [message, setMessage] = useState('');
   
   
   const onSubmit = async (data) => { 
@@ -183,10 +187,16 @@ function RecommendScreen({ navigation }) {
     .then(data => {
         return data;
     });
+    
+    //{(prediction) => setPrediction(response.message.prediction)}
+    //{(message) => setPMessage(response.message.message)}
     const prediction = response.message.prediction
     const message = response.message.message
     console.log("message: " + message+ ", prediction: " + prediction)
   }
+
+  //Variable to print prediction
+  const [myPrediction, setMyPrediction] = useState(`__`);
 
   return (
 
@@ -256,16 +266,44 @@ function RecommendScreen({ navigation }) {
       <View>
         <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
-          onPress={handleSubmit(onSubmit)} 
-          // onPress={() => navigation.navigate('Main')}
-          style={{ backgroundColor: 'gray', margin: 10 }}>
+          onPress={handleSubmit(onSubmit)}
+
+          //Sets display variable to prediction
+          //onPress= {(myPrediction) => setMyPrediction(`##`)}
+          //Current issue: Can't get onPress to do both at the same time
+
+          //TO DO: OnPress will also enable the accept and reject drive buttons
+
+          style={{ backgroundColor: 'cyan', margin: 10 }}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
       </View>
+
+      <View>
+      <Text style={styles.text}>{`Prediction: ${myPrediction}/hour`}</Text>
+      </View>
+
+      <View>
+      <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
+          style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
+          <Text style={styles.button}>Accept Drive</Text>    
+      </TouchableOpacity>
+
+      <Text style={styles.label}>  </Text>
+
+      <TouchableOpacity 
+      //TO DO: OnPress should clear the textboxes and disable the accept button (or just refresh the page entirely)
+          onPress= {(myPrediction) => setMyPrediction(`__`)}
+          style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
+          <Text style={styles.button}>Reject Drive</Text>
+      </TouchableOpacity>
+      </View>
+  
     </View>
     
   )
 }
+
 // For formatting the time, ensuring the zeros in front of the time
 // Slice -2 means selecting from the end of the array
 const formatNumber = number => `0${number}`.slice(-2);
@@ -385,7 +423,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   textbox: {
-    // backgroundColor: 'rgba(0,0,0,0.1)',
+    //backgroundColor: 'rgba(150,150,150,1)',
     backgroundColor: 'white',
   	height: 40,
   	width: 200,
@@ -429,30 +467,7 @@ const styles = StyleSheet.create({
   }
 });
 
-    /**
-    <View style={styles.container}>
-      <Text style={styles.title}>
-      Welcome to Dasher!</Text>
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TextInput
-      secureTextEntry={true}
-      style={styles.textbox}
-      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      />
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Main')
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Login</Text>
-        
-      </TouchableOpacity>
-
-      <StatusBar style="auto" />
-    </View>
-    */
+/*colors!
+Main background green: '#1ddf6e'
+Reject drive red: `rgba(203, 59, 59, 1)`
+*/

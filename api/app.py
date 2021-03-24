@@ -5,8 +5,6 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -191,7 +189,7 @@ def login():
     return jsonify({'message': 'login failed'}), 404
 
 '''
-This method is the gernal purpose signup that allows the user to be able to login to the app
+This method is the general purpose signup that allows the user to be able to login to the app
 should the input credentials be valid
 @param user_input: TYPE - json ATTRIBUTES - 'username', 'email', 'password'
 @return message: TYPE - json ATTRIBUTES - 'message'
@@ -236,7 +234,18 @@ if it was recorded or not
 @app.route('/record_drive', methods=['POST'])
 @cross_origin()
 def record_drive():
-    return
+
+    input_data = request.get_json()
+
+    drive = Drive.query.filter_by(id=MAX(id))
+    drive.start = input_data['start']
+    drive.restaurant_arrival = input_data['restaurant_arrival']
+    drive.restaurant_leave = input_data['restaurant_leave']
+    drive.end = input_data['end']
+    db.session.commit()
+
+
+    return 201
 
 '''
 Method to logout of the account
