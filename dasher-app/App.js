@@ -389,8 +389,16 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 45,
-    color: '#B9AAFF'
+    // color: '#B9AAFF'
+    color: 'black',
   },
+  buttonTextReset: {
+    fontSize: 45,
+    color: 'black',
+  },
+  timerText: {
+    fontSize: 80,
+  }
 });
 
     /**
