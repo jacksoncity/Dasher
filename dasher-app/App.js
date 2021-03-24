@@ -259,7 +259,8 @@ function RecommendScreen({ navigation }) {
         <TouchableOpacity
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit)} 
-          //onPress={() => navigation.navigate('RecordDrive')}
+
+          //OnPress will eventually make the textbox display the recommendation number
           onPress={() => alert(`Your prediction is... this!`)}
 
           style={{ backgroundColor: 'cyan', margin: 10 }}>
@@ -273,11 +274,13 @@ function RecommendScreen({ navigation }) {
 
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
+      //Still need to find a way to disable this button before GetRecommendation is activated
           style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
           <Text style={styles.button}>Accept Drive</Text>    
       </TouchableOpacity>
       <Text style={styles.label}>  </Text>
       <TouchableOpacity 
+      //OnPress should clear the textboxes
           style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
           <Text style={styles.button}>Reject Drive</Text>
       </TouchableOpacity>
