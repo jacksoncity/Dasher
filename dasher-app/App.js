@@ -262,20 +262,34 @@ function RecommendScreen({ navigation }) {
           //onPress={() => navigation.navigate('RecordDrive')}
           onPress={() => alert(`Your prediction is... this!`)}
 
-          /*onPress={() => 
-            <Text style={styles.label}>Experiment...</Text>
-          }*/
-
-          style={{ backgroundColor: 'gray', margin: 10 }}>
+          style={{ backgroundColor: 'cyan', margin: 10 }}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
-
-          
       </View>
+
+      <View>
+      <Text style={styles.text}>will display rec</Text>
+      </View>
+
+      <View>
+      <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
+          style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
+          <Text style={styles.button}>Accept Drive</Text>    
+      </TouchableOpacity>
+      <Text style={styles.label}>  </Text>
+      <TouchableOpacity 
+          style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
+          <Text style={styles.button}>Reject Drive</Text>
+      </TouchableOpacity>
+      
+      
+      </View>
+  
     </View>
     
   )
 }
+
 // For formatting the time, ensuring the zeros in front of the time
 // Slice -2 means selecting from the end of the array
 const formatNumber = number => `0${number}`.slice(-2);
@@ -367,7 +381,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   textbox: {
-    // backgroundColor: 'rgba(0,0,0,0.1)',
+    //backgroundColor: 'rgba(150,150,150,1)',
     backgroundColor: 'white',
   	height: 40,
   	width: 200,
@@ -411,30 +425,7 @@ const styles = StyleSheet.create({
   }
 });
 
-    /**
-    <View style={styles.container}>
-      <Text style={styles.title}>
-      Welcome to Dasher!</Text>
-
-      <TextInput
-      style={styles.textbox}
-      placeholder = "Username" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      onChangeText = {(text) => setUsername(text)}
-      />
-
-      <TextInput
-      secureTextEntry={true}
-      style={styles.textbox}
-      placeholder = "Password" placeholderTextColor = 'rgba(0,0,0,0.5)'
-      />
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Main')
-        style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Login</Text>
-        
-      </TouchableOpacity>
-
-      <StatusBar style="auto" />
-    </View>
-    */
+/*colors!
+Main background green: '#1ddf6e'
+Reject drive red: `rgba(203, 59, 59, 1)`
+*/
