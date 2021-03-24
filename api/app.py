@@ -1,10 +1,12 @@
 from flask import jsonify, request, Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -27,12 +29,28 @@ class Drive(db.Model):
     restaurant_time = db.Column(db.Float)
     distance = db.Column(db.Float)
     rate = db.Column(db.Float)
+    #restaurant_id = db.Column(db.Integer)
+    #user_id = db.Column(db.Integer)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique = True) #username cant go over 20 char
     email = db.Column(db.String(50), unique = True) #email cant go over 50 char
     password = db.Column(db.String(40)) #password cant go over 40 char
+
+'''
+class Comment(db.Model):
+    comment_id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(500))
+    restaurant_id = db.Column(db.Integer, foreign_key=True)
+    user_id = db.Column(db.Integer, foreign_key=True)
+'''
+
+'''
+class Restaurant(db.Model):
+    restaurant_id = db.Column(db.Integer, primary_key=True)
+    average_wait = db.Column(db.Float)
+'''
 
 '''
 Can add things up here that are like global variables for all of the views
@@ -237,7 +255,7 @@ def record_drive():
 
     input_data = request.get_json()
 
-    drive = Drive.query.filter_by(id=MAX(id))
+    drive = Drive.query.filter_by(id=func.max(Drive.id))
     drive.start = input_data['start']
     drive.restaurant_arrival = input_data['restaurant_arrival']
     drive.restaurant_leave = input_data['restaurant_leave']
@@ -245,7 +263,7 @@ def record_drive():
     db.session.commit()
 
 
-    return 201
+    return "complete"
 
 '''
 Method to logout of the account
