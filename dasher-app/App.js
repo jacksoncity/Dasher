@@ -363,15 +363,17 @@ function RecordDriveScreen ({ navigation }) {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
 
+  // Still need to do the laps function, that way you can distinguish between different intervals of the drive
+  // Thinking of displaying splits below or next to the buttons and time
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
       <TouchableOpacity onPress={toggle} style={styles.button}>
-          <Text style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</Text>
+        <Text style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Lap</Text>
+        <Text style={styles.buttonText}>Lap</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
           <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
@@ -384,18 +386,22 @@ function RecordDriveScreen ({ navigation }) {
 }
 
 function SaveDriveScreen ({ navigation }) {
-  const { control, handleSubmit } = useForm();
-  const restaurantInputRef = React.useRef()
-  const distanceInputRef = React.useRef()
-  const payInputRef = React.useRef()
+  // Save Drive Screen is for confirming details of the drive and adding comments/details
+  // This screen is where the api record drive is called
+  const { control } = useForm();
+  const startRef = React.useRef()
+  const arrivalRef = React.useRef()
+  const leaveRef = React.useRef()
+  const endRef = React.useRef()
 
   const onSubmit = async (data) => { 
     const json = JSON.parse(JSON.stringify(data))
     /**
-    const restaurant = json["restaurant"]
-    const distance = json["distance"]
-    const pay = json["pay"]
-    const drive = {restaurant, distance, pay}
+    const start = json["start"]
+    const restaurant_arrival = json["restaurant_arrival"]
+    const restaurant_leave = json["restaurant_leave"]
+    const end = json["end"]
+    const drive = {start, restaurant_arrival, restaurant_leave, end}
     console.log(drive)
     const response = await fetch("http://127.0.0.1:5000/record_drive", {
       method: "POST",
@@ -407,61 +413,13 @@ function SaveDriveScreen ({ navigation }) {
     .then(data => {
         return data;
     });
-    const prediction = response.message.prediction
-    const message = response.message.message
-    console.log("message: " + message+ ", prediction: " + prediction)
     */
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Save Drive</Text>
-      <View>
-        <Text style={styles.label}>Restaurant</Text>
-        <Controller 
-          name="restaurant" 
-          control={control} 
-          // rules= {{required: 'This is required'}}
-          defaultValue=''
-          render={(props) => 
-            <TextInput {...props} 
-              style={styles.textbox}
-              onChangeText={(value) => {
-                props.onChange(value)
-              }} 
-              ref={restaurantInputRef} /> } />
-      </View>
-      <View>
-        <Text style={styles.label}>Distance</Text>
-        <Controller 
-          name="distance" 
-          control={control} 
-          // rules= {{required: 'This is required'}}
-          defaultValue=''
-          render={(props) => 
-            <TextInput {...props} 
-              style={styles.textbox}
-              onChangeText={(value) => {
-                props.onChange(value)
-              }} 
-              ref={distanceInputRef} /> } />
-      </View>
-      <View>
-        <Text style={styles.label}>Pay</Text>
-        <Controller 
-          name="pay" 
-          control={control} 
-          // rules= {{required: 'This is required'}}
-          defaultValue=''
-          render={(props) => 
-            <TextInput {...props} 
-              style={styles.textbox}
-              onChangeText={(value) => {
-                props.onChange(value)
-              }} 
-              ref={payInputRef} /> } />
-      </View>
-    </View>
+   <View>
+     <Text>Confirm drive with comments/details here</Text>
+   </View>
   )
 }
 
@@ -544,6 +502,17 @@ const styles = StyleSheet.create({
     fontSize: 70,
     color: 'white',
   },
+  circleButton: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 17,
+    borderRadius: 100,
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 30,
+  }
 });
 
 /*colors!
