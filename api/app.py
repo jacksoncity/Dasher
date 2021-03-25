@@ -275,35 +275,30 @@ def stats():
     statistics = []
 
     def get_pay():
-        i = 0
-        while stat_list:
-            overallPay = overallPay + Drive.pay[i]
-            i = i+1
+        for stat in stat_list:
+            overallPay = overallPay + Drive.pay
+
         return overallPay
     def get_distance():
-         i = 0
-         while stat_list:
-            overallDis = overallDis + Drive.distance[i]
-            i = i+1
+         for stat in stat_list:
+            overallDis = overallDis + Drive.distance
+
          return overallDis
     def get_trips():
-        i = 0
-        while stat_list:
-            overallTrips = overallTrips + Drive.trip[i]
-            i = i+1
+        for stat in stat_list:
+            overallTrips = overallTrips + Drive.trip
+
         return overallTrips
     def get_delivTime():
-        i = 0
-        while stat_list:
-            overallDelivTime = overallDelivTime + Drive.end[i] - Drive.start[i]
-            i = i +1
+        for stat in stat_list:
+            overallDelivTime = overallDelivTime + Drive.end - Drive.start
+
         trips = get_trips
         avgDelivTime = overallDelivTime/trips
         return avgDelivTime
     def get_rate():
-        i = 0
-        while stat_list:
-            overallRate = overallRate + Drive.rate[i]
+        for stat in stat_list:
+            overallRate = overallRate + Drive.rate
         trips = get_trips
         avgRate = overallRate/trips
         return avgRate
