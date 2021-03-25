@@ -330,6 +330,8 @@ const getRemaining = (time) => {
   const secs = time - mins * 60;
   return { mins: formatNumber(mins), secs: formatNumber(secs) };
 }
+var laps = new Array(4);
+var index = 0;
 
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
@@ -339,17 +341,48 @@ function RecordDriveScreen ({ navigation }) {
   const [isActive, setIsActive] = useState(false);
   // Calling getRemaining to get time passed
   const { mins, secs } = getRemaining(remainingSecs);
+  
+
   // Called when pressing start/pause button
-  const toggle = () => {
+  var toggle = () => {
     setIsActive(!isActive);
+    if (!isActive) {
+      // setting start position
+      // laps.push(Date(Date.now()));
+      laps[index] = Date(Date.now());
+      index = index + 1;
+    } else {
+      console.log(laps);
+      // saveDrive;
+    }
   }
   // Resets the time back to initial state
-  const reset = () => {
+  var reset = () => {
     setRemainingSecs(0);
     setIsActive(false);
+    laps = new Array(4);
   }
-  const saveDrive = () => {
-    navigation.navigate('SaveDrive');
+  var addLap = () => {
+    // laps.push(Date(Date.now()));
+    laps[index] = Date(Date.now());
+    index = index + 1;
+  }
+  const saveDrive = async () => {
+    const start = laps[0]
+    const restaurant_arrival = laps[1]
+    const restaurant_departure = laps[2]
+    const end = laps[3]
+    const drive = {"start": start, "restaurant_arrival": restaurant_arrival, "restaurant_departure": restaurant_departure, "end": end}
+    console.log(drive)
+    const response = await fetch("http://127.0.0.1:5000/record_drive", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(drive)
+    })
+    return await response.json();
+    // console.log(response)
   }
   
   useEffect(() => {
@@ -371,16 +404,13 @@ function RecordDriveScreen ({ navigation }) {
       <StatusBar barStyle="light-content" />
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
       <TouchableOpacity onPress={toggle} style={styles.button}>
-        <Text style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</Text>
+        <Text style={styles.buttonText}>{isActive ? 'Save' : 'Start'}</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity onPress={addLap}style={styles.button}>
         <Text style={styles.buttonText}>Lap</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
           <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={saveDrive} style = {styles.button}>
-        <Text style={styles.buttonText}>Save Drive</Text>
       </TouchableOpacity>
     </View>
   );
