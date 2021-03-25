@@ -108,17 +108,18 @@ function LoginScreen ({ navigation }) {
         />
       </View>
       <View>
-        <Button color="black" title="Log In" 
+        <TouchableOpacity 
           // handleSubmit validates inputs before calling onSubmit
-          onPress={handleSubmit(onSubmit, onError)} 
+          onPress={handleSubmit(onSubmit, onError)}
           // onPress={() => navigation.navigate('Main')}
-          />
+          style={styles.buttonBlue}>
+          <Text style={styles.button}>Log In</Text>    
+        </TouchableOpacity>
       </View>
       <View>
-        <Text style={styles.text}>
-        </Text>
+        <Text style={styles.label}> </Text>
         <TouchableOpacity onPress={signup}>
-          <Text style={ { color: 'white', fontSize: 20, alignItems: 'center',}}>New to Dasher? Create an account.</Text>
+          <Text style={styles.buttonWhiteText}>New to Dasher? Create an account.</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -142,37 +143,27 @@ function MainScreen ({ navigation }) {
 
       <TouchableOpacity
         onPress={() => navigation.navigate('Recommendations')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>Get recommendation</Text>
       </TouchableOpacity>
 
-      <Text style={styles.text}>
-        </Text>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('RecordDrive')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>  Record a new drive  </Text>
       </TouchableOpacity>
 
-      <Text style={styles.text}>
-        </Text>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('Statistics')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>      View statistics      </Text>
       </TouchableOpacity>
 
-      <Text style={styles.text}>
-        </Text>
-
       <TouchableOpacity
         // onPress={() => navigation.navigate('Recommendations')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>View/edit past drives</Text>
       </TouchableOpacity>
-
     </View>
   )
 }
@@ -187,7 +178,6 @@ function RecommendScreen({ navigation }) {
   //Variables to print prediction and message
   const [newPrediction, setNewPrediction] = useState(`__`);
   const [newMessage, setNewMessage] = useState(`__`);
-  
   
   const onSubmit = async (data) => { 
     // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -289,7 +279,7 @@ function RecommendScreen({ navigation }) {
 
           //TO DO: OnPress will also enable the accept and reject drive buttons
 
-          style={{ backgroundColor: 'cyan', margin: 10 }}>
+          style={styles.buttonBlue}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
       </View>
@@ -300,18 +290,19 @@ function RecommendScreen({ navigation }) {
 
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
-          style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
-          <Text style={styles.button}>Accept Drive</Text>    
+          style={{backgroundColor: 'white', color: 'black',
+          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,}}>
+          <Text style={styles.buttonSmall}>Accept Drive</Text>    
       </TouchableOpacity>
-
-      <Text style={styles.label}>  </Text>
 
       <TouchableOpacity 
       //TO DO: OnPress should refresh the page entirely
       //possibly by returning to Main and then coming back to Get Rec
           onPress={() => navigation.navigate('Main')}
-          style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
-          <Text style={styles.button}>Reject Drive</Text>
+          style={{backgroundColor: 'black', color: 'white',
+          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,}}>
+          <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
+          paddingHorizontal: 5, color: 'white'}}>Reject Drive</Text>
       </TouchableOpacity>
       </View>
   
@@ -457,7 +448,45 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 10,
     marginVertical: 10,
+    borderRadius: 10
+  },
+  buttonWhiteText: {
+    color: 'white',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 10,
     borderRadius: 5
+  },
+  buttonBasic: {
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 15,
+    //borderColor: 'gray',
+  	//borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 2
+  },
+  buttonBlue: {
+    backgroundColor: '#8ebce7',
+    color: 'black',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderColor: 'gray',
+  	borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 2
+  },
+  buttonSmall: {
+    fontSize: 17,
+    marginHorizontal: 5,
+    marginVertical: 10,
+    //borderColor: 'gray',
+  	//borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 2
   },
   textbox: {
     //backgroundColor: 'rgba(150,150,150,1)',
@@ -519,5 +548,6 @@ const styles = StyleSheet.create({
 /*colors!
 Old background green: '#1ddf6e'
 New background green: '#66cc99'
+Button blue: '#80add6'
 Reject drive red: `rgba(203, 59, 59, 1)`
 */
