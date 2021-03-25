@@ -649,24 +649,13 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 70,
     color: 'white',
-  },
-  circleButton: {
-    width: 100,
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 17,
-    borderRadius: 100,
-    backgroundColor: 'white',
-    color: 'black',
-    fontSize: 30,
   }
 });
 
-/*colors!
+/*Colors!
 Old background green: '#1ddf6e'
 New background green: '#66cc99'
 Button blue: '#80add6'
 Textbox half-opacity white: 'rgba(255,255,255,.5)'
-Reject-drive red: `rgba(203, 59, 59, 1)`
+Old reject-drive red: `rgba(203, 59, 59, 1)`
 */
