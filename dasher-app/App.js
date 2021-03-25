@@ -14,6 +14,7 @@ export default function App () {
 	<NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Recommendations" component={RecommendScreen} />
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} />
@@ -58,6 +59,9 @@ function LoginScreen ({ navigation }) {
     }
     console.log(response)
     
+  }
+  const signup = () => {
+    navigation.navigate('Signup');
   }
 
   const onError = (errors, e) => console.log(errors, e)
@@ -110,6 +114,21 @@ function LoginScreen ({ navigation }) {
           // onPress={() => navigation.navigate('Main')}
           />
       </View>
+      <View>
+        <Text style={styles.text}>
+        </Text>
+        <TouchableOpacity onPress={signup}>
+          <Text style={ { color: 'white', fontSize: 20, alignItems: 'center',}}>New to Dasher? Create an account.</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+}
+
+function SignupScreen ({ navigation }) {
+  return (
+    <View>
+      <Text>Sign up here!</Text>
     </View>
   )
 }
@@ -133,7 +152,7 @@ function MainScreen ({ navigation }) {
       <TouchableOpacity
         onPress={() => navigation.navigate('RecordDrive')}
         style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>Record a new drive</Text>
+        <Text style={styles.button}>  Record a new drive  </Text>
       </TouchableOpacity>
 
       <Text style={styles.text}>
@@ -142,7 +161,7 @@ function MainScreen ({ navigation }) {
       <TouchableOpacity
         onPress={() => navigation.navigate('Statistics')}
         style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.button}>View statistics</Text>
+        <Text style={styles.button}>      View statistics      </Text>
       </TouchableOpacity>
 
       <Text style={styles.text}>
@@ -329,6 +348,9 @@ function RecordDriveScreen ({ navigation }) {
     setRemainingSecs(0);
     setIsActive(false);
   }
+  const saveDrive = () => {
+    navigation.navigate('SaveDrive');
+  }
   
   useEffect(() => {
     let interval = null;
@@ -349,11 +371,14 @@ function RecordDriveScreen ({ navigation }) {
       <TouchableOpacity onPress={toggle} style={styles.button}>
           <Text style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Lap</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
           <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={navigation.navigate('SaveDrive')}  style = {styles.button}>
-        <Text>Save Drive</Text>
+      <TouchableOpacity onPress={saveDrive} style = {styles.button}>
+        <Text style={styles.buttonText}>Save Drive</Text>
       </TouchableOpacity>
     </View>
   );
@@ -508,17 +533,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   buttonText: {
-    fontSize: 45,
+    fontSize: 30,
     // color: '#B9AAFF'
     color: 'black',
   },
   buttonTextReset: {
-    fontSize: 45,
-    color: 'black',
+    fontSize: 30,
+    color: '#808080',
   },
   timerText: {
-    fontSize: 80,
-  }
+    fontSize: 70,
+    color: 'white',
+  },
 });
 
 /*colors!
