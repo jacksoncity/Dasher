@@ -427,19 +427,20 @@ function RecommendScreen({ navigation }) {
   )
 }
 
-// For formatting the time, ensuring the zeros in front of the time
-// Slice -2 means selecting from the end of the array
-const formatNumber = number => `0${number}`.slice(-2);
-
-// For getting minutes and seconds from a time passed
-const getRemaining = (time) => {
-  const mins = Math.floor(time / 60);
-  const secs = time - mins * 60;
-  return { mins: formatNumber(mins), secs: formatNumber(secs) };
-}
-
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
+
+  // For formatting the time, ensuring the zeros in front of the time
+  // Slice -2 means selecting from the end of the array
+  const formatNumber = number => `0${number}`.slice(-2);
+
+    // For getting minutes and seconds from a time passed
+  const getRemaining = (time) => {
+    const mins = Math.floor(time / 60);
+    const secs = time - mins * 60;
+    return { mins: formatNumber(mins), secs: formatNumber(secs) };
+  }
+
   // Storing a variable remainingSecs
   const [remainingSecs, setRemainingSecs] = useState(0);
   // Storing a variable isActive
