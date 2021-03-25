@@ -320,6 +320,11 @@ function RecommendScreen({ navigation }) {
     setNewMessage(message)
   }
 
+  function refresh() {
+    navigation.navigate('Main')
+    navigation.navigate('Recommendations')
+  }
+
   return (
 
     <View style={styles.container}>
@@ -410,10 +415,7 @@ function RecommendScreen({ navigation }) {
           paddingHorizontal: 5, color: 'black'}}>Accept Drive</Text>    
       </TouchableOpacity>
 
-      <TouchableOpacity 
-      //TO DO: OnPress should refresh the page entirely,
-      //possibly by returning to Main and then coming back to Get Rec
-          onPress={() => navigation.navigate('Main')}
+      <TouchableOpacity onPress={() => refresh()}
           style={{backgroundColor: 'gray',
           marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
           borderWidth: 1, borderRadius: 20}}>
