@@ -113,7 +113,7 @@ function LoginScreen ({ navigation }) {
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit, onError)}
           // onPress={() => navigation.navigate('Main')}
-          style={styles.buttonBlue}>
+          style={styles.buttonBasic}>
           <Text style={styles.button}>Log In</Text>    
         </TouchableOpacity>
       </View>
@@ -204,7 +204,7 @@ function RecommendScreen({ navigation }) {
     console.log("message: " + message+ ", prediction: " + prediction)
 
     //Set variables for later printing
-    setNewPrediction(prediction)
+    setNewPrediction(Math.round(prediction * 100) / 100)
     setNewMessage(message)
   }
 
@@ -280,7 +280,7 @@ function RecommendScreen({ navigation }) {
 
           //TO DO: OnPress will also enable the accept and reject drive buttons
 
-          style={styles.buttonBlue}>
+          style={styles.buttonBasic}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
       </View>
@@ -468,15 +468,16 @@ const styles = StyleSheet.create({
     //borderColor: 'gray',
   	//borderWidth: 1,
     paddingHorizontal: 5,
-    borderRadius: 2
+    borderRadius: 7
   },
   buttonBlue: {
-    backgroundColor: '#8ebce7',
+    //backgroundColor: '#8ebce7',
+    backgroundColor: 'steelblue',
     color: 'black',
     fontSize: 20,
     marginHorizontal: 10,
     marginVertical: 10,
-    borderColor: 'gray',
+    borderColor: 'black',
   	borderWidth: 1,
     paddingHorizontal: 5,
     borderRadius: 2
@@ -491,8 +492,7 @@ const styles = StyleSheet.create({
     borderRadius: 2
   },
   textbox: {
-    //backgroundColor: 'rgba(150,150,150,1)',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,.5)',
   	height: 40,
   	width: 200,
   	marginTop: 10,
@@ -551,5 +551,6 @@ const styles = StyleSheet.create({
 Old background green: '#1ddf6e'
 New background green: '#66cc99'
 Button blue: '#80add6'
+Textbox half-opacity white: 'rgba(255,255,255,.5)'
 Reject drive red: `rgba(203, 59, 59, 1)`
 */
