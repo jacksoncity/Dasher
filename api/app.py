@@ -270,7 +270,7 @@ Method to show to the user to see informative stats about past drives so they ca
 Will show Overall Pay, Overall Distance Driven, Overall Trips Fulfilled, Average Delivery Time, and Average Rate 
 '''
 @app.route('/get_statistics')
-def stats():
+def get_stats():
     stat_list = Drive.query.all()
     statistics = []
 
