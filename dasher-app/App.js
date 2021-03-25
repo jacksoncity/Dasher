@@ -17,6 +17,7 @@ export default function App () {
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Recommendations" component={RecommendScreen} />
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} />
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -354,8 +355,93 @@ function RecordDriveScreen ({ navigation }) {
       <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
           <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={navigation.navigate('SaveDrive')}  style = {styles.button}>
+        <Text>Save Drive</Text>
+      </TouchableOpacity>
     </View>
   );
+}
+
+function SaveDriveScreen ({ navigation }) {
+  const { control, handleSubmit } = useForm();
+  const restaurantInputRef = React.useRef()
+  const distanceInputRef = React.useRef()
+  const payInputRef = React.useRef()
+
+  const onSubmit = async (data) => { 
+    const json = JSON.parse(JSON.stringify(data))
+    /**
+    const restaurant = json["restaurant"]
+    const distance = json["distance"]
+    const pay = json["pay"]
+    const drive = {restaurant, distance, pay}
+    console.log(drive)
+    const response = await fetch("http://127.0.0.1:5000/record_drive", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(drive)
+    }).then((response) => response.json())
+    .then(data => {
+        return data;
+    });
+    const prediction = response.message.prediction
+    const message = response.message.message
+    console.log("message: " + message+ ", prediction: " + prediction)
+    */
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Save Drive</Text>
+      <View>
+        <Text style={styles.label}>Restaurant</Text>
+        <Controller 
+          name="restaurant" 
+          control={control} 
+          // rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }} 
+              ref={restaurantInputRef} /> } />
+      </View>
+      <View>
+        <Text style={styles.label}>Distance</Text>
+        <Controller 
+          name="distance" 
+          control={control} 
+          // rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }} 
+              ref={distanceInputRef} /> } />
+      </View>
+      <View>
+        <Text style={styles.label}>Pay</Text>
+        <Controller 
+          name="pay" 
+          control={control} 
+          // rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }} 
+              ref={payInputRef} /> } />
+      </View>
+    </View>
+  )
 }
 
 // Statistics screen
@@ -372,7 +458,7 @@ function StatisticsScreen ({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1ddf6e',
+    backgroundColor: '#66cc99',
     alignItems: 'center',
     justifyContent: 'center'
   },
