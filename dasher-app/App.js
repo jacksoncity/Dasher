@@ -167,7 +167,7 @@ function RecommendScreen({ navigation }) {
 
   //Variables to print prediction and message
   const [newPrediction, setNewPrediction] = useState(`__`);
-  const [myMessage, setMyMessage] = useState(`__`);
+  const [newMessage, setNewMessage] = useState(`__`);
   
   
   const onSubmit = async (data) => { 
@@ -193,9 +193,9 @@ function RecommendScreen({ navigation }) {
     const message = response.message.message
     console.log("message: " + message+ ", prediction: " + prediction)
 
-      //Set variables for later printing
-    {(newPrediction) => setNewPrediction(prediction)}
-    {(newMessage) => setNewMessage(message)}
+    //Set variables for later printing
+    setNewPrediction(prediction)
+    setNewMessage(message)
   }
 
   return (
@@ -268,20 +268,16 @@ function RecommendScreen({ navigation }) {
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit)}
 
-          //Sets display variable to prediction
-          //onPress= {(newPrediction) => setNewPrediction(`##`)}
-          //Current issue: Can't get onPress to do both at the same time
-
           //TO DO: OnPress will also enable the accept and reject drive buttons
 
           style={{ backgroundColor: 'cyan', margin: 10 }}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
       </View>
-
-      <View>
-      <Text style={styles.text}>{`Prediction: ${newPrediction}/hour`}</Text>
-      </View>
+   
+      <Text style={styles.text}>{`Prediction: $${newPrediction}/hour`}</Text>
+      <Text style={styles.label}>{`Notes: ${newMessage}`}</Text>
+      <Text style={styles.label}>  </Text>
 
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
@@ -293,7 +289,7 @@ function RecommendScreen({ navigation }) {
 
       <TouchableOpacity 
       //TO DO: OnPress should clear the textboxes and disable the accept button (or just refresh the page entirely)
-          onPress= {(myPrediction) => setMyPrediction(`__`)}
+          //onPress= {(myPrediction) => setMyPrediction(`__`)}
           style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
           <Text style={styles.button}>Reject Drive</Text>
       </TouchableOpacity>
@@ -525,6 +521,7 @@ const styles = StyleSheet.create({
 });
 
 /*colors!
-Main background green: '#1ddf6e'
+Old background green: '#1ddf6e'
+New background green: '#66cc99'
 Reject drive red: `rgba(203, 59, 59, 1)`
 */
