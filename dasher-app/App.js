@@ -56,6 +56,7 @@ function LoginScreen ({ navigation }) {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
+      alert(`Login invalid`)
     }
     console.log(response)
     
@@ -290,19 +291,20 @@ function RecommendScreen({ navigation }) {
 
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
-          style={{backgroundColor: 'white', color: 'black',
+          style={{backgroundColor: 'white',
           marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,}}>
-          <Text style={styles.buttonSmall}>Accept Drive</Text>    
+          <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
+          paddingHorizontal: 5, color: 'black'}}>Accept Drive</Text>    
       </TouchableOpacity>
 
       <TouchableOpacity 
       //TO DO: OnPress should refresh the page entirely
       //possibly by returning to Main and then coming back to Get Rec
           onPress={() => navigation.navigate('Main')}
-          style={{backgroundColor: 'black', color: 'white',
+          style={{backgroundColor: 'gray',
           marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,}}>
           <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
-          paddingHorizontal: 5, color: 'white'}}>Reject Drive</Text>
+          paddingHorizontal: 5, color: 'black'}}>Reject Drive</Text>
       </TouchableOpacity>
       </View>
   
