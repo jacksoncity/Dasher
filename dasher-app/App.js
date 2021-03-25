@@ -288,8 +288,9 @@ function RecommendScreen({ navigation }) {
       <Text style={styles.label}>  </Text>
 
       <TouchableOpacity 
-      //TO DO: OnPress should clear the textboxes and disable the accept button (or just refresh the page entirely)
-          //onPress= {(myPrediction) => setMyPrediction(`__`)}
+      //TO DO: OnPress should refresh the page entirely
+      //possibly by returning to Main and then coming back to Get Rec
+          onPress={() => navigation.navigate('Main')}
           style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
           <Text style={styles.button}>Reject Drive</Text>
       </TouchableOpacity>
