@@ -176,6 +176,7 @@ def get_recommendation():
 
     ridge = Ridge().fit(stats, targets)
     prediction = ridge.predict(new_drive)
+    prediction[0] = round(prediction[0], 2)
 
     message['prediction'] = prediction[0]
 
