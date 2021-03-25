@@ -304,7 +304,7 @@ def get_stats():
         return avgRate
 
     for stat in stat_list:
-        stats.append({
+        statistics.append({
             'Money Earned' : get_pay,
             'Distance Driven' : get_distance,
             'Trips ran' : get_trips,
