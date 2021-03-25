@@ -127,10 +127,117 @@ function LoginScreen ({ navigation }) {
   )
 }
 
+//Signup screen
 function SignupScreen ({ navigation }) {
+
+  // useForm allows us to validate inputs and build forms
+  const {control, handleSubmit, setError, errors} = useForm( { criteriaMode: 'all' })
+  const usernameInputRef = React.useRef()
+  const passwordInputRef = React.useRef()
+  const emailInputRef = React.useRef()
+  
+  const onSubmit = async (data) => { 
+    // Once handleSubmit validates the inputs in onPress in button, this code is executed
+    const json = JSON.parse(JSON.stringify(data))
+    const username = json["username"]
+    const password = json["password"]
+    const email = json["email"]
+    const newUser = {username, password, email}
+    console.log(JSON.stringify(newUser))
+    const response = await fetch("http://127.0.0.1:5000/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(newUser)
+  }).then((response) => response.json())
+  .then(data => {
+      return data;
+  });
+  if (response.message == "user created") {
+    navigation.navigate('Login');
+    alert(`Account created! Please sign in`)
+    //navigation.navigate('Main');
+  } else {
+    alert(`A problem occurred. Please try again`)
+  }
+  console.log(response)
+  
+}
+
+const onError = (errors, e) => console.log(errors, e)
+
   return (
-    <View>
-      <Text>Sign up here!</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Account</Text>
+
+      <View>
+        <Text style={styles.label}>Username</Text>
+        <Controller 
+          name="username" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              autoCapitalize={false}
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={usernameInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Password</Text>
+        <Controller 
+          name="password" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              secureTextEntry={true}
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={passwordInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Email</Text>
+        <Controller 
+          name="email" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              autoCapitalize={false}
+              secureTextEntry={false}
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={emailInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <TouchableOpacity 
+          // handleSubmit validates inputs before calling onSubmit
+          onPress={handleSubmit(onSubmit, onError)}
+          // onPress={() => navigation.navigate('Main')}
+          style={styles.buttonBasic}>
+          <Text style={styles.button}>Sign up</Text>    
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -552,5 +659,5 @@ Old background green: '#1ddf6e'
 New background green: '#66cc99'
 Button blue: '#80add6'
 Textbox half-opacity white: 'rgba(255,255,255,.5)'
-Reject drive red: `rgba(203, 59, 59, 1)`
+Reject-drive red: `rgba(203, 59, 59, 1)`
 */
