@@ -164,9 +164,9 @@ function RecommendScreen({ navigation }) {
   const distanceInputRef = React.useRef()
   const payInputRef = React.useRef()
 
-  //Possible variables to save prediction and message
-  const [prediction, setPrediction] = useState(0);
-  const [message, setMessage] = useState('');
+  //Variables to print prediction and message
+  const [newPrediction, setNewPrediction] = useState(`__`);
+  const [myMessage, setMyMessage] = useState(`__`);
   
   
   const onSubmit = async (data) => { 
@@ -188,15 +188,14 @@ function RecommendScreen({ navigation }) {
         return data;
     });
     
-    //{(prediction) => setPrediction(response.message.prediction)}
-    //{(message) => setPMessage(response.message.message)}
     const prediction = response.message.prediction
     const message = response.message.message
     console.log("message: " + message+ ", prediction: " + prediction)
-  }
 
-  //Variable to print prediction
-  const [myPrediction, setMyPrediction] = useState(`__`);
+      //Set variables for later printing
+    {(newPrediction) => setNewPrediction(prediction)}
+    {(newMessage) => setNewMessage(message)}
+  }
 
   return (
 
@@ -269,7 +268,7 @@ function RecommendScreen({ navigation }) {
           onPress={handleSubmit(onSubmit)}
 
           //Sets display variable to prediction
-          //onPress= {(myPrediction) => setMyPrediction(`##`)}
+          //onPress= {(newPrediction) => setNewPrediction(`##`)}
           //Current issue: Can't get onPress to do both at the same time
 
           //TO DO: OnPress will also enable the accept and reject drive buttons
@@ -280,7 +279,7 @@ function RecommendScreen({ navigation }) {
       </View>
 
       <View>
-      <Text style={styles.text}>{`Prediction: ${myPrediction}/hour`}</Text>
+      <Text style={styles.text}>{`Prediction: ${newPrediction}/hour`}</Text>
       </View>
 
       <View>
