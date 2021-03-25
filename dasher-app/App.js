@@ -15,10 +15,15 @@ export default function App () {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="Recommendations" component={RecommendScreen} />
-        <Stack.Screen name="RecordDrive" component={RecordDriveScreen} />
-        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
+        <Stack.Screen name="Main" component={MainScreen} 
+          //Nulling headerLeft cuts off login screen altogether
+          options={{/*headerLeft: null,*/ headerBackTitle: 'Log out'}}/>
+        <Stack.Screen name="Recommendations" component={RecommendScreen} 
+          options={{title: 'Get Recommendation'}}/>
+        <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
+          options={{title: 'Record Drive'}}/>
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} 
+          options={{title: 'Save Drive'}}/>
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -56,6 +61,7 @@ function LoginScreen ({ navigation }) {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
+      alert(`Login invalid`)
     }
     console.log(response)
     
@@ -108,27 +114,135 @@ function LoginScreen ({ navigation }) {
         />
       </View>
       <View>
-        <Button color="black" title="Log In" 
+        <TouchableOpacity 
           // handleSubmit validates inputs before calling onSubmit
-          onPress={handleSubmit(onSubmit, onError)} 
+          onPress={handleSubmit(onSubmit, onError)}
           // onPress={() => navigation.navigate('Main')}
-          />
+          style={styles.buttonSpecial}>
+          <Text style={styles.button}>Log In</Text>    
+        </TouchableOpacity>
       </View>
       <View>
-        <Text style={styles.text}>
-        </Text>
+        <Text style={styles.label}> </Text>
         <TouchableOpacity onPress={signup}>
-          <Text style={ { color: 'white', fontSize: 20, alignItems: 'center',}}>New to Dasher? Create an account.</Text>
+          <Text style={styles.buttonWhiteText}>New to Dasher? Create an account</Text>
         </TouchableOpacity>
       </View>
     </View>
   )
 }
 
+//Signup screen
 function SignupScreen ({ navigation }) {
+
+  // useForm allows us to validate inputs and build forms
+  const {control, handleSubmit, setError, errors} = useForm( { criteriaMode: 'all' })
+  const usernameInputRef = React.useRef()
+  const passwordInputRef = React.useRef()
+  const emailInputRef = React.useRef()
+  
+  const onSubmit = async (data) => { 
+    // Once handleSubmit validates the inputs in onPress in button, this code is executed
+    const json = JSON.parse(JSON.stringify(data))
+    const username = json["username"]
+    const password = json["password"]
+    const email = json["email"]
+    const newUser = {username, password, email}
+    console.log(JSON.stringify(newUser))
+    const response = await fetch("http://127.0.0.1:5000/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(newUser)
+  }).then((response) => response.json())
+  .then(data => {
+      return data;
+  });
+  if (response.message == "user created") {
+    navigation.navigate('Login');
+    alert(`Account created! Please sign in`)
+    //navigation.navigate('Main');
+  } else {
+    alert(`A problem occurred. Please try again`)
+  }
+  console.log(response)
+  
+}
+
+const onError = (errors, e) => console.log(errors, e)
+
   return (
-    <View>
-      <Text>Sign up here!</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Account</Text>
+
+      <View>
+        <Text style={styles.label}>Username</Text>
+        <Controller 
+          name="username" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              autoCapitalize={false}
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={usernameInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Password</Text>
+        <Controller 
+          name="password" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              secureTextEntry={true}
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={passwordInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <Text style={styles.label}>Email</Text>
+        <Controller 
+          name="email" 
+          control={control} 
+          rules= {{required: 'This is required'}}
+          defaultValue=''
+          render={(props) => 
+            <TextInput {...props} 
+              autoCapitalize={false}
+              secureTextEntry={false}
+              style={styles.textbox}
+              onChangeText={(value) => {
+                props.onChange(value)
+              }}
+              ref={emailInputRef}
+            />
+          }
+        />
+      </View>
+      <View>
+        <TouchableOpacity 
+          // handleSubmit validates inputs before calling onSubmit
+          onPress={handleSubmit(onSubmit, onError)}
+          // onPress={() => navigation.navigate('Main')}
+          style={styles.buttonSpecial}>
+          <Text style={styles.button}>Sign up</Text>    
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -142,37 +256,27 @@ function MainScreen ({ navigation }) {
 
       <TouchableOpacity
         onPress={() => navigation.navigate('Recommendations')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>Get recommendation</Text>
       </TouchableOpacity>
 
-      <Text style={styles.text}>
-        </Text>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('RecordDrive')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>  Record a new drive  </Text>
       </TouchableOpacity>
 
-      <Text style={styles.text}>
-        </Text>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('Statistics')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>      View statistics      </Text>
       </TouchableOpacity>
 
-      <Text style={styles.text}>
-        </Text>
-
       <TouchableOpacity
         // onPress={() => navigation.navigate('Recommendations')}
-        style={{ backgroundColor: '#fff' }}>
+        style={styles.buttonBasic}>
         <Text style={styles.button}>View/edit past drives</Text>
       </TouchableOpacity>
-
     </View>
   )
 }
@@ -186,8 +290,7 @@ function RecommendScreen({ navigation }) {
 
   //Variables to print prediction and message
   const [newPrediction, setNewPrediction] = useState(`__`);
-  const [newMessage, setNewMessage] = useState(`__`);
-  
+  const [newMessage, setNewMessage] = useState(``);
   
   const onSubmit = async (data) => { 
     // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -213,8 +316,13 @@ function RecommendScreen({ navigation }) {
     console.log("message: " + message+ ", prediction: " + prediction)
 
     //Set variables for later printing
-    setNewPrediction(prediction)
+    setNewPrediction(Math.round(prediction * 100) / 100)
     setNewMessage(message)
+  }
+
+  function refresh() {
+    navigation.navigate('Main')
+    navigation.navigate('Recommendations')
   }
 
   return (
@@ -289,7 +397,7 @@ function RecommendScreen({ navigation }) {
 
           //TO DO: OnPress will also enable the accept and reject drive buttons
 
-          style={{ backgroundColor: 'cyan', margin: 10 }}>
+          style={styles.buttonSpecial}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
       </View>
@@ -300,18 +408,19 @@ function RecommendScreen({ navigation }) {
 
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
-          style={{ backgroundColor: 'rgba(33, 161, 72, 1)'}}>
-          <Text style={styles.button}>Accept Drive</Text>    
+          style={{backgroundColor: 'white',
+          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
+          borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
+          paddingHorizontal: 5, color: 'black'}}>Accept Drive</Text>    
       </TouchableOpacity>
 
-      <Text style={styles.label}>  </Text>
-
-      <TouchableOpacity 
-      //TO DO: OnPress should refresh the page entirely
-      //possibly by returning to Main and then coming back to Get Rec
-          onPress={() => navigation.navigate('Main')}
-          style={{ backgroundColor: `rgba(203, 59, 59, 1)`}}>
-          <Text style={styles.button}>Reject Drive</Text>
+      <TouchableOpacity onPress={() => refresh()}
+          style={{backgroundColor: 'gray',
+          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
+          borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
+          paddingHorizontal: 5, color: 'black'}}>Reject Drive</Text>
       </TouchableOpacity>
       </View>
   
@@ -335,6 +444,18 @@ var index = 0;
 
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
+
+  // For formatting the time, ensuring the zeros in front of the time
+  // Slice -2 means selecting from the end of the array
+  const formatNumber = number => `0${number}`.slice(-2);
+
+    // For getting minutes and seconds from a time passed
+  const getRemaining = (time) => {
+    const mins = Math.floor(time / 60);
+    const secs = time - mins * 60;
+    return { mins: formatNumber(mins), secs: formatNumber(secs) };
+  }
+
   // Storing a variable remainingSecs
   const [remainingSecs, setRemainingSecs] = useState(0);
   // Storing a variable isActive
@@ -487,11 +608,51 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 10,
     marginVertical: 10,
+    borderRadius: 10
+  },
+  buttonWhiteText: {
+    color: 'white',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 10,
     borderRadius: 5
   },
-  textbox: {
-    //backgroundColor: 'rgba(150,150,150,1)',
+  buttonBasic: {
     backgroundColor: 'white',
+    color: 'black',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 15,
+    //borderColor: 'gray',
+  	borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 7
+  },
+  buttonSpecial: { //Currently identical to buttonBasic
+    //backgroundColor: '#8ebce7',
+    //backgroundColor: '#94bfe7',
+    //backgroundColor: '#072A42',
+    backgroundColor: 'white',
+    color: 'white',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 15,
+    borderColor: 'black',
+  	borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 7
+  },
+  buttonSmall: {
+    fontSize: 17,
+    marginHorizontal: 5,
+    marginVertical: 10,
+    //borderColor: 'gray',
+  	//borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 2
+  },
+  textbox: {
+    backgroundColor: 'rgba(255,255,255,.5)',
   	height: 40,
   	width: 200,
   	marginTop: 10,
@@ -532,22 +693,13 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 70,
     color: 'white',
-  },
-  circleButton: {
-    width: 100,
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 17,
-    borderRadius: 100,
-    backgroundColor: 'white',
-    color: 'black',
-    fontSize: 30,
   }
 });
 
-/*colors!
+/*Colors!
 Old background green: '#1ddf6e'
 New background green: '#66cc99'
-Reject drive red: `rgba(203, 59, 59, 1)`
+Button blue: '#80add6'
+Textbox half-opacity white: 'rgba(255,255,255,.5)'
+Old reject-drive red: `rgba(203, 59, 59, 1)`
 */

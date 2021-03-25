@@ -80,7 +80,7 @@ def add_drive():
         distance=drive_data['distance'], 
         pay=drive_data['pay'], 
         restaurant=drive_data['restaurant'],
-        rate=drive_data['rate'])
+        rate=drive_data['rate']) 
 
     db.session.add(new_drive)
     db.session.commit()
@@ -176,6 +176,7 @@ def get_recommendation():
 
     ridge = Ridge().fit(stats, targets)
     prediction = ridge.predict(new_drive)
+    prediction[0] = round(prediction[0], 2)
 
     message['prediction'] = prediction[0]
 
@@ -266,6 +267,55 @@ def record_drive():
     return "complete"
 
 '''
+Method to show to the user to see informative stats about past drives so they can possibly optimise their future drives more
+Will show Overall Pay, Overall Distance Driven, Overall Trips Fulfilled, Average Delivery Time, and Average Rate 
+'''
+@app.route('/get_statistics')
+def get_stats():
+    stat_list = Drive.query.all()
+    statistics = []
+
+    def get_pay():
+        for stat in stat_list:
+            overallPay = overallPay + Drive.pay
+
+        return overallPay
+    def get_distance():
+         for stat in stat_list:
+            overallDis = overallDis + Drive.distance
+
+         return overallDis
+    def get_trips():
+        for stat in stat_list:
+            overallTrips = overallTrips + Drive.trip
+
+        return overallTrips
+    def get_delivTime():
+        for stat in stat_list:
+            overallDelivTime = overallDelivTime + Drive.end - Drive.start
+
+        trips = get_trips
+        avgDelivTime = overallDelivTime/trips
+        return avgDelivTime
+    def get_rate():
+        for stat in stat_list:
+            overallRate = overallRate + Drive.rate
+        trips = get_trips
+        avgRate = overallRate/trips
+        return avgRate
+
+    for stat in stat_list:
+        statistics.append({
+            'Money Earned' : get_pay,
+            'Distance Driven' : get_distance,
+            'Trips ran' : get_trips,
+            'Average Delivery Time' : get_delivTime,
+            'Average Rate' : get_rate
+        })
+
+    return jsonify({'statistics' : statistics}), 201
+
+'''
 Method to logout of the account
 something about having to set up a login_manager for this to work I'm not sure, we'll figure it out later
 '''
@@ -274,9 +324,3 @@ something about having to set up a login_manager for this to work I'm not sure, 
 def logout():
     logout_user(current_user)
     return jsonify({'message': 'logout successful'})'''
-
-
-
-
-        
-    
