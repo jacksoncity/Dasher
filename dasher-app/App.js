@@ -15,10 +15,15 @@ export default function App () {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="Recommendations" component={RecommendScreen} />
-        <Stack.Screen name="RecordDrive" component={RecordDriveScreen} />
-        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
+        <Stack.Screen name="Main" component={MainScreen} 
+          //Nulling headerLeft cuts off login screen altogether
+          options={{/*headerLeft: null,*/ headerBackTitle: 'Log out'}}/>
+        <Stack.Screen name="Recommendations" component={RecommendScreen} 
+          options={{title: 'Get Recommendation'}}/>
+        <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
+          options={{title: 'Record Drive'}}/>
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} 
+          options={{title: 'Save Drive'}}/>
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -113,14 +118,14 @@ function LoginScreen ({ navigation }) {
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit, onError)}
           // onPress={() => navigation.navigate('Main')}
-          style={styles.buttonBasic}>
+          style={styles.buttonSpecial}>
           <Text style={styles.button}>Log In</Text>    
         </TouchableOpacity>
       </View>
       <View>
         <Text style={styles.label}> </Text>
         <TouchableOpacity onPress={signup}>
-          <Text style={styles.buttonWhiteText}>New to Dasher? Create an account.</Text>
+          <Text style={styles.buttonWhiteText}>New to Dasher? Create an account</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -234,7 +239,7 @@ const onError = (errors, e) => console.log(errors, e)
           // handleSubmit validates inputs before calling onSubmit
           onPress={handleSubmit(onSubmit, onError)}
           // onPress={() => navigation.navigate('Main')}
-          style={styles.buttonBasic}>
+          style={styles.buttonSpecial}>
           <Text style={styles.button}>Sign up</Text>    
         </TouchableOpacity>
       </View>
@@ -285,7 +290,7 @@ function RecommendScreen({ navigation }) {
 
   //Variables to print prediction and message
   const [newPrediction, setNewPrediction] = useState(`__`);
-  const [newMessage, setNewMessage] = useState(`__`);
+  const [newMessage, setNewMessage] = useState(``);
   
   const onSubmit = async (data) => { 
     // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -387,7 +392,7 @@ function RecommendScreen({ navigation }) {
 
           //TO DO: OnPress will also enable the accept and reject drive buttons
 
-          style={styles.buttonBasic}>
+          style={styles.buttonSpecial}>
         <Text style={ styles.button}>Get Recommendation</Text>
       </TouchableOpacity>
       </View>
@@ -399,17 +404,19 @@ function RecommendScreen({ navigation }) {
       <View>
       <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
           style={{backgroundColor: 'white',
-          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,}}>
+          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
+          borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
           paddingHorizontal: 5, color: 'black'}}>Accept Drive</Text>    
       </TouchableOpacity>
 
       <TouchableOpacity 
-      //TO DO: OnPress should refresh the page entirely
+      //TO DO: OnPress should refresh the page entirely,
       //possibly by returning to Main and then coming back to Get Rec
           onPress={() => navigation.navigate('Main')}
           style={{backgroundColor: 'gray',
-          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,}}>
+          marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
+          borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
           paddingHorizontal: 5, color: 'black'}}>Reject Drive</Text>
       </TouchableOpacity>
@@ -573,21 +580,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 15,
     //borderColor: 'gray',
-  	//borderWidth: 1,
+  	borderWidth: 1,
     paddingHorizontal: 5,
     borderRadius: 7
   },
-  buttonBlue: {
+  buttonSpecial: { //Currently identical to buttonBasic
     //backgroundColor: '#8ebce7',
-    backgroundColor: 'steelblue',
-    color: 'black',
+    //backgroundColor: '#94bfe7',
+    //backgroundColor: '#072A42',
+    backgroundColor: 'white',
+    color: 'white',
     fontSize: 20,
     marginHorizontal: 10,
-    marginVertical: 10,
+    marginVertical: 15,
     borderColor: 'black',
   	borderWidth: 1,
     paddingHorizontal: 5,
-    borderRadius: 2
+    borderRadius: 7
   },
   buttonSmall: {
     fontSize: 17,
