@@ -57,7 +57,7 @@ function LoginScreen ({ navigation }) {
     .then(data => {
         return data;
     });
-    if (response.message == "login successful") {
+    if (response.message == "login successfull") {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
@@ -84,7 +84,9 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              // autoCapitalize={false}
+            //I know the following line sometimes gives a warning.
+              //Please leave it in place, otherwise the forms are hard to work with
+              autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -185,7 +187,9 @@ const onError = (errors, e) => console.log(errors, e)
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              // autoCapitalize={false}
+              //I know the following line sometimes gives a warning.
+              //Please leave it in place, otherwise the forms are hard to work with
+              autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -223,7 +227,9 @@ const onError = (errors, e) => console.log(errors, e)
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              // autoCapitalize={false}
+              //I know the following line sometimes gives a warning.
+              //Please leave it in place, otherwise the forms are hard to work with
+              autoCapitalize={false}
               secureTextEntry={false}
               style={styles.textbox}
               onChangeText={(value) => {
