@@ -185,7 +185,7 @@ const onError = (errors, e) => console.log(errors, e)
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              autoCapitalize={false}
+              // autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -223,7 +223,7 @@ const onError = (errors, e) => console.log(errors, e)
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              autoCapitalize={false}
+              // autoCapitalize={false}
               secureTextEntry={false}
               style={styles.textbox}
               onChangeText={(value) => {
@@ -429,6 +429,7 @@ function RecommendScreen({ navigation }) {
   )
 }
 
+
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
   // For formatting the time, ensuring the zeros in front of the time
@@ -453,24 +454,13 @@ function RecordDriveScreen ({ navigation }) {
 
   // Called when pressing start/pause button
   const toggle = () => {
-    if (index == 0) {
-      setIsActive(!isActive);
-    } else if (index < 4) {
-      takeLap();
-    } 
-    else if (index >= 4) {
-      try {
-        saveDrive();
-      } catch(error) {
-        console.log(error);
-      }
-    }
+    setIsActive(!isActive);
+    takeLap();
   }
 
   const takeLap = () => {
     // setting start position
     laps.push(Date(Date.now()));
-    () => setIndex(index + 1);
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -531,18 +521,27 @@ function RecordDriveScreen ({ navigation }) {
       <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
         <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
       </TouchableOpacity>
-
       <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
         <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
     </View>
   );
 }
 
 function SaveDriveScreen ({ navigation }) {
+  /**
+  const end = drive.pop();
+  const leave = drive.pop();
+  const arrival = drive.pop();
+  const start = drive.pop();
+  */
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Drive saved!</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.text}>{`Start: ${start} Arrived: ${arrival} Left: ${leave} End: ${end}`}</Text>
+      </View>
       <Text style={{fontSize: 15, color: 'white'}}>Add any comments to your drive?</Text>
       <TextInput style={styles.commentsBox}></TextInput>
       <TouchableOpacity onPress={navigation.navigate('Main')} style={{backgroundColor: 'gray', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
