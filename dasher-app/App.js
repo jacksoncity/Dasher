@@ -2,12 +2,13 @@ import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Image, Alert, TextInput, TouchableOpacity, Dimensions} from 'react-native'
+import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { RecommendForm } from './RecommendForm'
 import ReactDOM from 'react-dom'
+import { State } from 'react-native-gesture-handler'
 
 export default function App () {
   return (
@@ -22,8 +23,7 @@ export default function App () {
           options={{title: 'Get Recommendation'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
           options={{title: 'Record Drive'}}/>
-        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} 
-          options={{title: 'Save Drive'}}/>
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -57,7 +57,7 @@ function LoginScreen ({ navigation }) {
     .then(data => {
         return data;
     });
-    if (response.message == "login successfull") {
+    if (response.message == "login successful") {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
@@ -84,7 +84,7 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              autoCapitalize={false}
+              // autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -429,22 +429,8 @@ function RecommendScreen({ navigation }) {
   )
 }
 
-// For formatting the time, ensuring the zeros in front of the time
-// Slice -2 means selecting from the end of the array
-const formatNumber = number => `0${number}`.slice(-2);
-
-// For getting minutes and seconds from a time passed
-const getRemaining = (time) => {
-  const mins = Math.floor(time / 60);
-  const secs = time - mins * 60;
-  return { mins: formatNumber(mins), secs: formatNumber(secs) };
-}
-var laps = new Array(4);
-var index = 0;
-
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
-
   // For formatting the time, ensuring the zeros in front of the time
   // Slice -2 means selecting from the end of the array
   const formatNumber = number => `0${number}`.slice(-2);
@@ -455,45 +441,51 @@ function RecordDriveScreen ({ navigation }) {
     const secs = time - mins * 60;
     return { mins: formatNumber(mins), secs: formatNumber(secs) };
   }
-
   // Storing a variable remainingSecs
   const [remainingSecs, setRemainingSecs] = useState(0);
   // Storing a variable isActive
   const [isActive, setIsActive] = useState(false);
   // Calling getRemaining to get time passed
   const { mins, secs } = getRemaining(remainingSecs);
-  
+
+  const [laps, setLaps] = useState([]);
+  let [index, setIndex] = useState(0);
 
   // Called when pressing start/pause button
-  var toggle = () => {
-    setIsActive(!isActive);
-    if (!isActive) {
-      // setting start position
-      // laps.push(Date(Date.now()));
-      laps[index] = Date(Date.now());
-      index = index + 1;
-    } else {
-      console.log(laps);
-      // saveDrive;
+  const toggle = () => {
+    if (index == 0) {
+      setIsActive(!isActive);
+    } else if (index < 4) {
+      takeLap();
+    } 
+    else if (index >= 4) {
+      try {
+        saveDrive();
+      } catch(error) {
+        console.log(error);
+      }
     }
   }
+
+  const takeLap = () => {
+    // setting start position
+    laps.push(Date(Date.now()));
+    () => setIndex(index + 1);
+  }
   // Resets the time back to initial state
-  var reset = () => {
+  const reset = () => {
     setRemainingSecs(0);
     setIsActive(false);
-    laps = new Array(4);
+    const laps = [];
   }
-  var addLap = () => {
-    // laps.push(Date(Date.now()));
-    laps[index] = Date(Date.now());
-    index = index + 1;
-  }
+
   const saveDrive = async () => {
-    const start = laps[0]
-    const restaurant_arrival = laps[1]
-    const restaurant_departure = laps[2]
-    const end = laps[3]
-    const drive = {"start": start, "restaurant_arrival": restaurant_arrival, "restaurant_departure": restaurant_departure, "end": end}
+    const end = laps.pop();
+    const restaurant_leave = laps.pop();
+    const restaurant_arrival = laps.pop();
+    const start = laps.pop();
+    
+    const drive = {"start": start, "restaurant_arrival": restaurant_arrival, "restaurant_leave": restaurant_leave, "end": end}
     console.log(drive)
     const response = await fetch("http://127.0.0.1:5000/record_drive", {
       method: "POST",
@@ -502,8 +494,8 @@ function RecordDriveScreen ({ navigation }) {
       },
       body: JSON.stringify(drive)
     })
-    return await response.json();
-    // console.log(response)
+    console.log(response);
+    navigation.navigate('SaveDrive');
   }
   
   useEffect(() => {
@@ -524,54 +516,39 @@ function RecordDriveScreen ({ navigation }) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
-      <TouchableOpacity onPress={toggle} style={styles.button}>
-        <Text style={styles.buttonText}>{isActive ? 'Save' : 'Start'}</Text>
+      <View style= {{flexDirection: 'row'}} >
+        <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+            { isActive ? 'Pause' : 'Start' }
+            </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+            { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Lap'}
+            </Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+        <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={addLap}style={styles.button}>
-        <Text style={styles.buttonText}>Lap</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={reset} style={[styles.button, styles.buttonReset]}>
-          <Text style={[styles.buttonText, styles.buttonTextReset]}>Reset</Text>
+
+      <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
+        <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 function SaveDriveScreen ({ navigation }) {
-  // Save Drive Screen is for confirming details of the drive and adding comments/details
-  // This screen is where the api record drive is called
-  const { control } = useForm();
-  const startRef = React.useRef()
-  const arrivalRef = React.useRef()
-  const leaveRef = React.useRef()
-  const endRef = React.useRef()
-
-  const onSubmit = async (data) => { 
-    const json = JSON.parse(JSON.stringify(data))
-    /**
-    const start = json["start"]
-    const restaurant_arrival = json["restaurant_arrival"]
-    const restaurant_leave = json["restaurant_leave"]
-    const end = json["end"]
-    const drive = {start, restaurant_arrival, restaurant_leave, end}
-    console.log(drive)
-    const response = await fetch("http://127.0.0.1:5000/record_drive", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(drive)
-    }).then((response) => response.json())
-    .then(data => {
-        return data;
-    });
-    */
-  }
-
   return (
-   <View>
-     <Text>Confirm drive with comments/details here</Text>
-   </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Drive saved!</Text>
+      <Text style={{fontSize: 15, color: 'white'}}>Add any comments to your drive?</Text>
+      <TextInput style={styles.commentsBox}></TextInput>
+      <TouchableOpacity onPress={navigation.navigate('Main')} style={{backgroundColor: 'gray', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
+        <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Submit</Text>
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -581,7 +558,6 @@ function StatisticsScreen ({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>
       Statistics</Text>
-
     </View>
   )
 }
@@ -693,6 +669,19 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 70,
     color: 'white',
+  },
+  commentsBox: {
+    textbox: {
+      backgroundColor: 'rgba(255,255,255,.5)',
+      height: 100,
+      width: 200,
+      marginTop: 10,
+      marginBottom: 20,
+      borderRadius: 5,
+      borderColor: 'white',
+      borderWidth: 1,
+      padding: 5
+    },
   }
 });
 
