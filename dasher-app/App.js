@@ -668,7 +668,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   commentsBox: {
-    textbox: {
       backgroundColor: 'rgba(255,255,255,.5)',
       height: 100,
       width: 200,
@@ -678,7 +677,6 @@ const styles = StyleSheet.create({
       borderColor: 'white',
       borderWidth: 1,
       padding: 5
-    },
   }
 });
 
