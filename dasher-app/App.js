@@ -411,16 +411,16 @@ function RecommendScreen({ navigation }) {
           style={{backgroundColor: 'white',
           marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
           borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
-          paddingHorizontal: 5, color: 'black'}}>Accept Drive</Text>    
+          <Text style={{fontSize: 17, color: 'black', marginHorizontal: 10, 
+          marginVertical: 10, paddingHorizontal: 5}}>Accept Drive</Text>    
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => refresh()}
           style={{backgroundColor: 'gray',
           marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
           borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 17, marginHorizontal: 10, marginVertical: 10, 
-          paddingHorizontal: 5, color: 'black'}}>Reject Drive</Text>
+          <Text style={{fontSize: 17, color: 'black', marginHorizontal: 10, 
+          marginVertical: 10, paddingHorizontal: 5}} >Reject Drive</Text>
       </TouchableOpacity>
       </View>
   
