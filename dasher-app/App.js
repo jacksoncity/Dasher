@@ -518,22 +518,22 @@ function RecordDriveScreen ({ navigation }) {
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
       <View style= {{flexDirection: 'row'}} >
         <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+          <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { isActive ? 'Pause' : 'Start' }
             </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+          <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Lap'}
             </Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-        <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
+        <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-        <Text style={{fontSize: 35, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+        <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
       </TouchableOpacity>
     </View>
   );
