@@ -539,9 +539,7 @@ function SaveDriveScreen ({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Drive saved!</Text>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={styles.text}>{`Start: ${start} Arrived: ${arrival} Left: ${leave} End: ${end}`}</Text>
-      </View>
+
       <Text style={{fontSize: 15, color: 'white'}}>Add any comments to your drive?</Text>
       <TextInput style={styles.commentsBox}></TextInput>
       <TouchableOpacity onPress={navigation.navigate('Main')} style={{backgroundColor: 'gray', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
