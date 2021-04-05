@@ -204,7 +204,7 @@ def login():
     if check_password_hash(user.password, input_data['password']):
         current_user = user
         # login_user(current_user)
-        return jsonify({'message': 'login successfull'}), 201
+        return jsonify({'message': 'login successful'}), 201
     return jsonify({'message': 'login failed'}), 404
 
 '''
