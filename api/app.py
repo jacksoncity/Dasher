@@ -80,7 +80,7 @@ def add_drive():
         distance=drive_data['distance'], 
         pay=drive_data['pay'], 
         restaurant=drive_data['restaurant'],
-        rate=drive_data['rate']) 
+        rate=drive_data['rate'])
 
     db.session.add(new_drive)
     db.session.commit()
@@ -324,3 +324,9 @@ something about having to set up a login_manager for this to work I'm not sure, 
 def logout():
     logout_user(current_user)
     return jsonify({'message': 'logout successful'})'''
+
+
+
+
+        
+    

@@ -55,7 +55,7 @@ function LoginScreen ({ navigation }) {
     if (response.message == "login successfull") {
       navigation.navigate('Main');
     } else {
-      //clear the input fields and display message
+      alert("username or password invalid, please try again")
     }
     console.log(response)
     
