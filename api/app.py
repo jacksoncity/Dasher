@@ -1,6 +1,6 @@
 from flask import jsonify, request, Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, ForeignKey
 from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -16,41 +16,35 @@ app.config['CORS_HEADERS'] = "Content-Type"
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # models for this databasee
+class Restaurant(db.Model):
+    restaurant_name = db.Column(db.String(50), primary_key=True, nullable=False)
+    average_wait = db.Column(db.Float, nullable=False)
+
+class User(db.Model):
+    username = db.Column(db.String(20), primary_key=True, nullable=False) #username cant go over 20 char
+    email = db.Column(db.String(50), nullable=False) #email cant go over 50 char
+    password = db.Column(db.String(40), nullable=False) #password cant go over 40 char
+
 class Drive(db.Model):
-    id = db.Column(db.Integer, primary_key=True) #synonymous with drive
-    trip = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True, nullable=False) #synonymous with drive
     start = db.Column(db.DateTime)
     restaurant_arrival = db.Column(db.DateTime)
     restaurant_leave = db.Column(db.DateTime)
     end = db.Column(db.DateTime)
-    restaurant = db.Column(db.Float) #needs to go in as a float but IDK how were gonna do that yet
-    pay = db.Column(db.Float)
-    delivery_time = db.Column(db.Float)
+    pay = db.Column(db.Float, nullable=False)
     restaurant_time = db.Column(db.Float)
-    distance = db.Column(db.Float)
+    distance = db.Column(db.Float, nullable=False)
     rate = db.Column(db.Float)
-    #restaurant_id = db.Column(db.Integer)
-    #user_id = db.Column(db.Integer)
+    restaurant_name = db.Column(db.Integer, ForeignKey("restaurant.restaurant_name"), nullable=False)
+    username = db.Column(db.Integer, ForeignKey("user.username"), nullable=False)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique = True) #username cant go over 20 char
-    email = db.Column(db.String(50), unique = True) #email cant go over 50 char
-    password = db.Column(db.String(40)) #password cant go over 40 char
 
-'''
 class Comment(db.Model):
-    comment_id = db.Column(db.Integer, primary_key=True)
-    comment = db.Column(db.String(500))
-    restaurant_id = db.Column(db.Integer, foreign_key=True)
-    user_id = db.Column(db.Integer, foreign_key=True)
-'''
+    comment_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    comment = db.Column(db.String(400), nullable=False)
+    restaurant_name = db.Column(db.Integer, ForeignKey("restaurant.restaurant_name"), nullable=False)
+    username = db.Column(db.String(20), ForeignKey("user.username"), nullable=False)
 
-'''
-class Restaurant(db.Model):
-    restaurant_id = db.Column(db.Integer, primary_key=True)
-    average_wait = db.Column(db.Float)
-'''
 
 '''
 Can add things up here that are like global variables for all of the views
@@ -68,19 +62,26 @@ def home():
 
 '''
 Method to add a drive to the drive database.
-------REMEMBER------
-WHEN PUTTING IN RESTAURATNS, USE INTS!!! (not strings)
+@param newData: TYPE - json request, ATTRIBUTES - 'distance', 'pay', 'restaurant', 'username'
 '''
 @app.route('/add_drive', methods=["POST"])
 def add_drive():
 
-    drive_data = request.get_json()
+    input_data = request.get_json()
+    restaurant = Restaurant.query.filter_by(restaurant_name=input_data['restaurant']).first()
 
+    if (restaurant == None):
+        restaurant = Restaurant(
+            restaurant_name=input_data['restaurant'],
+            average_wait=5)
+        db.session.add(restaurant)
+        db.session.commit()
+    
     new_drive = Drive(
-        distance=drive_data['distance'], 
-        pay=drive_data['pay'], 
-        restaurant=drive_data['restaurant'],
-        rate=drive_data['rate'])
+        distance=input_data['distance'], 
+        pay=input_data['pay'], 
+        restaurant_name=restaurant.restaurant_name,
+        username=input_data['username'])
 
     db.session.add(new_drive)
     db.session.commit()
@@ -103,7 +104,8 @@ def drives():
             'restaurant' : drive.restaurant, 
             'distance' : drive.distance, 
             'pay' : drive.pay, 
-            'rate' : drive.rate})
+            'rate' : drive.rate,
+            'user' : drive.username})
 
     return jsonify({'drives': drives}), 201
 
@@ -139,52 +141,130 @@ message:
 def get_recommendation():
 
     input_data = request.get_json()
+
+    #Find restaruant in reference
+    restaurant = Restaurant.query.filter_by(restaurant_name=input_data['restaurant']).first()
+
+    #If this restaurant has not been visited before
+    if restaurant == None:
+        restaurant = Restaurant(
+            restaurant_name=input_data['restaurant'],
+            average_wait=5)
+        db.session.add(restaurant)
+        db.session.commit()
+    
+    #Create new drive with corresponding drive
     to_save = Drive(
         distance=input_data['distance'], 
         pay=input_data['pay'], 
-        restaurant=input_data['restaurant'])
+        restaurant_name=restaurant.restaurant_name,
+        username=current_user.username)
+
+    #Create numpy version of this new drive to feed the algorithm
     new_drive = np.zeros(3)
-    new_drive[0] = input_data['distance']
-    new_drive[1] = input_data['pay']
-    new_drive[2] = input_data['restaurant']
+    new_drive[0] = to_save.distance
+    new_drive[1] = to_save.pay
+    new_drive[2] = restaurant.average_wait #using the restaurants average wait to do this
     new_drive = np.reshape(new_drive, (1, -1))
     
-    drive_list = Drive.query.all()
-    pay = np.zeros(len(drive_list))
-    restaurant = np.zeros(len(drive_list))
-    distance = np.zeros(len(drive_list))
-    targets = np.zeros(len(drive_list))
+    #Creating numpy arrays to go into algo
+    drive_list = db.session.query(Drive).filter_by(username=current_user.username).all()
+    drive_len = len(drive_list)
+    pay_stack = np.zeros(drive_len)
+    restaurant_stack = np.zeros(drive_len)
+    distance_stack = np.zeros(drive_len)
+    targets = np.zeros(drive_len)
     message = {}
 
-    if(len(drive_list) < 10):
+    #Creating messages based on how many drives the user has made
+    if(drive_len < 10):
         message['message'] = 'Not enough recorded drives to make a prediction'
         return jsonify({"message": message}), 201
-    elif(len(drive_list) < 50):
+    elif(drive_len < 50):
         message['message'] = 'Prediction may be innacurate'
     else:
         message['message'] = 'None'
 
+    #Putting all of the drives in the database in numpy arrays so that it can go in the algo
     index = 0
     for drive in drive_list:
-        pay[index] = drive.pay
-        distance[index] = drive.distance
-        restaurant[index] = drive.restaurant
+        related_restaurant = Restaurant.query.filter_by(restaurant_name=drive.restaurant_name).first()
+        pay_stack[index] = drive.pay
+        distance_stack[index] = drive.distance
+        restaurant_stack[index] = related_restaurant.average_wait
         targets[index] = drive.rate
         index += 1
 
-    stats = np.stack((distance, pay, restaurant), axis = -1)
+    #committing the drive here so it doesn't interfere with previous loop
+    db.session.add(to_save)
+    db.session.commit()
 
+    #Stacking and formatting to put in algo
+    stats = np.stack((distance_stack, pay_stack, restaurant_stack), axis = -1)
+
+    #Putting in algo
     ridge = Ridge().fit(stats, targets)
     prediction = ridge.predict(new_drive)
     prediction[0] = round(prediction[0], 2)
 
+    #Adding the prediction to the message
     message['prediction'] = prediction[0]
-
-    #db.session.add(to_save)
-    #db.session.commit()
 
     return jsonify({'message': message}), 201
 
+'''
+Method to actually store the times from the drive passed by the user through the 'Record Drive' function
+@param user_input: TYPE - json ATTRIBUTES - 'start_time', 'restaurant_arrival', 'restaurant_leave', 'end'
+@return there will be no return, might change later to something letting the user know 
+if it was recorded or not
+'''
+@app.route('/record_drive', methods=['POST'])
+@cross_origin()
+def record_drive():
+
+    input_data = request.get_json()
+
+    #Putting in the new times for the drive that is inputed
+    drive = Drive.query.filter_by(id=func.max(Drive.id))
+    drive.start = input_data['start']
+    drive.restaurant_arrival = input_data['restaurant_arrival']
+    drive.restaurant_leave = input_data['restaurant_leave']
+    drive.end = input_data['end']
+    drive.rate = (drive.end - drive.start) / drive.pay
+    drive.restaurant_time = drive.restaurant_leave - drive.restaurant_arrive
+
+    #Getting all previous drives to this restaurant to get a new average
+    previous_restaurant_visits = Drive.query.filter_by(restaurant_name=drive.restaurant_name).all()
+
+    #Adding all of the restaurant times and dividing it by total trips
+    rate = 0
+    if previous_restaurant_visits is not None:
+        for visit in previous_restaurant_visits:
+            rate = rate + visit.restaurant_time
+        rate = rate / len(previous_restaurant_visits)
+    else:
+        rate = drive.restaurant_time
+
+    #Updating the restaurant 
+    related_restaurant = Restaurant.query.filter_by(restaurant_name=drive.restaurant_name).first()
+    related_restaurant.rate = rate
+
+    #I don't know if you have to commit when updating but might as well
+    db.session.commit()
+
+
+    return "done"
+
+'''
+This method is for when the user does not like the recommendation that they get in the get 
+recommendation screen and they choose to reject the drive
+'''
+@app.route('/decline_drive', methods['GET'])
+def decline_drive():
+
+    #Get the most recent drive and delete
+    drive = Drive.query.filter_by(id=func.max(Drive.id)).delete()
+    db.session.commit()
 
 '''
 This method allows the user to login and access the app page of the app should the 
@@ -203,7 +283,6 @@ def login():
     # need to check the string of password and username
     if check_password_hash(user.password, input_data['password']):
         current_user = user
-        # login_user(current_user)
         return jsonify({'message': 'login successful'}), 201
     return jsonify({'message': 'login failed'}), 404
 
@@ -218,6 +297,7 @@ message:
 @app.route('/signup', methods=['POST'])
 @cross_origin()
 def signup():
+    
     input_data = request.get_json()
 
     new_user = User(username=input_data['username'], email=input_data['email'], password=generate_password_hash(input_data['password']))
@@ -244,27 +324,7 @@ def users():
             'email' : user.email})
 
     return jsonify({'users': users}), 201
-'''
-Method to actually store the times from the drive passed by the user through the 'Record Drive' function
-@param user_input: TYPE - json ATTRIBUTES - 'start_time', 'restaurant_arrival', 'restaurant_leave', 'end'
-@return there will be no return, might change later to something letting the user know 
-if it was recorded or not
-'''
-@app.route('/record_drive', methods=['POST'])
-@cross_origin()
-def record_drive():
 
-    input_data = request.get_json()
-
-    drive = Drive.query.filter_by(id=func.max(Drive.id))
-    drive.start = input_data['start']
-    drive.restaurant_arrival = input_data['restaurant_arrival']
-    drive.restaurant_leave = input_data['restaurant_leave']
-    drive.end = input_data['end']
-    db.session.commit()
-
-
-    return "complete"
 
 '''
 Method to show to the user to see informative stats about past drives so they can possibly optimise their future drives more
@@ -285,11 +345,19 @@ def get_stats():
             overallDis = overallDis + Drive.distance
 
          return overallDis
+    '''
+    I'm getting rid of trip from the database. It stood for the shift that they were working, not the
+    individual delivery that they were doing, I think that you were looking for the specific deliveries
+    so I just changed it to the len of stat_list because thats how many deliveries they would have done
+    '''
     def get_trips():
+        '''
         for stat in stat_list:
             overallTrips = overallTrips + Drive.trip
 
         return overallTrips
+        '''
+        return len(stat_list)
     def get_delivTime():
         for stat in stat_list:
             overallDelivTime = overallDelivTime + Drive.end - Drive.start
@@ -325,6 +393,13 @@ def logout():
     logout_user(current_user)
     return jsonify({'message': 'logout successful'})'''
 
+def temp():
+
+    print(User.query.all())
+    
+
+if __name__ == "__main__":
+    temp()
 
 
 

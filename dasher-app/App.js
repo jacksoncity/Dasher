@@ -57,7 +57,8 @@ function LoginScreen ({ navigation }) {
     .then(data => {
         return data;
     });
-    if (response.message == "login successfull") {
+    console.log(response.message)
+    if (response.message == "login successful") {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
