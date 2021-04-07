@@ -47,10 +47,11 @@ function LoginScreen ({ navigation }) {
     const password = json["password"]
     const user = {username, password}
     console.log(JSON.stringify(user))
-    const response = await fetch("http://127.0.0.1:5000/login", {
+    const response = await fetch("http://localhost:5000/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "accepts":"application/json"
       },
       body: JSON.stringify(user)
     }).then((response) => response.json())
@@ -152,7 +153,7 @@ function SignupScreen ({ navigation }) {
     const email = json["email"]
     const newUser = {username, password, email}
     console.log(JSON.stringify(newUser))
-    const response = await fetch("http://127.0.0.1:5000/signup", {
+    const response = await fetch("http://localhost:5000/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -307,7 +308,7 @@ function RecommendScreen({ navigation }) {
     const pay = json["pay"]
     const drive = {restaurant, distance, pay}
     console.log(drive)
-    const response = await fetch("http://127.0.0.1:5000/get_recommendation", {
+    const response = await fetch("http://localhost:5000/get_recommendation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -484,7 +485,7 @@ function RecordDriveScreen ({ navigation }) {
     
     const drive = {"start": start, "restaurant_arrival": restaurant_arrival, "restaurant_leave": restaurant_leave, "end": end}
     console.log(drive)
-    const response = await fetch("http://127.0.0.1:5000/record_drive", {
+    const response = await fetch("http://localhost:5000/record_drive", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
