@@ -220,30 +220,45 @@ def record_drive():
 
     input_data = request.get_json()
 
+    months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
+                'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
+    
+    #Converting the inputs to datetimes
+    temp = input_data['start'].replace(':', ' ').split()
+    start = datetime(int(temp[3]),int(months[temp[1]]),int(temp[2]),int(temp[4]),int(temp[5]),int(temp[6]))
+    temp = input_data['restaurant_arrival'].replace(':', ' ').split()
+    restaurant_arrival = datetime(int(temp[3]),int(months[temp[1]]),int(temp[2]),int(temp[4]),int(temp[5]),int(temp[6]))
+    temp = input_data['restaurant_leave'].replace(':', ' ').split()
+    restaurant_leave = datetime(int(temp[3]),int(months[temp[1]]),int(temp[2]),int(temp[4]),int(temp[5]),int(temp[6]))
+    temp = input_data['end'].replace(':', ' ').split()
+    end = datetime(int(temp[3]),int(months[temp[1]]),int(temp[2]),int(temp[4]),int(temp[5]),int(temp[6]))
+    restaurant_time = (restaurant_leave - restaurant_arrival).total_seconds() / 60
+
     #Putting in the new times for the drive that is inputed
-    drive = Drive.query.filter_by(id=func.max(Drive.id))
-    drive.start = input_data['start']
-    drive.restaurant_arrival = input_data['restaurant_arrival']
-    drive.restaurant_leave = input_data['restaurant_leave']
-    drive.end = input_data['end']
-    drive.rate = (drive.end - drive.start) / drive.pay
-    drive.restaurant_time = drive.restaurant_leave - drive.restaurant_arrive
+    drive = Drive.query.order_by(Drive.id.desc()).first()
+    drive.start = start
+    drive.restaurant_arrival = restaurant_arrival
+    drive.restaurant_leave = restaurant_leave
+    drive.end = end
+    drive.rate = (drive.pay * 60) / ((drive.end - drive.start).total_seconds() / 60)
+    drive.restaurant_time = restaurant_time
 
     #Getting all previous drives to this restaurant to get a new average
     previous_restaurant_visits = Drive.query.filter_by(restaurant_name=drive.restaurant_name).all()
 
     #Adding all of the restaurant times and dividing it by total trips
-    rate = 0
+    wait = 0
     if previous_restaurant_visits is not None:
         for visit in previous_restaurant_visits:
-            rate = rate + visit.restaurant_time
-        rate = rate / len(previous_restaurant_visits)
+            wait = wait + visit.restaurant_time
+        wait = wait / len(previous_restaurant_visits)
     else:
-        rate = drive.restaurant_time
+        wait = drive.restaurant_time
+    print(wait)
 
     #Updating the restaurant 
     related_restaurant = Restaurant.query.filter_by(restaurant_name=drive.restaurant_name).first()
-    related_restaurant.rate = rate
+    related_restaurant.average_wait = wait
 
     #Commit all the new changes we have made
     db.session.commit()
@@ -359,50 +374,42 @@ def get_stats():
         for stat in stat_list:
             overallPay = overallPay + stat.pay
 
-        return overallPay
+        return round(overallPay, 2)
+        
     def get_distance():
         overallDis = 0
         for stat in stat_list:
             overallDis = overallDis + stat.distance
 
-        return overallDis
-    '''
-    I'm getting rid of trip from the database. It stood for the shift that they were working, not the
-    individual delivery that they were doing, I think that you were looking for the specific deliveries
-    so I just changed it to the len of stat_list because thats how many deliveries they would have done
-    '''
+        return round(overallDis, 2)
+   
     def get_trips():
-        '''
-        for stat in stat_list:
-            overallTrips = overallTrips + Drive.trip
-
-        return overallTrips
-        '''
         return len(stat_list)
+
     def get_delivTime():
         overallDelivTime = 0
         for stat in stat_list:
-            overallDelivTime = overallDelivTime + stat.end - stat.start
+            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60)
 
-        trips = get_trips
-        avgDelivTime = overallDelivTime/trips
-        return avgDelivTime
+        trips = len(stat_list)
+        avgDelivTime = overallDelivTime / trips
+        return round(avgDelivTime, 2)
+        
     def get_rate():
         overallRate = 0
         for stat in stat_list:
             overallRate = overallRate + stat.rate
-        trips = get_trips
+        trips = len(stat_list)
         avgRate = overallRate/trips
-        return avgRate
+        return round(avgRate, 2)
 
-    for stat in stat_list:
-        statistics.append({
-            'Money Earned' : get_pay,
-            'Distance Driven' : get_distance,
-            'Trips ran' : get_trips,
-            'Average Delivery Time' : get_delivTime,
-            'Average Rate' : get_rate
-        })
+    statistics.append({
+        'Money Earned' : get_pay(),
+        'Distance Driven' : get_distance(),
+        'Trips ran' : get_trips(),
+        'Average Delivery Time' : get_delivTime(),
+        'Average Rate' : get_rate()
+    })
 
     return jsonify({'statistics' : statistics}), 201
 
