@@ -86,9 +86,7 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-            //I know the following line sometimes gives a warning.
-              //Please leave it in place, otherwise the forms are hard to work with
-              autoCapitalize={false}
+              autoCapitalize="none"
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
