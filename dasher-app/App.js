@@ -544,9 +544,10 @@ function RecordDriveScreen ({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={{textAlign: 'center'}}>
       <StatusBar barStyle="light-content" />
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
-      <View style= {{flexDirection: 'row'}} >
+      <View style= {{flexDirection: 'row', textAlign: 'center', justifyContent: 'center'}}>
         <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { isActive ? 'Pause' : 'Start' }
@@ -564,6 +565,7 @@ function RecordDriveScreen ({ navigation }) {
       <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
         <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
       </TouchableOpacity> 
+      <View style= {{flexDirection: 'row', textAlign: 'center', justifyContent: 'center'}}>
       <FlatList 
         data={splits}
         style={{width:"15%"}}
@@ -572,13 +574,15 @@ function RecordDriveScreen ({ navigation }) {
         // stickyHeaderIndices={[0]}
         renderItem={({item, index})=> {
           return (
-            <View style={{...styles.tableRow, backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
+            <View style={{backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
               <Text style={{textAlign: 'center'}}>{item.Increment}</Text>
               <Text style={{textAlign: 'center'}}>{item.Time}</Text>
             </View>
           )
         }}
       />
+      </View>
+      </View>
   </View>
   );
 }
@@ -744,8 +748,6 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       padding: 5
   },
-  // start of styles for table
-  // end of styles for table
 });
 
 /*Colors!
