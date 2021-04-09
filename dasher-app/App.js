@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState, Component } from 'react'
 import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 
 import { RecommendForm } from './RecommendForm'
 import ReactDOM from 'react-dom'
@@ -476,7 +476,13 @@ function RecordDriveScreen ({ navigation }) {
     // setting start position
     laps.push(Date(Date.now()));
     // update table!
-    setSplits()
+    const splits = splits.map(split => {
+      let properties = {
+        "Increment": split.Increment,
+        "Time": Date(Date.now()).toString(),
+      }
+
+    })
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -516,7 +522,7 @@ function RecordDriveScreen ({ navigation }) {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
 
-
+  // array of objects
   const [ splits, setSplits ] = useState([
     {
       Increment: "Start",
@@ -542,21 +548,21 @@ function RecordDriveScreen ({ navigation }) {
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
       <View style= {{flexDirection: 'row'}} >
         <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { isActive ? 'Pause' : 'Start' }
             </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Lap'}
             </Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-        <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
+        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-        <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
       </TouchableOpacity> 
       <FlatList 
         data={splits}
