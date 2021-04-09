@@ -2,9 +2,9 @@ import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 
 import { RecommendForm } from './RecommendForm'
 import ReactDOM from 'react-dom'
@@ -26,7 +26,7 @@ export default function App () {
         <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
-    </NavigationContainer>
+  </NavigationContainer>
   )
 }
 
@@ -86,7 +86,9 @@ function LoginScreen ({ navigation }) {
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              autoCapitalize="none"
+            //I know the following line sometimes gives a warning.
+              //Please leave it in place, otherwise the forms are hard to work with
+              autoCapitalize={false}
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -473,6 +475,14 @@ function RecordDriveScreen ({ navigation }) {
   const takeLap = () => {
     // setting start position
     laps.push(Date(Date.now()));
+    // update table!
+    const splits = splits.map(split => {
+      let properties = {
+        "Increment": split.Increment,
+        "Time": Date(Date.now()).toString(),
+      }
+
+    })
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -512,31 +522,64 @@ function RecordDriveScreen ({ navigation }) {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
 
-  // Still need to do the laps function, that way you can distinguish between different intervals of the drive
-  // Thinking of displaying splits below or next to the buttons and time
+  // array of objects
+  const [ splits, setSplits ] = useState([
+    {
+      Increment: "Start",
+      Time: "--",
+    },
+    {
+      Increment: "Arrived",
+      Time: "--",
+    },
+    {
+      Increment: "Departed",
+      Time: "--",
+    },
+    {
+      Increment: "End",
+      Time: "--",
+    }
+  ])
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
       <View style= {{flexDirection: 'row'}} >
         <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { isActive ? 'Pause' : 'Start' }
             </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
             { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Lap'}
             </Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-        <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
+        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-        <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
       </TouchableOpacity> 
-    </View>
+      <FlatList 
+        data={splits}
+        style={{width:"15%"}}
+        keyExtractor={(item, index) => index+""}
+        // ListHeaderComponent={tableHeader}
+        // stickyHeaderIndices={[0]}
+        renderItem={({item, index})=> {
+          return (
+            <View style={{...styles.tableRow, backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
+              <Text style={{textAlign: 'center'}}>{item.Increment}</Text>
+              <Text style={{textAlign: 'center'}}>{item.Time}</Text>
+            </View>
+          )
+        }}
+      />
+  </View>
   );
 }
 
@@ -700,7 +743,9 @@ const styles = StyleSheet.create({
       borderColor: 'white',
       borderWidth: 1,
       padding: 5
-  }
+  },
+  // start of styles for table
+  // end of styles for table
 });
 
 /*Colors!
