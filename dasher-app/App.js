@@ -2,7 +2,7 @@ import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
 import { NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -26,7 +26,7 @@ export default function App () {
         <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
-    </NavigationContainer>
+  </NavigationContainer>
   )
 }
 
@@ -57,7 +57,7 @@ function LoginScreen ({ navigation }) {
     .then(data => {
         return data;
     });
-    if (response.message == "login successfull") {
+    if (response.message == "login successful") {
       navigation.navigate('Main');
     } else {
       //clear the input fields and display message
@@ -467,6 +467,7 @@ function RecordDriveScreen ({ navigation }) {
   const takeLap = () => {
     // setting start position
     laps.push(Date(Date.now()));
+    // update table!
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -506,8 +507,26 @@ function RecordDriveScreen ({ navigation }) {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
 
-  // Still need to do the laps function, that way you can distinguish between different intervals of the drive
-  // Thinking of displaying splits below or next to the buttons and time
+
+  const [ splits, setSplits ] = useState([
+    {
+      Increment: "Start",
+      Time: "--",
+    },
+    {
+      Increment: "Arrived",
+      Time: "--",
+    },
+    {
+      Increment: "Departed",
+      Time: "--",
+    },
+    {
+      Increment: "End",
+      Time: "--",
+    }
+  ])
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -530,7 +549,22 @@ function RecordDriveScreen ({ navigation }) {
       <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
         <Text style={{fontSize: 25, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
       </TouchableOpacity> 
-    </View>
+      <FlatList 
+        data={splits}
+        style={{width:"15%"}}
+        keyExtractor={(item, index) => index+""}
+        // ListHeaderComponent={tableHeader}
+        // stickyHeaderIndices={[0]}
+        renderItem={({item, index})=> {
+          return (
+            <View style={{...styles.tableRow, backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
+              <Text style={{textAlign: 'center'}}>{item.Increment}</Text>
+              <Text style={{textAlign: 'center'}}>{item.Time}</Text>
+            </View>
+          )
+        }}
+      />
+  </View>
   );
 }
 
@@ -683,7 +717,9 @@ const styles = StyleSheet.create({
       borderColor: 'white',
       borderWidth: 1,
       padding: 5
-  }
+  },
+  // start of styles for table
+  // end of styles for table
 });
 
 /*Colors!
