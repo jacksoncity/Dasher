@@ -188,7 +188,7 @@ def get_recommendation():
         pay_stack[index] = drive.pay
         distance_stack[index] = drive.distance
         restaurant_stack[index] = related_restaurant.average_wait
-        targets[index] = drive.rate
+        targets[index] = -1 * drive.rate
         index += 1
 
     #committing the drive here so it doesn't interfere with previous loop
@@ -543,8 +543,23 @@ def temp():
             rate=drive[9]
         )
         db.session.add(to_add)
-    db.session.commit()
-    '''
+    db.session.commit()'''
+
+    '''users = User.query.all()
+
+    for user in users:
+        print('username: ' + str(user.username) + ' password: ' + str(user.password))
+
+
+    restaurants = Restaurant.query.all()
+
+    for restaurant in restaurants:
+        print('name: ' + str(restaurant.restaurant_name) + ' rate: ' + str(restaurant.average_wait))'''
+
+    current_user = User.query.filter_by(current_user=True).first()
+
+    drives = Drive.query.filter_by(username=current_user.username).all()
+
     print(len(Drive.query.all()))
 
     
