@@ -466,7 +466,7 @@ def temp():
     db.session.add(mac)
     db.session.commit()'''
     
-
+    '''
     #Import the new data
     taxi_data = pd.read_csv("taxi_data.csv", low_memory=False)
 
@@ -544,7 +544,7 @@ def temp():
         )
         db.session.add(to_add)
     db.session.commit()
-
+    '''
     print(len(Drive.query.all()))
 
     
