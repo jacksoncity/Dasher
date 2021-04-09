@@ -254,7 +254,7 @@ const onError = (errors, e) => console.log(errors, e)
 // Main menu screen
 function MainScreen ({ navigation }) {
   function logout() {
-    fetch("http://localhost:5000/logout")
+    /*await*/ fetch("http://localhost:5000/logout")
     navigation.navigate('Login')
   }
 
