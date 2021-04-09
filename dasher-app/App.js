@@ -473,9 +473,6 @@ function RecordDriveScreen ({ navigation }) {
     takeLap();
   }
 
-  // const [split, setSplit] = useState([ '--', '--', '--', '--',])
-  // var i = 0
-
   const takeLap = () => {
     // setting start position
     laps.push(Date());
