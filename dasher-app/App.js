@@ -476,13 +476,7 @@ function RecordDriveScreen ({ navigation }) {
     // setting start position
     laps.push(Date(Date.now()));
     // update table!
-    const splits = splits.map(split => {
-      let properties = {
-        "Increment": split.Increment,
-        "Time": Date(Date.now()).toString(),
-      }
-
-    })
+    // splits.map(updateLap)
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -492,6 +486,7 @@ function RecordDriveScreen ({ navigation }) {
   }
 
   const saveDrive = async () => {
+    /**
     const end = laps.pop();
     const restaurant_leave = laps.pop();
     const restaurant_arrival = laps.pop();
@@ -507,7 +502,16 @@ function RecordDriveScreen ({ navigation }) {
       body: JSON.stringify(drive)
     })
     console.log(response);
-    navigation.navigate('SaveDrive');
+    */
+   Alert.alert(
+    'Recording successfully saved!',
+    [
+      {text: 'OK', onPress: () => navigation.navigate('SaveDrive')},
+      // {text: 'Recommend', onPress: () => navigation.navigate('Recommendations')},
+    ],
+    // { cancelable: false }
+  )
+  navigation.navigate('SaveDrive')
   }
   
   useEffect(() => {
@@ -544,9 +548,9 @@ function RecordDriveScreen ({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={{textAlign: 'center'}}>
       <StatusBar barStyle="light-content" />
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
+      <View style={{textAlign: 'center'}}>
       <View style= {{flexDirection: 'row', textAlign: 'center', justifyContent: 'center'}}>
         <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
@@ -555,7 +559,7 @@ function RecordDriveScreen ({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
-            { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Lap'}
+            { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Add Time'}
             </Text>
         </TouchableOpacity>
       </View>
@@ -570,8 +574,6 @@ function RecordDriveScreen ({ navigation }) {
         data={splits}
         style={{width:"15%"}}
         keyExtractor={(item, index) => index+""}
-        // ListHeaderComponent={tableHeader}
-        // stickyHeaderIndices={[0]}
         renderItem={({item, index})=> {
           return (
             <View style={{backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
@@ -588,22 +590,38 @@ function RecordDriveScreen ({ navigation }) {
 }
 
 function SaveDriveScreen ({ navigation }) {
-  /**
-  const end = drive.pop();
-  const leave = drive.pop();
-  const arrival = drive.pop();
-  const start = drive.pop();
-  */
+  const {control, handleSubmit, setError, errors} = useForm( { criteriaMode: 'all' })
+  const commentText = React.useRef()
+
+  const saveComments = () => {
+    Alert.alert(
+      'Comments successfully saved!',
+      'Continue to menu or recommend?',
+      [
+        {text: 'Menu', onPress: () => navigation.navigate('Menu')},
+        {text: 'Recommend', onPress: () => navigation.navigate('Recommendations')},
+      ],
+      { cancelable: false }
+    )
+
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Drive saved!</Text>
-
-      <Text style={{fontSize: 15, color: 'white'}}>Add any comments to your drive?</Text>
-      <TextInput style={styles.commentsBox}></TextInput>
-      <TouchableOpacity onPress={navigation.navigate('Main')} style={{backgroundColor: 'gray', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-        <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Submit</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>Comments</Text>
+      <TextInput 
+        style={styles.commentsBox}
+        multiline={true}
+        placeholder={"Add comments about the restaurant here!"}
+        // numberOfLines={5}
+        textAlignVertical={"top"}
+        textBreakStrategy={"highQuality"}
+        textAlignVertical
+        autoCorrect>
+      </TextInput>
+      <TouchableOpacity onPress={saveComments} style={{backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+      </TouchableOpacity> 
     </View>
   )
 }
@@ -739,14 +757,16 @@ const styles = StyleSheet.create({
   },
   commentsBox: {
       backgroundColor: 'rgba(255,255,255,.5)',
-      height: 100,
-      width: 200,
+      height: 150,
+      width: 250,
       marginTop: 10,
       marginBottom: 20,
       borderRadius: 5,
       borderColor: 'white',
       borderWidth: 1,
-      padding: 5
+      padding: 5,
+      flexWrap: 'wrap',
+      overflow: 'scroll',
   },
 });
 
