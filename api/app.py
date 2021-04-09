@@ -543,9 +543,14 @@ def temp():
             rate=drive[9]
         )
         db.session.add(to_add)
-    db.session.commit()
-'''
-    print(len(Drive.query.all()))
+    db.session.commit()'''
+
+    users = User.query.all()
+
+    for user in users:
+        print('username: ' + str(user.username) + ' password: ' + str(user.password))
+    
+    print(len(User.query.all()))
 
 
 
