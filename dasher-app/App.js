@@ -189,9 +189,7 @@ const onError = (errors, e) => console.log(errors, e)
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              //I know the following line sometimes gives a warning.
-              //Please leave it in place, otherwise the forms are hard to work with
-              autoCapitalize={false}
+              autoCapitalize="none"
               style={styles.textbox}
               onChangeText={(value) => {
                 props.onChange(value)
@@ -229,9 +227,7 @@ const onError = (errors, e) => console.log(errors, e)
           defaultValue=''
           render={(props) => 
             <TextInput {...props} 
-              //I know the following line sometimes gives a warning.
-              //Please leave it in place, otherwise the forms are hard to work with
-              autoCapitalize={false}
+              autoCapitalize="none"
               secureTextEntry={false}
               style={styles.textbox}
               onChangeText={(value) => {
@@ -257,6 +253,11 @@ const onError = (errors, e) => console.log(errors, e)
 
 // Main menu screen
 function MainScreen ({ navigation }) {
+  function logout() {
+    fetch("http://localhost:5000/logout")
+    navigation.navigate('Login')
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -287,7 +288,7 @@ function MainScreen ({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => logout()}
         style={styles.buttonLogout}>
         <Text style={styles.button}>Log out</Text>
       </TouchableOpacity>
