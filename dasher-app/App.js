@@ -17,8 +17,8 @@ export default function App () {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Main" component={MainScreen} 
-          //Nulling headerLeft cuts off login screen altogether
-          options={{/*headerLeft: null,*/ headerBackTitle: 'Log out'}}/>
+          //Nulling headerLeft removes navigation back to login screen
+          options={{headerLeft: null, headerBackTitle: 'Log out'}}/>
         <Stack.Screen name="Recommendations" component={RecommendScreen} 
           options={{title: 'Get Recommendation'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
@@ -62,7 +62,7 @@ function LoginScreen ({ navigation }) {
     if (response.message == "login successful") {
       navigation.navigate('Main');
     } else {
-      //clear the input fields and display message
+      //Display message
       alert(`Login invalid`)
     }
     console.log(response)
@@ -283,6 +283,12 @@ function MainScreen ({ navigation }) {
         style={styles.buttonBasic}>
         <Text style={styles.button}>View/edit past drives</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Login')}
+        style={styles.buttonLogout}>
+        <Text style={styles.button}>Log out</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -421,7 +427,7 @@ function RecommendScreen({ navigation }) {
           marginVertical: 10, paddingHorizontal: 5}}>Accept Drive</Text>    
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => refresh()}
+      <TouchableOpacity //onPress={() => refresh()}
           style={{backgroundColor: 'gray',
           marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
           borderWidth: 1, borderRadius: 20}}>
@@ -603,6 +609,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 15,
     //borderColor: 'gray',
+  	borderWidth: 1,
+    paddingHorizontal: 5,
+    borderRadius: 7
+  },
+  buttonLogout: {
+    backgroundColor: 'rgba(255,255,255,.5)',
+    color: 'black',
+    fontSize: 20,
+    marginHorizontal: 10,
+    marginVertical: 25,
+    borderColor: 'white',
   	borderWidth: 1,
     paddingHorizontal: 5,
     borderRadius: 7

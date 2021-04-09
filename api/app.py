@@ -466,8 +466,8 @@ def temp():
     db.session.add(mac)
     db.session.commit()'''
     
-
-    '''#Import the new data
+    '''
+    #Import the new data
     taxi_data = pd.read_csv("taxi_data.csv", low_memory=False)
 
     #Get and rename the columns that we want to use
@@ -545,7 +545,12 @@ def temp():
         db.session.add(to_add)
     db.session.commit()'''
 
-    print(len(Drive.query.all()))
+    users = User.query.all()
+
+    for user in users:
+        print('username: ' + str(user.username) + ' password: ' + str(user.password))
+    
+    print(len(User.query.all()))
 
     
 
