@@ -188,18 +188,21 @@ def get_recommendation():
         pay_stack[index] = drive.pay
         distance_stack[index] = drive.distance
         restaurant_stack[index] = related_restaurant.average_wait
-        targets[index] = -1 * drive.rate
+        targets[index] = drive.rate
         index += 1
 
     #committing the drive here so it doesn't interfere with previous loop
-    db.session.add(to_save)
-    db.session.commit()
+    '''db.session.add(to_save)
+    db.session.commit()'''
 
     #Stacking and formatting to put in algo
     stats = np.stack((distance_stack, pay_stack, restaurant_stack), axis = -1)
 
+    print('stats: ' + str(stats[0]) + ' target: ' + str(targets[0]))
+    print(new_drive)
+
     #Putting in algo
-    ridge = Ridge().fit(stats, targets)
+    ridge = Ridge(alpha=200).fit(stats, targets)
     prediction = ridge.predict(new_drive)
     prediction[0] = round(prediction[0], 2)
 
@@ -224,7 +227,7 @@ def record_drive():
                 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
     
     #Converting the inputs to datetimes
-    temp = input_data['start'].replace(':', ' ').split()
+    '''temp = input_data['start'].replace(':', ' ').split()
     start = datetime(int(temp[3]),int(months[temp[1]]),int(temp[2]),int(temp[4]),int(temp[5]),int(temp[6]))
     temp = input_data['restaurant_arrival'].replace(':', ' ').split()
     restaurant_arrival = datetime(int(temp[3]),int(months[temp[1]]),int(temp[2]),int(temp[4]),int(temp[5]),int(temp[6]))
@@ -261,7 +264,7 @@ def record_drive():
     related_restaurant.average_wait = wait
 
     #Commit all the new changes we have made
-    db.session.commit()
+    db.session.commit()'''
 
 
     return "done"
