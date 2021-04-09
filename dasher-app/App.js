@@ -611,6 +611,27 @@ function SaveDriveScreen ({ navigation }) {
 
 // Statistics screen
 function StatisticsScreen ({ navigation }) {
+
+    const response = /*await*/ fetch("http://localhost:5000/get_statistics", {
+      /*method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "accepts":"application/json"
+      },
+      body: JSON.stringify(user)*/
+    }).then((response) => response.json())
+    .then(data => {
+        return data;
+    });
+    
+    /*console.log(response.message)
+    if (response.message == "login successful") {
+      navigation.navigate('Main');
+    } else {
+      //Display message
+      alert(`Login invalid`)
+    }*/
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
