@@ -444,7 +444,6 @@ function RecommendScreen({ navigation }) {
   )
 }
 
-
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
   // For formatting the time, ensuring the zeros in front of the time
@@ -615,31 +614,44 @@ function SaveDriveScreen ({ navigation }) {
 
 // Statistics screen
 function StatisticsScreen ({ navigation }) {
+  //const { control, handleSubmit, errors } = useForm();
+  const [newStatistics, setNewStatistics] = useState(`__`);
 
-    const response = /*await*/ fetch("http://localhost:5000/get_statistics", {
-      /*method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "accepts":"application/json"
-      },
-      body: JSON.stringify(user)*/
-    }).then((response) => response.json())
+  /*async function fetchMovies() {
+  const response = await fetch('/movies');
+  // waits until the request completes...
+  console.log(response);
+}*/
+
+  const onSubmit = async (data) => { 
+    const response = await fetch("http://localhost:5000/get_statistics")
+    .then((response) => response.json())
     .then(data => {
         return data;
     });
-    
-    /*console.log(response.message)
-    if (response.message == "login successful") {
-      navigation.navigate('Main');
-    } else {
-      //Display message
-      alert(`Login invalid`)
-    }*/
+    console.log(response)
 
+    //const statistics = response.statistics
+    const statistics = response
+    //console.log("statistics: " + statistics)
+
+    //Set variables for later printing
+    setNewStatistics(statistics)
+  }
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-      Statistics</Text>
+      <Text style={styles.title}>Statistics</Text>
+      <View>
+        <TouchableOpacity
+          // handleSubmit validates inputs before calling onSubmit
+          //onPress={handleSubmit(onSubmit)}
+          onPress={onSubmit}
+          style={styles.buttonSpecial}>
+        <Text style={ styles.button}>Get Statistics</Text>
+      </TouchableOpacity>
+      </View>
+      <Text style={styles.text}>{`${newStatistics}`}</Text>
     </View>
   )
 }
