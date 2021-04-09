@@ -473,11 +473,19 @@ function RecordDriveScreen ({ navigation }) {
     takeLap();
   }
 
+  // const [split, setSplit] = useState([ '--', '--', '--', '--',])
+  // var i = 0
+
   const takeLap = () => {
     // setting start position
-    laps.push(Date(Date.now()));
+    laps.push(Date());
+    /**
+    console.log(laps)
     // update table!
-    // splits.map(updateLap)
+    split.splice(i, 0, Date().toString);
+    i++;
+    console.log(split)
+    */
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -487,7 +495,7 @@ function RecordDriveScreen ({ navigation }) {
   }
 
   const saveDrive = async () => {
-    /**
+    
     const end = laps.pop();
     const restaurant_leave = laps.pop();
     const restaurant_arrival = laps.pop();
@@ -503,7 +511,7 @@ function RecordDriveScreen ({ navigation }) {
       body: JSON.stringify(drive)
     })
     console.log(response);
-    */
+    
     alert('Recording successfully saved!')
     navigation.navigate('SaveDrive')
   }
