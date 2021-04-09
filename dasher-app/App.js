@@ -504,15 +504,8 @@ function RecordDriveScreen ({ navigation }) {
     })
     console.log(response);
     */
-   Alert.alert(
-    'Recording successfully saved!',
-    [
-      {text: 'OK', onPress: () => navigation.navigate('SaveDrive')},
-      // {text: 'Recommend', onPress: () => navigation.navigate('Recommendations')},
-    ],
-    // { cancelable: false }
-  )
-  navigation.navigate('SaveDrive')
+    alert('Recording successfully saved!')
+    navigation.navigate('SaveDrive')
   }
   
   useEffect(() => {
@@ -595,16 +588,9 @@ function SaveDriveScreen ({ navigation }) {
   const commentText = React.useRef()
 
   const saveComments = () => {
-    Alert.alert(
-      'Comments successfully saved!',
-      'Continue to menu or recommend?',
-      [
-        {text: 'Menu', onPress: () => navigation.navigate('Menu')},
-        {text: 'Recommend', onPress: () => navigation.navigate('Recommendations')},
-      ],
-      { cancelable: false }
-    )
-
+    // call save comments api here
+    alert('Comments successfully saved!')
+    navigation.navigate('Main')
   }
 
   return (
