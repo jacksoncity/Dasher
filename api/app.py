@@ -443,43 +443,8 @@ This method is just to put in dummy data so that it can be used for testing and 
 '''
 def temp():
 
-    '''ianr = User(
-        username='ianr',
-        password='admin',
-        email='ianr@email.com',
-        current_user=False
-    )
-    andreat = User(
-        username='andreat',
-        password='admin',
-        email='andreat@email.com',
-        current_user=False
-    )
-    susannahb = User(
-        username='susannahb',
-        password='admin',
-        email='susannahb@email.com',
-        current_user=False
-    )
-    jacksons = User(
-        username='jacksons',
-        password='admin',
-        email='jacksons@email.com',
-        current_user=False
-    )
-    admin = User(
-        username='admin',
-        password='admin',
-        email='admin@email.com',
-        current_user=False
-    )
-    db.session.add(ianr)
-    db.session.add(andreat)
-    db.session.add(susannahb)
-    db.session.add(jacksons)
-    db.session.add(admin)
-
-    portillos = Restaurant(
+    
+    '''portillos = Restaurant(
         restaurant_name='Portillos',
         average_wait=5
     )
@@ -579,8 +544,8 @@ def temp():
         )
         db.session.add(to_add)
     db.session.commit()'''
-    
-    print(len(Drive.query.all()))
+
+    print(len(User.query.all()))
 
     
 
