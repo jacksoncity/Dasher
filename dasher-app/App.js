@@ -464,7 +464,13 @@ function RecordDriveScreen ({ navigation }) {
   const { mins, secs } = getRemaining(remainingSecs);
 
   const [laps, setLaps] = useState([]);
-  let [index, setIndex] = useState(0);
+  // let [index, setIndex] = useState(0);
+
+  const [index, setIndex] = useState(0);
+  const [start, setStart] = useState([ "Start"]);
+  const [arrive, setArrive] = useState([ "Arrived"]);
+  const [depart, setDepart] = useState([ "Departed"]);
+  const [end, setEnd] = useState([ "End"]);
 
   // Called when pressing start/pause button
   const toggle = () => {
@@ -475,13 +481,27 @@ function RecordDriveScreen ({ navigation }) {
   const takeLap = () => {
     // setting start position
     laps.push(Date());
-    /**
-    console.log(laps)
-    // update table!
-    split.splice(i, 0, Date().toString);
-    i++;
-    console.log(split)
-    */
+
+    const m = mins;
+    const s = secs;
+     
+    if (index === 0) {
+      start.push(`${m}:${s}`);
+      console.log ("index = 0")
+    } else if (index === 1) {
+      arrive.push(`${m}:${s}`);
+      console.log ("index = 1")
+    } else if (index === 2) {
+      depart.push(`${m}:${s}`);
+      console.log ("index = 2")
+    } else if (index === 3) {
+      end.push(`${m}:${s}`);
+      console.log ("index = 3")
+    } else {
+      alert("No more splits to take!")
+    }
+    setIndex(index + 1);
+    console.log(index)
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -524,25 +544,6 @@ function RecordDriveScreen ({ navigation }) {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
 
-  // array of objects
-  const [ splits, setSplits ] = useState([
-    {
-      Increment: "Start",
-      Time: "--",
-    },
-    {
-      Increment: "Arrived",
-      Time: "--",
-    },
-    {
-      Increment: "Departed",
-      Time: "--",
-    },
-    {
-      Increment: "End",
-      Time: "--",
-    }
-  ])
 
   return (
     <View style={styles.container}>
@@ -557,32 +558,25 @@ function RecordDriveScreen ({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
-            { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Add Time'}
+            { (index === 1) ? 'At Restaurant' : (index === 2) ? 'Left Restaurant' : (index === 3) ? 'End Drive' : 'Add Time'}
             </Text>
         </TouchableOpacity>
-      </View>
-      <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
-      </TouchableOpacity> 
-      <View style= {{flexDirection: 'row', textAlign: 'center', justifyContent: 'center'}}>
-      <FlatList 
-        data={splits}
-        style={{width:"15%"}}
-        keyExtractor={(item, index) => index+""}
-        renderItem={({item, index})=> {
-          return (
-            <View style={{backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
-              <Text style={{textAlign: 'center'}}>{item.Increment}</Text>
-              <Text style={{textAlign: 'center'}}>{item.Time}</Text>
-            </View>
-          )
-        }}
-      />
-      </View>
-      </View>
+        </View>
+        <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+        </TouchableOpacity>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{ start[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 1) ? '--' : start[1]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{arrive[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 2) ? '--' : arrive[1]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{depart[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 3) ? '--' : depart[1]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{end[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 4) ? '--' : end[1]}</Text>
+    </View>
   </View>
   );
 }
