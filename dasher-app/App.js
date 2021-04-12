@@ -563,10 +563,10 @@ function RecordDriveScreen ({ navigation }) {
         </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>              Reset</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>               Save</Text>
         </TouchableOpacity>
           <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{ start[0]}</Text>
           <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 1) ? '--' : start[1]}</Text>
