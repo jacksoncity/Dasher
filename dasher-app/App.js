@@ -254,7 +254,7 @@ const onError = (errors, e) => console.log(errors, e)
 // Main menu screen
 function MainScreen ({ navigation }) {
   function logout() {
-    fetch("http://localhost:5000/logout")
+    /*await*/ fetch("http://localhost:5000/logout")
     navigation.navigate('Login')
   }
 
@@ -444,7 +444,6 @@ function RecommendScreen({ navigation }) {
   )
 }
 
-
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
   // For formatting the time, ensuring the zeros in front of the time
@@ -567,10 +566,10 @@ function RecordDriveScreen ({ navigation }) {
         </View>
         <View style={{textAlign: 'center'}}>
         <TouchableOpacity onPress={reset} style={{textAlign: 'center', backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>             Reset           </Text>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>               Reset</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={saveDrive} style={{textAlign: 'center', backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>             Save            </Text>
+          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>               Save</Text>
         </TouchableOpacity>
           <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{ start[0]}</Text>
           <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 1) ? '--' : start[1]}</Text>
@@ -617,10 +616,44 @@ function SaveDriveScreen ({ navigation }) {
 
 // Statistics screen
 function StatisticsScreen ({ navigation }) {
+  //const { control, handleSubmit, errors } = useForm();
+  const [newStatistics, setNewStatistics] = useState(`__`);
+
+  /*async function fetchMovies() {
+  const response = await fetch('/movies');
+  // waits until the request completes...
+  console.log(response);
+}*/
+
+  const onSubmit = async (data) => { 
+    const response = await fetch("http://localhost:5000/get_statistics")
+    .then((response) => response.json())
+    .then(data => {
+        return data;
+    });
+    console.log(response)
+
+    //const statistics = response.statistics
+    const statistics = response
+    //console.log("statistics: " + statistics)
+
+    //Set variables for later printing
+    setNewStatistics(statistics)
+  }
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-      Statistics</Text>
+      <Text style={styles.title}>Statistics</Text>
+      <View>
+        <TouchableOpacity
+          // handleSubmit validates inputs before calling onSubmit
+          //onPress={handleSubmit(onSubmit)}
+          onPress={onSubmit}
+          style={styles.buttonSpecial}>
+        <Text style={ styles.button}>Get Statistics</Text>
+      </TouchableOpacity>
+      </View>
+      <Text style={styles.text}>{`${newStatistics}`}</Text>
     </View>
   )
 }
