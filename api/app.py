@@ -188,7 +188,7 @@ def get_recommendation():
     #Putting in algo
     X_train, X_test, y_train, y_test = train_test_split(stats, targets, random_state=0)
     temp = Ridge(alpha=.01).fit(X_train, y_train)
-    y_pred = temp.predict(X_test)ß
+    y_pred = temp.predict(X_test)
     prediction = temp.predict(new_drive)
     prediction[0] = round(prediction[0], 2)
 
@@ -426,29 +426,7 @@ This is a method that takes the method that will store the comments that the use
 '''
 @app.route('/add_comment', methods=['POST'])
 @cross_origin()
-def comment():
-
-    input_data = request.get_json()
-
-    #Find current user
-    current_user = User.query.filter_by(current_user=True).all()
-    assert len(current_user) <= 1, len(current_user)
-    current_user = current_user[0]
-
-    to_save = Comment(
-        comment=input_data['comment'],
-        restaurant_name=input_data['restaurant_name'],
-        username=currrent_user.username
-    )
-
-'''
-This is a method that takes the method that will store the comments that the user makes
-@param user_input: TYPE - json ATTRIBUTES - 'comment', 'restaurant_name'
-@return there won't be a return
-'''
-@app.route('/add_comment', methods=['POST'])
-@cross_origin()
-def comment():
+def add_comment():
 
     input_data = request.get_json()
 
