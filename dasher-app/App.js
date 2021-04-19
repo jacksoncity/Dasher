@@ -262,31 +262,26 @@ function MainScreen ({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>
       Main Menu</Text>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('Recommendations')}
         style={styles.buttonBasic}>
         <Text style={styles.button}>Get recommendation</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('RecordDrive')}
         style={styles.buttonBasic}>
         <Text style={styles.button}>  Record a new drive  </Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         onPress={() => navigation.navigate('Statistics')}
         style={styles.buttonBasic}>
         <Text style={styles.button}>      View statistics      </Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         // onPress={() => navigation.navigate('Recommendations')}
         style={styles.buttonBasic}>
         <Text style={styles.button}>View/edit past drives</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         onPress={() => logout()}
         style={styles.buttonLogout}>
@@ -635,7 +630,7 @@ function StatisticsScreen ({ navigation }) {
 
     //const statistics = response.statistics
     const statistics = response
-    //console.log("statistics: " + statistics)
+    // console.log("statistics: " + statistics)
 
     //Set variables for later printing
     setNewStatistics(statistics)
@@ -691,14 +686,12 @@ const styles = StyleSheet.create({
   },
   buttonBasic: {
     backgroundColor: 'white',
-    color: 'black',
-    fontSize: 20,
     marginHorizontal: 10,
     marginVertical: 15,
     //borderColor: 'gray',
   	borderWidth: 1,
-    paddingHorizontal: 5,
-    borderRadius: 7
+    paddingHorizontal: 10,
+    borderRadius: 7,
   },
   buttonLogout: {
     backgroundColor: 'rgba(255,255,255,.5)',

@@ -353,7 +353,6 @@ def users():
 
     return jsonify({'users': users}), 201
 
-
 '''
 Method to show to the user to see informative stats about past drives so they can possibly optimise their future drives more
 Will show Overall Pay, Overall Distance Driven, Overall Trips Fulfilled, Average Delivery Time, and Average Rate 
