@@ -254,7 +254,7 @@ const onError = (errors, e) => console.log(errors, e)
 // Main menu screen
 function MainScreen ({ navigation }) {
   function logout() {
-    fetch("http://localhost:5000/logout")
+    /*await*/ fetch("http://localhost:5000/logout")
     navigation.navigate('Login')
   }
 
@@ -444,7 +444,6 @@ function RecommendScreen({ navigation }) {
   )
 }
 
-
 // RecordDrive screen
 function RecordDriveScreen ({ navigation }) {
   // For formatting the time, ensuring the zeros in front of the time
@@ -465,7 +464,13 @@ function RecordDriveScreen ({ navigation }) {
   const { mins, secs } = getRemaining(remainingSecs);
 
   const [laps, setLaps] = useState([]);
-  let [index, setIndex] = useState(0);
+  // let [index, setIndex] = useState(0);
+
+  const [index, setIndex] = useState(0);
+  const [start, setStart] = useState([ "Start"]);
+  const [arrive, setArrive] = useState([ "Arrived"]);
+  const [depart, setDepart] = useState([ "Departed"]);
+  const [end, setEnd] = useState([ "End"]);
 
   // Called when pressing start/pause button
   const toggle = () => {
@@ -475,14 +480,28 @@ function RecordDriveScreen ({ navigation }) {
 
   const takeLap = () => {
     // setting start position
-    laps.push(Date());
-    /**
-    console.log(laps)
-    // update table!
-    split.splice(i, 0, Date().toString);
-    i++;
-    console.log(split)
-    */
+    laps.push(Date(Date.now()));
+
+    const m = mins;
+    const s = secs;
+     
+    if (index === 0) {
+      start.push(`${m}:${s}`);
+      console.log ("index = 0")
+    } else if (index === 1) {
+      arrive.push(`${m}:${s}`);
+      console.log ("index = 1")
+    } else if (index === 2) {
+      depart.push(`${m}:${s}`);
+      console.log ("index = 2")
+    } else if (index === 3) {
+      end.push(`${m}:${s}`);
+      console.log ("index = 3")
+    } else {
+      alert("No more splits to take!")
+    }
+    setIndex(index + 1);
+    console.log(index)
   }
   // Resets the time back to initial state
   const reset = () => {
@@ -492,7 +511,7 @@ function RecordDriveScreen ({ navigation }) {
   }
 
   const saveDrive = async () => {
-    
+    /**
     const end = laps.pop();
     const restaurant_leave = laps.pop();
     const restaurant_arrival = laps.pop();
@@ -508,6 +527,7 @@ function RecordDriveScreen ({ navigation }) {
       body: JSON.stringify(drive)
     })
     console.log(response);
+    */
     
     alert('Recording successfully saved!')
     navigation.navigate('SaveDrive')
@@ -525,25 +545,6 @@ function RecordDriveScreen ({ navigation }) {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
 
-  // array of objects
-  const [ splits, setSplits ] = useState([
-    {
-      Increment: "Start",
-      Time: "--",
-    },
-    {
-      Increment: "Arrived",
-      Time: "--",
-    },
-    {
-      Increment: "Departed",
-      Time: "--",
-    },
-    {
-      Increment: "End",
-      Time: "--",
-    }
-  ])
 
   return (
     <View style={styles.container}>
@@ -558,32 +559,27 @@ function RecordDriveScreen ({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
-            { (index == 1) ? 'Arrived' : (index == 2) ? 'Left' : (index == 3) ? 'End' : 'Add Time'}
+            { (index === 1) ? 'At Restaurant' : (index === 2) ? 'Left Restaurant' : (index === 3) ? 'End Drive' : 'Add Time'}
             </Text>
         </TouchableOpacity>
-      </View>
-      <TouchableOpacity onPress={reset} style={{backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={saveDrive} style={{backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
-        <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
-      </TouchableOpacity> 
-      <View style= {{flexDirection: 'row', textAlign: 'center', justifyContent: 'center'}}>
-      <FlatList 
-        data={splits}
-        style={{width:"15%"}}
-        keyExtractor={(item, index) => index+""}
-        renderItem={({item, index})=> {
-          return (
-            <View style={{backgroundColor: index % 2 == 1 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.75)'}}>
-              <Text style={{textAlign: 'center'}}>{item.Increment}</Text>
-              <Text style={{textAlign: 'center'}}>{item.Time}</Text>
-            </View>
-          )
-        }}
-      />
-      </View>
-      </View>
+        </View>
+        </View>
+        <View style={{textAlign: 'center'}}>
+        <TouchableOpacity onPress={reset} style={{textAlign: 'center', backgroundColor: 'black', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 15, marginHorizontal: 60, marginVertical: 10, paddingHorizontal: 5, color: 'white'}}>Reset</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={saveDrive} style={{textAlign: 'center', backgroundColor: 'rgba(255,255,255,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20, borderColor: 'white'}}>
+          <Text style={{fontSize: 15, marginHorizontal: 60, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+        </TouchableOpacity>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{ start[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 1) ? '--' : start[1]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{arrive[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 2) ? '--' : arrive[1]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{depart[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 3) ? '--' : depart[1]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.55)', textAlign: 'center'}}>{end[0]}</Text>
+          <Text style={{backgroundColor: 'rgba(255,255,255,.75)', textAlign: 'center'}}>{ (index < 4) ? '--' : end[1]}</Text>
+    </View>
   </View>
   );
 }
@@ -620,10 +616,44 @@ function SaveDriveScreen ({ navigation }) {
 
 // Statistics screen
 function StatisticsScreen ({ navigation }) {
+  //const { control, handleSubmit, errors } = useForm();
+  const [newStatistics, setNewStatistics] = useState(`__`);
+
+  /*async function fetchMovies() {
+  const response = await fetch('/movies');
+  // waits until the request completes...
+  console.log(response);
+}*/
+
+  const onSubmit = async (data) => { 
+    const response = await fetch("http://localhost:5000/get_statistics")
+    .then((response) => response.json())
+    .then(data => {
+        return data;
+    });
+    console.log(response)
+
+    //const statistics = response.statistics
+    const statistics = response
+    //console.log("statistics: " + statistics)
+
+    //Set variables for later printing
+    setNewStatistics(statistics)
+  }
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-      Statistics</Text>
+      <Text style={styles.title}>Statistics</Text>
+      <View>
+        <TouchableOpacity
+          // handleSubmit validates inputs before calling onSubmit
+          //onPress={handleSubmit(onSubmit)}
+          onPress={onSubmit}
+          style={styles.buttonSpecial}>
+        <Text style={ styles.button}>Get Statistics</Text>
+      </TouchableOpacity>
+      </View>
+      <Text style={styles.text}>{`${newStatistics}`}</Text>
     </View>
   )
 }
