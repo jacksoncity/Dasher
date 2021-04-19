@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS, cross_origin
 import pandas as pd
 from datetime import datetime
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -133,6 +135,9 @@ def get_recommendation():
 
     #Find restaruant in reference
     restaurant = Restaurant.query.filter_by(restaurant_name=input_data['restaurant']).first()
+    current_user = User.query.filter_by(current_user=True).all()
+    assert len(current_user) == 1, len(current_user)
+    current_user = current_user[0]
 
     #If this restaurant has not been visited before
     if restaurant == None:
@@ -141,21 +146,11 @@ def get_recommendation():
             average_wait=5)
         db.session.add(restaurant)
         db.session.commit()
-    
-    #Create new drive with corresponding drive
-    current_user = User.query.filter_by(current_user=True).all()
-    assert len(current_user) == 1, len(current_user)
-    current_user = current_user[0]
-    to_save = Drive(
-        distance=input_data['distance'], 
-        pay=input_data['pay'], 
-        restaurant_name=restaurant.restaurant_name,
-        username=current_user.username)
 
     #Create numpy version of this new drive to feed the algorithm
     new_drive = np.zeros(3)
-    new_drive[0] = to_save.distance
-    new_drive[1] = to_save.pay
+    new_drive[0] = input_data['distance']
+    new_drive[1] = input_data['pay']
     new_drive[2] = restaurant.average_wait #using the restaurants average wait to do this
     new_drive = np.reshape(new_drive, (1, -1))
     
@@ -170,11 +165,7 @@ def get_recommendation():
 
     #Creating messages based on how many drives the user has made
     if(drive_len < 10):
-        message['message'] = 'Not enough recorded drives to make a prediction'
-        db.session.add(to_save)
-        db.session.commit()
-        print(current_user)
-        print(to_save)
+        message['message'] = 'Not enough recorded drives to make a predictions'
         return jsonify({"message": message}), 201
     elif(drive_len < 50):
         message['message'] = 'Prediction may be innacurate'
@@ -191,22 +182,48 @@ def get_recommendation():
         targets[index] = drive.rate
         index += 1
 
-    #committing the drive here so it doesn't interfere with previous loop
-    db.session.add(to_save)
-    db.session.commit()
-
     #Stacking and formatting to put in algo
     stats = np.stack((distance_stack, pay_stack, restaurant_stack), axis = -1)
 
     #Putting in algo
-    ridge = Ridge().fit(stats, targets)
-    prediction = ridge.predict(new_drive)
+    X_train, X_test, y_train, y_test = train_test_split(stats, targets, random_state=0)
+    temp = Ridge(alpha=.01).fit(X_train, y_train)
+    y_pred = temp.predict(X_test)
+    prediction = temp.predict(new_drive)
     prediction[0] = round(prediction[0], 2)
 
     #Adding the prediction to the message
     message['prediction'] = prediction[0]
 
     return jsonify({'message': message}), 201
+
+'''
+Method to accept the drive after they get the recommendation
+@param user_input: TYPE - json ATTRIBUTES - 'restaurant', 'distance', 'pay'
+@return there will be no return
+'''
+@app.route('/accept_drive', methods=['POST'])
+@cross_origin()
+def accept_drive():
+
+    input_data = request.get_json()
+
+    #Find restaruant in reference
+    restaurant = Restaurant.query.filter_by(restaurant_name=input_data['restaurant']).first()
+
+    #Create new drive with corresponding drive
+    current_user = User.query.filter_by(current_user=True).all()
+    assert len(current_user) == 1, len(current_user)
+    current_user = current_user[0]
+    to_save = Drive(
+        distance=input_data['distance'], 
+        pay=input_data['pay'], 
+        restaurant_name=restaurant.restaurant_name,
+        username=current_user.username)
+
+    #committing the drive here so it doesn't interfere with previous loop
+    db.session.add(to_save)
+    db.session.commit()
 
 '''
 Method to actually store the times from the drive passed by the user through the 'Record Drive' function
@@ -254,7 +271,6 @@ def record_drive():
         wait = wait / len(previous_restaurant_visits)
     else:
         wait = drive.restaurant_time
-    print(wait)
 
     #Updating the restaurant 
     related_restaurant = Restaurant.query.filter_by(restaurant_name=drive.restaurant_name).first()
@@ -264,19 +280,6 @@ def record_drive():
     db.session.commit()
 
 
-    return "done"
-
-'''
-This method is for when the user does not like the recommendation that they get in the get 
-recommendation screen and they choose to reject the drive
-'''
-@app.route('/reject_drive')
-def reject_drive():
-
-    #Get the most recent drive and delete
-    to_delete = Drive.query.order_by(Drive.id.desc()).first()
-    db.session.delete(to_delete)
-    db.session.commit()
     return "done"
 
 '''
@@ -331,28 +334,6 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'user created'}), 201 #then needs to return the user to the login page
-
-    #return jsonify({'message': 'user creation error'}) #needs to return the user to the login page
-
-'''
-Method to display all the users that are in the database as of now
-Will show, username, password, and email
-'''
-@app.route('/users')
-def users():
-
-    user_list = User.query.all()
-    users = []
-
-    for user in user_list:
-        users.append({
-            'username' : user.username, 
-            'password' : user.password,
-            'email' : user.email,
-            'current_user' : user.current_user})
-
-    return jsonify({'users': users}), 201
-
 
 '''
 Method to show to the user to see informative stats about past drives so they can possibly optimise their future drives more
@@ -437,6 +418,77 @@ def logout():
         current_user[0].current_user = False
         db.session.commit()
         return jsonify({'message': 'logout successful'})
+
+'''
+This is a method that takes the method that will store the comments that the user makes
+@param user_input: TYPE - json ATTRIBUTES - 'comment', 'restaurant_name'
+@return there won't be a return
+'''
+@app.route('/add_comment', methods=['POST'])
+@cross_origin()
+def add_comment():
+
+    input_data = request.get_json()
+
+    #Find current user
+    current_user = User.query.filter_by(current_user=True).all()
+    assert len(current_user) <= 1, len(current_user)
+    current_user = current_user[0]
+
+    to_save = Comment(
+        comment=input_data['comment'],
+        restaurant_name=input_data['restaurant_name'],
+        username=currrent_user.username
+    )
+
+    db.session.add(to_save)
+    db.session.commit()
+
+'''
+This is a method that will delete the comment that the user wants to delete
+@param user_input: TYPE - json ATTRIBUTES - 'comment_id'
+@return message: TYPE - json ATTRIBUTES - 'message'
+message:
+    'could not delete comment' - if the comment couldn't be found
+    'comment deleted' - if the comment was found and deleted
+'''
+@app.route('/delete_comment', methods=['POST'])
+@cross_origin()
+def delete_comment():
+
+    input_data = request.get_json()
+
+    to_delete = Comment.query.filter_by(comment_id=input_data['comment_id']).first()
+
+    if (to_delete == None):
+        return jsonify({'message': 'could not delete comment'})
+    else:
+        db.session.delete(to_delete)
+        db.session.commit()
+        return jsonify({'message': 'comment deleted'}), 201
+
+'''
+This is a method that will edit the comment that the user wants to edit
+@param user_input: TYPE - json ATTRIBUTES - 'comment_id', 'comment'
+@return message: TYPE - json ATTRIBUTES - 'message'
+message:
+    'could not edit comment' - if the comment couldn't be found
+    'comment edited' - if the comment was found and edited
+'''
+@app.route('/edit_comment', methods=['POST'])
+@cross_origin()
+def edit_comment():
+
+    input_data = request.get_json()
+
+    to_edit = Comment.query.filter_by(comment_id=input_data['comment_id']).first()
+
+    if (to_edit == None):
+        return jsonify({'message': 'could not edit comment'})
+    else:
+        to_edit.comment = input_data['comment']
+        db.session.commit()
+        return jsonify({'message': 'comment edited'}), 201
     
 '''
 This method is just to put in dummy data so that it can be used for testing and such things like that
@@ -444,29 +496,21 @@ This method is just to put in dummy data so that it can be used for testing and 
 def temp():
 
     
-    '''portillos = Restaurant(
-        restaurant_name='Portillos',
-        average_wait=5
-    )
-    wendys = Restaurant(
-        restaurant_name='Wendys',
-        average_wait=2
-    )
-    chick = Restaurant(
-        restaurant_name='Chick-Fil-A',
-        average_wait=4
-    )
-    mac = Restaurant(
-        restaurant_name='McDonalds',
-        average_wait=1
-    )
-    db.session.add(portillos)
-    db.session.add(wendys)
-    db.session.add(chick)
-    db.session.add(mac)
-    db.session.commit()'''
-    
-    '''
+    print(len(Drive.query.all()))
+
+def tailored():
+
+    start = []
+    distance = []
+
+    for i in range(100):
+        start.append(datetime.datetime.now())
+
+    print("hello")
+
+
+def taxi():
+
     #Import the new data
     taxi_data = pd.read_csv("taxi_data.csv", low_memory=False)
 
@@ -543,29 +587,41 @@ def temp():
             rate=drive[9]
         )
         db.session.add(to_add)
-    db.session.commit()'''
-
-    '''users = User.query.all()
-
-    for user in users:
-        print('username: ' + str(user.username) + ' password: ' + str(user.password))
+    db.session.commit()
 
 
-    restaurants = Restaurant.query.all()
+def restaurant():
 
-    for restaurant in restaurants:
-        print('name: ' + str(restaurant.restaurant_name) + ' rate: ' + str(restaurant.average_wait))'''
+    portillos = Restaurant(
+        restaurant_name='Portillos',
+        average_wait=5
+    )
+    wendys = Restaurant(
+        restaurant_name='Wendys',
+        average_wait=2
+    )
+    chick = Restaurant(
+        restaurant_name='Chick-Fil-A',
+        average_wait=4
+    )
+    mac = Restaurant(
+        restaurant_name='McDonalds',
+        average_wait=1
+    )
 
-    current_user = User.query.filter_by(current_user=True).first()
-
-    drives = Drive.query.filter_by(username=current_user.username).all()
-
-    print(len(Drive.query.all()))
-
+    db.session.add(portillos)
+    db.session.add(wendys)
+    db.session.add(chick)
+    db.session.add(mac)
+    db.session.commit()
 
 
 if __name__ == "__main__":
     temp()
+    #taxi()
+    #restuarant()
+    #tailored()
+
 
 
 
