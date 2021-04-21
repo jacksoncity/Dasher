@@ -467,12 +467,6 @@ function RecordDriveScreen ({ navigation }) {
   const [depart, setDepart] = useState([ "Departed"]);
   const [end, setEnd] = useState([ "End"]);
 
-  // Called when pressing start/pause button
-  const toggle = () => {
-    setIsActive(!isActive);
-    takeLap();
-  }
-
   const takeLap = () => {
     // setting start position
     laps.push(Date(Date.now()));
@@ -481,6 +475,7 @@ function RecordDriveScreen ({ navigation }) {
     const s = secs;
      
     if (index === 0) {
+      setIsActive(!isActive);
       start.push(`${m}:${s}`);
       console.log ("index = 0")
     } else if (index === 1) {
@@ -503,6 +498,7 @@ function RecordDriveScreen ({ navigation }) {
     setRemainingSecs(0);
     setIsActive(false);
     const laps = [];
+    setIndex(0)
   }
 
   const saveDrive = async () => {
@@ -547,14 +543,9 @@ function RecordDriveScreen ({ navigation }) {
       <Text style={styles.timerText}>{`${mins}:${secs}`}</Text>
       <View style={{textAlign: 'center'}}>
       <View style= {{flexDirection: 'row', textAlign: 'center', justifyContent: 'center'}}>
-        <TouchableOpacity onPress={toggle} style={ {backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
-            { isActive ? 'Pause' : 'Start' }
-            </Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={takeLap} style={ {backgroundColor: '#A9A9A9', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 15, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
-            { (index === 1) ? 'At Restaurant' : (index === 2) ? 'Left Restaurant' : (index === 3) ? 'End Drive' : 'Add Time'}
+          <Text style={{fontSize: 15, marginHorizontal: 60, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>
+            { (index === 1) ? 'At Restaurant' : (index === 2) ? 'Left Restaurant' : (index === 3) ? 'End Drive' : 'Start'}
             </Text>
         </TouchableOpacity>
         </View>
