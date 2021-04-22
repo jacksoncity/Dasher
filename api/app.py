@@ -449,11 +449,13 @@ def add_comment():
     to_save = Comment(
         comment=input_data['comment'],
         restaurant_name=input_data['restaurant_name'],
-        username=currrent_user.username
+        username=current_user.username
     )
 
     db.session.add(to_save)
     db.session.commit()
+
+    return "done", 201
 
 '''
 This is a method that will delete the comment that the user wants to delete
