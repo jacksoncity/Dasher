@@ -340,7 +340,7 @@ Method to show to the user to see informative stats about past drives so they ca
 Will show Overall Pay, Overall Distance Driven, Overall Trips Fulfilled, Average Delivery Time, and Average Rate 
 '''
 @app.route('/get_statistics')
-def get_stats():
+def get_statistics():
 
     #Getting the currently logged in user
     current_user = User.query.filter_by(current_user=True).all()
@@ -355,35 +355,44 @@ def get_stats():
         for stat in stat_list:
             overallPay = overallPay + stat.pay
 
-        return round(overallPay, 2)
+        message = str(round(overallPay, 2))
+        return jsonify({'message': message})
         
     def get_distance():
         overallDis = 0
         for stat in stat_list:
             overallDis = overallDis + stat.distance
 
-        return round(overallDis, 2)
+        message = str(round(overallDis, 2))
+        return jsonify({'message': message})
    
     def get_trips():
-        return len(stat_list)
+        message = str(len(stat_list))
+        return jsonify({'message': message})
 
     def get_delivTime():
         overallDelivTime = 0
         for stat in stat_list:
-            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60)
-
+            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60) #end and start are NULL so can't be typed need to fix
         trips = len(stat_list)
         avgDelivTime = overallDelivTime / trips
-        return round(avgDelivTime, 2)
+
+        message = str(round(avgDelivTime, 2))
+        return jsonify({'message': message})
 
     def get_rate():
+        
         overallRate = 0
         for stat in stat_list:
-            overallRate = overallRate + stat.rate
+            overallRate = overallRate + stat.rate #rate=NULL for some reason therefore can't be typed need to figure out why
         trips = len(stat_list)
         avgRate = overallRate/trips
-        return round(avgRate, 2)
 
+        message = str(round(avgRate, 2))
+        
+        return jsonify({'message': message})
+
+'''
     statistics.append({
         'Money Earned' : get_pay(),
         'Distance Driven' : get_distance(),
@@ -393,6 +402,8 @@ def get_stats():
     })
 
     return jsonify({'statistics' : statistics}), 201
+'''
+
 
 '''
 Method to logout of the account
@@ -620,9 +631,9 @@ def restaurant():
 
 if __name__ == "__main__":
     temp()
-    #taxi()
-    #restuarant()
-    #tailored()
+    taxi()
+    restuarant()
+    tailored()
 
 
 
