@@ -502,12 +502,42 @@ def edit_comment():
         to_edit.comment = input_data['comment']
         db.session.commit()
         return jsonify({'message': 'comment edited'}), 201
+
+'''
+This is a method that will return all of the comments that the current user has made
+@param user_input: None
+@return message: TYPE - json ATTRIBUTES - 'comments', this will be a list of dicts that all have 
+the attributes comment, commment_id, and restuarant_name
+'''
+@app.route('/get_comments', methods=['GET'])
+def get_comments():
+
+    #Find current user
+    current_user = User.query.filter_by(current_user=True).all()
+    assert len(current_user) <= 1, len(current_user)
+    current_user = current_user[0]
+
+    comments = Comment.query.filter_by(username=current_user.username).all()
+    to_return = []
+
+    for comment in comments:
+        to_return.append({"comment" : comment.comment, 
+        "comment_id" : comment.comment_id,
+        "restaurant_name" : comment.restaurant_name
+        })
+
+    return jsonify({"comments" : to_return}), 201
     
 '''
 This method is just to put in dummy data so that it can be used for testing and such things like that
 '''
 def temp():
 
+    comments = Comment.query.all()
+
+    for comment in comments:
+        db.session.delete(comment)
+    db.session.commit()
     
     print(len(Comment.query.all()))
 
@@ -631,9 +661,9 @@ def restaurant():
 
 if __name__ == "__main__":
     temp()
-    taxi()
-    restuarant()
-    tailored()
+    '''taxi()
+    restaurant()
+    tailored()'''
 
 
 
