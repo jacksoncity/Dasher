@@ -168,7 +168,7 @@ def get_recommendation():
         message['message'] = 'Not enough recorded drives to make a predictions'
         return jsonify({"message": message}), 201
     elif(drive_len < 50):
-        message['message'] = 'Prediction may be innacurate'
+        message['message'] = 'Based on < 50 drives; prediction may be innacurate'
     else:
         message['message'] = 'None'
 
@@ -367,20 +367,23 @@ def get_statistics():
         for stat in stat_list:
             overallPay = overallPay + stat.pay
 
-        message = str(round(overallPay, 2))
-        return jsonify({'message': message})
+        ''' message = str(round(overallPay, 2))
+        return jsonify({'message': message}) '''
+        return str(round(overallPay, 2))
         
     def get_distance():
         overallDis = 0
         for stat in stat_list:
             overallDis = overallDis + stat.distance
 
-        message = str(round(overallDis, 2))
-        return jsonify({'message': message})
+        '''message = str(round(overallDis, 2))
+        return jsonify({'message': message})'''
+        return str(round(overallDis, 2))
    
     def get_trips():
-        message = str(len(stat_list))
-        return jsonify({'message': message})
+        '''message = str(len(stat_list))
+        return jsonify({'message': message})'''
+        return str(len(stat_list))
 
     def get_delivTime():
         overallDelivTime = 0
@@ -389,22 +392,31 @@ def get_statistics():
         trips = len(stat_list)
         avgDelivTime = overallDelivTime / trips
 
-        message = str(round(avgDelivTime, 2))
-        return jsonify({'message': message})
+        '''message = str(round(avgDelivTime, 2))
+        return jsonify({'message': message})'''
+        return str(round(avgDelivTime, 2))
 
-    def get_rate():
-        
+    def get_rate():       
         overallRate = 0
         for stat in stat_list:
             overallRate = overallRate + stat.rate #rate=NULL for some reason therefore can't be typed need to figure out why
         trips = len(stat_list)
         avgRate = overallRate/trips
 
-        message = str(round(avgRate, 2))
-        
-        return jsonify({'message': message})
+        '''message = str(round(avgRate, 2))      
+        return jsonify({'message': message})'''
+        return str(round(avgRate, 2))
 
-        return get_distance()
+        #return get_distance()
+
+    message = {}
+    message["pay"] = get_pay()
+    message["distance"] = get_distance()
+    message["trips"] = get_trips()
+    #message["avgTime"] = get_delivTime()  ISSUE HERE WITH NULL VALUE
+    #message["avgRate"] = get_rate()  ISSUE HERE WITH NULL VALUE RATE
+
+    return jsonify({'message': message}), 201
 
 '''
     statistics.append({
