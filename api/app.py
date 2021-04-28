@@ -172,6 +172,16 @@ def get_recommendation():
     else:
         message['message'] = 'None'
 
+    #Getting the user's rate to send back
+    overallRate = 0
+    for stat in drive_list:
+        overallRate = overallRate + stat.rate #rate=NULL for some reason therefore can't be typed need to figure out why
+    trips = len(drive_list)
+    avgRate = overallRate/trips
+    message['rate'] = avgRate
+
+    print(avgRate)
+
     #Putting all of the drives in the database in numpy arrays so that it can go in the algo
     index = 0
     for drive in drive_list:
@@ -191,6 +201,8 @@ def get_recommendation():
     y_pred = temp.predict(X_test)
     prediction = temp.predict(new_drive)
     prediction[0] = round(prediction[0], 2)
+    if prediction < 0:
+        prediction = prediction * -1
 
     #Adding the prediction to the message
     message['prediction'] = prediction[0]
@@ -527,17 +539,67 @@ def get_comments():
         })
 
     return jsonify({"comments" : to_return}), 201
+
+'''
+This is a method that will return all of the drivese that the current user has made
+@param user_input: None
+@return message: TYPE - json ATTRIBUTES - 'drives', this will be a list of dicts that all have 
+the attributes "id", "start", "restaurant_arrival", "restaurant_leave", "end", "pay", "restaurant_time",
+    "distance", "rate", "restaurant_name"
+'''
+@app.route('/get_drives', methods=['GET'])
+def get_drives():
     
+    #Find current user
+    current_user = User.query.filter_by(current_user=True).all()
+    assert len(current_user) <= 1, len(current_user)
+    current_user = current_user[0]
+
+    drives = Drive.query.filter_by(username=current_user.username).all()
+    to_return = []
+
+    for drive in drives:
+        to_return.append({"id" : drive.id, 
+        "start" : drive.start,
+        "restaurant_arrival" : drive.restaurant_arrival, 
+        "restaurant_leave" : drive.restaurant_leave, 
+        "end" : drive.end,
+        "pay" : drive.pay, 
+        "restaurant_time" : drive.restaurant_time,
+        "distance" : drive.distance, 
+        "rate" : drive.rate, 
+        "restaurant_name" : drive.restaurant_name
+        })
+
+    return jsonify({"drives" : to_return}), 201
+
+'''
+This is a method that will delete the drive that the user wants to delete
+@param user_input: TYPE - json ATTRIBUTES - 'id'
+@return message: TYPE - json ATTRIBUTES - 'message'
+message:
+    'could not delete drive' - if the comment couldn't be found
+    'drive deleted' - if the comment was found and deleted
+'''
+@app.route('/delete_drive', methods=['POST'])
+@cross_origin()
+def delete_drive():
+
+    input_data = request.get_json()
+
+    to_delete = Drive.query.filter_by(id=input_data['id']).first()
+
+    if (to_delete == None):
+        return jsonify({'message': 'could not delete comment'})
+    else:
+        db.session.delete(to_delete)
+        db.session.commit()
+        return jsonify({'message': 'comment deleted'}), 201
+
 '''
 This method is just to put in dummy data so that it can be used for testing and such things like that
 '''
 def temp():
-
-    comments = Comment.query.all()
-
-    for comment in comments:
-        db.session.delete(comment)
-    db.session.commit()
     
     print(len(Comment.query.all()))
 
