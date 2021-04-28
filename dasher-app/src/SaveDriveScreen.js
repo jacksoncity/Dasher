@@ -70,7 +70,7 @@ export function SaveDriveScreen ({ navigation }) {
           <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save Comment</Text>
         </TouchableOpacity> 
 
-        <TouchableOpacity onPress={() => navigation.navigate('Main')} style={{backgroundColor: 'gray', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+        <TouchableOpacity onPress={() => navigation.navigate('Main')} style={{backgroundColor: 'rgba(150,150,150,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
           <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>  Back to Main  </Text>
         </TouchableOpacity>
       </View>

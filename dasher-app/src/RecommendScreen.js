@@ -14,6 +14,7 @@ export function RecommendScreen({ navigation }) {
     //Variables to print prediction and message
     const [newPrediction, setNewPrediction] = useState(`__`);
     const [newMessage, setNewMessage] = useState(``);
+    const [newPercentage, setNewPercentage] = useState(`__`);
     
     const onSubmit = async (data) => { 
       // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -36,11 +37,13 @@ export function RecommendScreen({ navigation }) {
       
       const prediction = response.message.prediction
       const message = response.message.message
-      console.log("message: " + message+ ", prediction: " + prediction)
+      const rate = response.message.rate
+      console.log("message: " + message+ ", prediction: " + prediction + ", rate: " + rate)
   
       //Set variables for later printing
       setNewPrediction(Math.round(prediction * 100) / 100)
       setNewMessage(message)
+      setNewPercentage(Math.round(rate / prediction) * 100)
     }
   
     function refresh() {
@@ -126,6 +129,7 @@ export function RecommendScreen({ navigation }) {
         </View>
      
         <Text style={styles.text}>{`Prediction: $${newPrediction}/hour`}</Text>
+        <Text style={styles.text}>{`(${newPercentage}% of your average rate)`}</Text>
         <Text style={styles.label}>{`Notes: ${newMessage}`}</Text>
         <Text style={styles.label}>  </Text>
   
@@ -166,6 +170,20 @@ export function RecommendScreen({ navigation }) {
         marginVertical: 10,
         borderRadius: 10
     },
+    buttonSpecial: {
+      //backgroundColor: '#8ebce7',
+      //backgroundColor: '#94bfe7',
+      //backgroundColor: '#072A42',
+      backgroundColor: 'white',
+      color: 'white',
+      fontSize: 20,
+      marginHorizontal: 10,
+      marginVertical: 15,
+      borderColor: 'black',
+        borderWidth: 1,
+      paddingHorizontal: 5,
+      borderRadius: 7
+  },
     textbox: {
         backgroundColor: 'rgba(255,255,255,.5)',
           height: 40,

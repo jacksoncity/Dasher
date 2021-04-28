@@ -24,10 +24,14 @@ export function StatisticsScreen ({ navigation }) {
   
       //const statistics = response.statistics
       const statistics = response
-      // console.log("statistics: " + statistics)
+      console.log("statistics: " + statistics)
   
       //Set variables for later printing
       setNewStatistics(statistics)
+    }
+
+    function makeText() {
+      setNewStatistics("Hi!!")
     }
     
     return (
@@ -38,7 +42,8 @@ export function StatisticsScreen ({ navigation }) {
           <TouchableOpacity
             // handleSubmit validates inputs before calling onSubmit
             //onPress={handleSubmit(onSubmit)}
-            onPress={onSubmit}
+            //onPress={onSubmit}
+            onPress={() => makeText()}
             style={styles.buttonBasic}>
           <Text style={ styles.button}>      Get Statistics</Text>
         </TouchableOpacity>

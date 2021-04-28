@@ -404,6 +404,8 @@ def get_statistics():
         
         return jsonify({'message': message})
 
+        return get_distance()
+
 '''
     statistics.append({
         'Money Earned' : get_pay(),
