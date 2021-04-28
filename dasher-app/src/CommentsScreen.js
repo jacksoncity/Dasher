@@ -23,19 +23,31 @@ export function CommentsScreen ({ navigation }) {
       fetchData();
     }, [])
     // if the text is longer than what can be displayed, cut it short with ...
-    const deleteItem = (id) => {
+    const deleteItem = async (id) => {
       // send back the whole item and it will delete that comment
+      const toDelete = (scrollList.filter(function(item){
+        return item.comment_id == id;
+      }).map(function({comment, comment_id, restaurant_name}){
+         return {comment, comment_id, restaurant_name};
+      })).pop()
 
-      /**
-      const response = await fetch("http://localhost:5000/get_comments", {
-        method: "GET",
+      const response = await fetch("http://localhost:5000/delete_comment", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify(toDelete)
       }).then((response) => response.json())
-      const list = response.comments // an array of comments (restaurant name and comment)
-      console.log(list)
-      */
+      if (response.message == "comment deleted") {
+        alert("Comment successfully deleted")
+        setScrollList(scrollList.filter(function(item){
+          return item.comment_id != id;
+        }).map(function({comment, comment_id, restaurant_name}){
+          return {comment, comment_id, restaurant_name};
+        }))
+      } else {
+        alert("Failed to delete comment")
+      }
     }
 
     return (
@@ -45,17 +57,16 @@ export function CommentsScreen ({ navigation }) {
           data={scrollList}
           renderItem = {item => (
             <TouchableOpacity 
-              onPress={() => navigation.navigate('Main')}
-              style={styles.textbox}
-            >
+              style={styles.textbox} >
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.restaurant}>{item.item.restaurant_name}</Text>
-                <Trash2
-                  name="trash-2"
-                  color='black'
-                  size={15}
-                  // onPress={() => deleteItem(item.comment_id)}
-                />
+                <Text style={styles.restaurant} onPress={() => navigation.navigate('Main')}>{item.item.restaurant_name}</Text>
+                <TouchableOpacity onPress={() => deleteItem(item.item.comment_id)}>
+                  <Trash2
+                    name="trash-2"
+                    color='black'
+                    size={15}
+                  />
+                </TouchableOpacity>
               </View>
               <Text style={styles.comment}>{item.item.comment}</Text>
             </TouchableOpacity>
