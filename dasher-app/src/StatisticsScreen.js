@@ -42,12 +42,6 @@ export function StatisticsScreen ({ navigation }) {
             style={styles.buttonBasic}>
           <Text style={ styles.button}>      Get Statistics</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity
-          onPress={ () => navigation.navigate('Comments')}
-          style={styles.buttonBasic}>
-          <Text style={styles.button}>View/edit comments</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity
           //onPress={ () => navigation.navigate('Drives')}
