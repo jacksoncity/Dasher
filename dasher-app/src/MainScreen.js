@@ -29,12 +29,7 @@ export function MainScreen ({ navigation }) {
         <TouchableOpacity
           onPress={() => navigation.navigate('Statistics')}
           style={styles.buttonBasic}>
-          <Text style={styles.button}>      View statistics      </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          // onPress={() => navigation.navigate('Recommendations')}
-          style={styles.buttonBasic}>
-          <Text style={styles.button}>View/edit past drives</Text>
+          <Text style={styles.button}>  Stats & past drives  </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={ () => navigation.navigate('Comments')}

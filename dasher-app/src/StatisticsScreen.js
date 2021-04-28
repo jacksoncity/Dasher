@@ -33,16 +33,29 @@ export function StatisticsScreen ({ navigation }) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Statistics</Text>
+        <Text style={styles.text}>{`${newStatistics}`}</Text>
         <View>
           <TouchableOpacity
             // handleSubmit validates inputs before calling onSubmit
             //onPress={handleSubmit(onSubmit)}
             onPress={onSubmit}
-            style={styles.buttonSpecial}>
-          <Text style={ styles.button}>Get Statistics</Text>
+            style={styles.buttonBasic}>
+          <Text style={ styles.button}>      Get Statistics</Text>
         </TouchableOpacity>
+        
+        <TouchableOpacity
+          onPress={ () => navigation.navigate('Comments')}
+          style={styles.buttonBasic}>
+          <Text style={styles.button}>View/edit comments</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          //onPress={ () => navigation.navigate('Drives')}
+          style={styles.buttonBasic}>
+          <Text style={styles.button}>View/edit past drives</Text>
+        </TouchableOpacity>
+
         </View>
-        <Text style={styles.text}>{`${newStatistics}`}</Text>
       </View>
     )
   }
@@ -59,6 +72,16 @@ export function StatisticsScreen ({ navigation }) {
         marginHorizontal: 10,
         marginVertical: 10,
         borderRadius: 10
+    },
+    buttonBasic: {
+      backgroundColor: 'white',
+      // marginHorizontal: 10,
+      // marginVertical: 15,
+      marginTop: 10,
+      //borderColor: 'gray',
+        borderWidth: 1,
+      paddingHorizontal: 10,
+      borderRadius: 7,
     },
     buttonSpecial: { //Currently identical to buttonBasic
         //backgroundColor: '#8ebce7',
