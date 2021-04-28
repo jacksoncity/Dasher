@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import { Image, StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import car from './assets/car3.png';
 
 // Main menu screen
 export function MainScreen ({ navigation }) {
@@ -8,9 +9,11 @@ export function MainScreen ({ navigation }) {
       /*await*/ fetch("http://localhost:5000/logout")
       navigation.navigate('Login')
     }
-  
+   
     return (
       <View style={styles.container}>
+        <Image source={car} style={{ width: 150, height: 70 }} />  
+
         <Text style={styles.title}>
         Main Menu</Text>
         <TouchableOpacity
