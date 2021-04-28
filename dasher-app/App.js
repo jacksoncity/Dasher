@@ -12,6 +12,7 @@ import { MainScreen } from './src/MainScreen'
 import { RecommendScreen } from './src/RecommendScreen'
 import { RecordDriveScreen } from './src/RecordDriveScreen'
 import { SaveDriveScreen } from './src/SaveDriveScreen'
+import { CommentsScreen } from './src/CommentsScreen'
 import { StatisticsScreen } from './src/StatisticsScreen'
 
 // import { RecommendForm } from './RecommendForm'
@@ -34,6 +35,8 @@ export default function App () {
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
           options={{title: 'Record Drive'}}/>
         <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
+        <Stack.Screen name="Comments" component={CommentsScreen}
+          options={{title: 'Comments'}}/>
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
   </NavigationContainer>

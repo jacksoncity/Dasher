@@ -34,6 +34,11 @@ export function MainScreen ({ navigation }) {
           <Text style={styles.button}>View/edit past drives</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={ () => navigation.navigate('Comments')}
+          style={styles.buttonBasic}>
+          <Text style={styles.button}>View/edit comments</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => logout()}
           style={styles.buttonLogout}>
           <Text style={styles.button}>Log out</Text>
@@ -58,8 +63,9 @@ export function MainScreen ({ navigation }) {
     },
     buttonBasic: {
         backgroundColor: 'white',
-        marginHorizontal: 10,
-        marginVertical: 15,
+        // marginHorizontal: 10,
+        // marginVertical: 15,
+        marginTop: 10,
         //borderColor: 'gray',
           borderWidth: 1,
         paddingHorizontal: 10,

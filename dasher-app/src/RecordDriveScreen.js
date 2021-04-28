@@ -26,10 +26,10 @@ export function RecordDriveScreen ({ navigation }) {
     // let [index, setIndex] = useState(0);
   
     const [index, setIndex] = useState(0);
-    const [start, setStart] = useState([]);
-    const [arrive, setArrive] = useState([]);
-    const [depart, setDepart] = useState([]);
-    const [end, setEnd] = useState([]);
+    const [start, setStart] = useState(["Start"]);
+    const [arrive, setArrive] = useState(["Arrived at Restaurant"]);
+    const [depart, setDepart] = useState(["Left Restaurant"]);
+    const [end, setEnd] = useState(["Finished Drive"]);
   
     const takeLap = () => {
       // setting start position
@@ -51,6 +51,7 @@ export function RecordDriveScreen ({ navigation }) {
       } else if (index === 3) {
         end.push(`${m}:${s}`);
         console.log ("index = 3")
+        setIsActive(!isActive);
       } else {
         alert("No more splits to take!")
       }
@@ -61,12 +62,12 @@ export function RecordDriveScreen ({ navigation }) {
     const reset = () => {
       setRemainingSecs(0);
       setIsActive(false);
-      
+
       setLaps([])
-      setStart([])
-      setArrive([])
-      setDepart([])
-      setEnd([])
+      setStart(["Start"])
+      setArrive(["Arrived at Restaurant"])
+      setDepart(["Left Restaurant"])
+      setEnd(["Finished Drive"])
       setIndex(0)
     }
   
