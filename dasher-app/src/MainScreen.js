@@ -21,11 +21,13 @@ export function MainScreen ({ navigation }) {
           style={styles.buttonBasic}>
           <Text style={styles.button}>Get recommendation</Text>
         </TouchableOpacity>
+        
         <TouchableOpacity
-          onPress={() => navigation.navigate('RecordDrive')}
+          onPress={() => navigation.navigate('NewDrive')}
           style={styles.buttonBasic}>
           <Text style={styles.button}>  Record a new drive  </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => navigation.navigate('Statistics')}
           style={styles.buttonBasic}>

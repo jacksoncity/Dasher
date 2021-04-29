@@ -5,48 +5,11 @@ import React, { useEffect, useState, Component } from 'react'
 import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
 
 //GetRecommendations screen
-export function RecommendScreen({ navigation }) {
+export function NewDriveScreen({ navigation }) {
     const { control, handleSubmit, errors } = useForm();
     const restaurantInputRef = React.useRef()
     const distanceInputRef = React.useRef()
     const payInputRef = React.useRef()
-  
-    //Variables to print prediction and message
-    const [newPrediction, setNewPrediction] = useState(`__`);
-    const [newMessage, setNewMessage] = useState(``);
-    const [newPercentage, setNewPercentage] = useState(``);
-    const [newRate, setNewRate] = useState('__')
-    
-    const onSubmit = async (data) => { 
-      // Once handleSubmit validates the inputs in onPress in button, this code is executed
-      const json = JSON.parse(JSON.stringify(data))
-      const restaurant = json["restaurant"]
-      const distance = json["distance"]
-      const pay = json["pay"]
-      const drive = {restaurant, distance, pay}
-      console.log(drive)
-      const response = await fetch("http://localhost:5000/get_recommendation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(drive)
-      }).then((response) => response.json())
-      .then(data => {
-          return data;
-      });
-      
-      const prediction = response.message.prediction
-      const message = response.message.message
-      const rate = response.message.rate
-      console.log("message: " + message+ ", prediction: " + prediction + ", rate: " + rate)
-  
-      //Set variables for later printing
-      setNewPrediction(Math.round(prediction * 100) / 100)
-      setNewMessage(message)
-      setNewRate((Math.round(rate * 100) / 100))
-      setNewPercentage(Math.round((((prediction / rate) * 100) * 10)) / 10)
-    }
 
     const onAccept = async (data) => {
       // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -71,14 +34,14 @@ export function RecommendScreen({ navigation }) {
   
     function refresh() {
       navigation.navigate('Main')
-      navigation.navigate('Recommendations')
+      navigation.navigate('NewDrive')
     }
   
     return (
   
       <View style={styles.container}>
         
-        <Text style={styles.title}>Get Recommendation!</Text>
+        <Text style={styles.title}>Enter Drive Info</Text>
         
         <View>
           <Text style={styles.label}>Restaurant</Text>
@@ -140,17 +103,8 @@ export function RecommendScreen({ navigation }) {
           />
         </View>
         <View>
-          <TouchableOpacity
-            // handleSubmit validates inputs before calling onSubmit
-            onPress={handleSubmit(onSubmit)}
-            style={styles.buttonSpecial}>
-          <Text style={ styles.button}>Get Recommendation</Text>
-        </TouchableOpacity>
+          
         </View>
-     
-        <Text style={styles.text}>{`Prediction: $${newPrediction}/hour`}</Text>
-        <Text style={styles.label}>{`(${newPercentage}% of your average rate $${newRate})`}</Text>
-        <Text style={styles.label}>{`${newMessage}`}</Text>
   
         <View>
         <TouchableOpacity onPress={handleSubmit(onAccept)}

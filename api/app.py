@@ -237,6 +237,8 @@ def accept_drive():
     db.session.add(to_save)
     db.session.commit()
 
+    return "done", 201
+
 '''
 Method to actually store the times from the drive passed by the user through the 'Record Drive' function
 @param user_input: TYPE - json ATTRIBUTES - 'start', 'restaurant_arrival', 'restaurant_leave', 'end'
@@ -360,7 +362,7 @@ def get_statistics():
     current_user = current_user[0]
 
     stat_list = Drive.query.filter_by(username=current_user.username).all()
-    statistics = []
+    #statistics = []
 
     def get_pay():
         overallPay = 0
