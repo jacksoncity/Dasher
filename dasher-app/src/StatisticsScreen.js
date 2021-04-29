@@ -6,55 +6,55 @@ import { StyleSheet, Button, Text, View, TouchableOpacity } from 'react-native'
 // Statistics screen
 export function StatisticsScreen ({ navigation }) {
     //const { control, handleSubmit, errors } = useForm();
-    const [newStatistics, setNewStatistics] = useState(`__`);
+    const [newPay, setNewPay] = useState(`__`);
+    const [newDistance, setNewDistance] = useState(`__`);
+    const [newTrips, setNewTrips] = useState(`__`);
+    const [newAvgTime, setNewAvgTime] = useState(`__`);
+    const [newAvgRate, setNewAvgRate] = useState(`__`);
   
-    /*async function fetchMovies() {
-    const response = await fetch('/movies');
-    // waits until the request completes...
-    console.log(response);
-  }*/
-  
-    const onSubmit = async (data) => { 
-      const response = await fetch("http://localhost:5000/get_statistics")
-      .then((response) => response.json())
-      .then(data => {
-          return data;
-      });
-      console.log(response)
-  
-      //const statistics = response.statistics
-      const statistics = response
-      console.log("statistics: " + statistics)
-  
-      //Set variables for later printing
-      setNewStatistics(statistics)
-    }
+    useEffect ( () => {
+      async function fetchData() {
+        const response = await fetch("http://localhost:5000/get_statistics")
+        .then((response) => response.json())
+        .then(data => {
+            return data;
+        });
+        console.log(response)
 
-    function makeText() {
-      setNewStatistics("Hi!!")
-    }
+        const pay = response.message.pay
+        const distance = response.message.distance
+        const trips = response.message.trips
+        const avgTime = response.message.avgTime
+        const avgRate = response.message.avgRate
+        console.log("Statistics received")
+    
+        //Set variables for later printing
+        setNewPay(pay)
+        setNewDistance(distance)
+        setNewTrips(trips)
+        setNewAvgTime(avgTime)
+        setNewAvgRate(avgRate)
+      }
+      fetchData();
+    }, [])
     
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Statistics</Text>
-        <Text style={styles.text}>{`${newStatistics}`}</Text>
+        <Text style={styles.title}>Driver Statistics</Text>
+        <Text style={styles.text}>{`Money Earned: $${newPay}`}</Text>
+        <Text style={styles.text}>{`Distance Driven: ${newDistance} miles`}</Text>
+        <Text style={styles.text}>{`Trips Completed: ${newTrips}`}</Text>
+        <Text style={styles.text}>{`Avg. Delivery Time: ${newAvgTime} min`}</Text>
+        <Text style={styles.text}>{`Avg. Hourly Rate: $${newAvgRate}`}</Text>
+        
         <View>
-          <TouchableOpacity
-            // handleSubmit validates inputs before calling onSubmit
-            //onPress={handleSubmit(onSubmit)}
-            //onPress={onSubmit}
-            onPress={() => makeText()}
-            style={styles.buttonBasic}>
-          <Text style={ styles.button}>      Get Statistics</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
           //onPress={ () => navigation.navigate('Drives')}
           style={styles.buttonBasic}>
           <Text style={styles.button}>View/edit past drives</Text>
         </TouchableOpacity>
-
         </View>
+        
       </View>
     )
   }
@@ -75,31 +75,17 @@ export function StatisticsScreen ({ navigation }) {
     buttonBasic: {
       backgroundColor: 'white',
       // marginHorizontal: 10,
-      // marginVertical: 15,
-      marginTop: 10,
+      marginVertical: 15,
+      marginTop: 25,
       //borderColor: 'gray',
         borderWidth: 1,
       paddingHorizontal: 10,
       borderRadius: 7,
     },
-    buttonSpecial: { //Currently identical to buttonBasic
-        //backgroundColor: '#8ebce7',
-        //backgroundColor: '#94bfe7',
-        //backgroundColor: '#072A42',
-        backgroundColor: 'white',
-        color: 'white',
-        fontSize: 20,
-        marginHorizontal: 10,
-        marginVertical: 15,
-        borderColor: 'black',
-          borderWidth: 1,
-        paddingHorizontal: 5,
-        borderRadius: 7
-    },
     text: {
         fontSize: 20,
         color: 'black',
-        margin: 10,
+        margin: 5,
         alignContent: 'center'
     },
     title: {
@@ -107,7 +93,7 @@ export function StatisticsScreen ({ navigation }) {
         fontSize: 30,
         // backgroundColor: 'white',
         marginHorizontal: 15,
-        marginVertical: 15,
+        marginVertical: 10,
         padding: 7,
         paddingHorizontal: 20,
         borderRadius: 5

@@ -384,7 +384,7 @@ def get_statistics():
     def get_delivTime():
         overallDelivTime = 0
         for stat in stat_list:
-            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60) #end and start are NULL so can't be typed need to fix
+            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60)
         trips = len(stat_list)
         avgDelivTime = overallDelivTime / trips
 
@@ -393,7 +393,7 @@ def get_statistics():
     def get_rate():       
         overallRate = 0
         for stat in stat_list:
-            overallRate = overallRate + stat.rate #rate=NULL for some reason therefore can't be typed need to figure out why
+            overallRate = overallRate + stat.rate
         trips = len(stat_list)
         avgRate = overallRate/trips
 

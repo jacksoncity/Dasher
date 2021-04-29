@@ -14,7 +14,7 @@ export function RecommendScreen({ navigation }) {
     //Variables to print prediction and message
     const [newPrediction, setNewPrediction] = useState(`__`);
     const [newMessage, setNewMessage] = useState(``);
-    const [newPercentage, setNewPercentage] = useState(``);
+    const [newPercentage, setNewPercentage] = useState(`__`);
     const [newRate, setNewRate] = useState('__')
     
     const onSubmit = async (data) => { 
