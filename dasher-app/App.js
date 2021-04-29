@@ -13,6 +13,7 @@ import { RecommendScreen } from './src/RecommendScreen'
 import { RecordDriveScreen } from './src/RecordDriveScreen'
 import { SaveDriveScreen } from './src/SaveDriveScreen'
 import { CommentsScreen } from './src/CommentsScreen'
+import { AddCommentScreen } from './src/AddCommentScreen'
 import { StatisticsScreen } from './src/StatisticsScreen'
 import { NewDriveScreen } from './src/NewDriveScreen'
 
@@ -33,16 +34,19 @@ export default function App () {
           //Nulling headerLeft removes navigation back to login screen
           options={{headerLeft: null}}/>
         <Stack.Screen name="Recommendations" component={RecommendScreen} 
-          options={{title: 'Get Recommendation', headerTintColor: 'black'}}/>
+          options={{headerTintColor: 'black', title: 'Get Recommendation'}}/>
         <Stack.Screen name="NewDrive" component={NewDriveScreen} 
-          options={{title: 'New Drive', headerTintColor: 'black'}}/>
+          options={{headerTintColor: 'black', title: 'New Drive'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
-          //Nulling headerLeft removes navigation back, since info shouldn't be changed
-          options={{/*headerLeft: null,*/ title: 'Record Drive'}}/>
+          //Nulling headerLeft removes navigation back, since previous info shouldn't be changed at this point
+          options={{headerLeft: null, title: 'Record Drive'}}/>
         <Stack.Screen name="SaveDrive" component={SaveDriveScreen} 
-          options={{headerTintColor: 'black'}}/>
+          //Nulling headerLeft removes navigation back to Record Drive
+          options={{headerLeft: null, title: "Add Comment"}}/>
         <Stack.Screen name="Comments" component={CommentsScreen}
-          options={{title: 'Comments', headerTintColor: 'black'}}/>
+          options={{headerTintColor: 'black', title: 'Comments'}}/>
+        <Stack.Screen name="AddComment" component={AddCommentScreen}
+          options={{headerTintColor: 'black', title: 'New Comment'}}/>
         <Stack.Screen name="Statistics" component={StatisticsScreen} 
           options={{headerTintColor: 'black'}}/>
       </Stack.Navigator>

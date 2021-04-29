@@ -35,7 +35,7 @@ export function LoginScreen ({ navigation }) {
         navigation.navigate('Main');
       } else {
         //Display message
-        alert(`Login invalid`)
+        alert(`Login invalid. Please try again`)
       }
       console.log(response)
       

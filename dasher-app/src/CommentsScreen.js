@@ -72,7 +72,7 @@ export function CommentsScreen ({ navigation }) {
             </TouchableOpacity>
             )} />
       <TouchableOpacity
-       onPress={() => navigation.navigate('SaveDrive')} 
+       onPress={() => navigation.navigate('AddComment')} 
       >
         <Text style={styles.button}>
           Add comment
