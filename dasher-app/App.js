@@ -27,21 +27,24 @@ export default function App () {
 	<NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} 
+          options={{headerTintColor: 'black'}}/>
         <Stack.Screen name="Main" component={MainScreen} 
           //Nulling headerLeft removes navigation back to login screen
-          options={{headerLeft: null, headerBackTitle: 'Log out'}}/>
+          options={{headerLeft: null}}/>
         <Stack.Screen name="Recommendations" component={RecommendScreen} 
-          options={{title: 'Get Recommendation'}}/>
+          options={{title: 'Get Recommendation', headerTintColor: 'black'}}/>
         <Stack.Screen name="NewDrive" component={NewDriveScreen} 
-          options={{title: 'New Drive'}}/>
+          options={{title: 'New Drive', headerTintColor: 'black'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
           //Nulling headerLeft removes navigation back, since info shouldn't be changed
           options={{/*headerLeft: null,*/ title: 'Record Drive'}}/>
-        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} 
+          options={{headerTintColor: 'black'}}/>
         <Stack.Screen name="Comments" component={CommentsScreen}
-          options={{title: 'Comments'}}/>
-        <Stack.Screen name="Statistics" component={StatisticsScreen} />
+          options={{title: 'Comments', headerTintColor: 'black'}}/>
+        <Stack.Screen name="Statistics" component={StatisticsScreen} 
+          options={{headerTintColor: 'black'}}/>
       </Stack.Navigator>
   </NavigationContainer>
   )
