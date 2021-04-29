@@ -40,13 +40,16 @@ export function StatisticsScreen ({ navigation }) {
     
     return (
       <View style={styles.container}>
+
+      <View>
         <Text style={styles.title}>Driver Statistics</Text>
-        <Text style={styles.text}>{`Money Earned: $${newPay}`}</Text>
-        <Text style={styles.text}>{`Distance Driven: ${newDistance} miles`}</Text>
-        <Text style={styles.text}>{`Trips Completed: ${newTrips}`}</Text>
-        <Text style={styles.text}>{`Avg. Delivery Time: ${newAvgTime} min`}</Text>
-        <Text style={styles.text}>{`Avg. Hourly Rate: $${newAvgRate}`}</Text>
-        
+        <Text style={styles.chartDark}>{`Money Earned: $${newPay}`}</Text>
+        <Text style={styles.chartLight}>{`Distance Driven: ${newDistance} miles`}</Text>
+        <Text style={styles.chartDark}>{`Trips Completed: ${newTrips}`}</Text>
+        <Text style={styles.chartLight}>{`Avg. Delivery Time: ${newAvgTime} min`}</Text>
+        <Text style={styles.chartDark}>{`Avg. Hourly Rate: $${newAvgRate}`}</Text>
+      </View>
+
         <View>
         <TouchableOpacity
           //onPress={ () => navigation.navigate('Drives')}
@@ -87,6 +90,28 @@ export function StatisticsScreen ({ navigation }) {
         color: 'black',
         margin: 5,
         alignContent: 'center'
+    },
+    chartDark: {
+      backgroundColor: 'rgba(255,255,255,.55)',
+      fontSize: 20,
+      color: 'black',
+      margin: 0,
+      alignContent: 'center',
+      textAlign: 'center',
+      padding: 5,
+      borderWidth: 1,
+      borderColor: 'black'
+    },
+    chartLight: {
+      backgroundColor: 'rgba(255,255,255,.75)',
+      fontSize: 20,
+      color: 'black',
+      margin: 0,
+      alignContent: 'center',
+      textAlign: 'center',
+      padding: 5,     
+      borderWidth: 1,
+      borderColor: 'black'
     },
     title: {
         color: 'black',
