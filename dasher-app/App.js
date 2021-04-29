@@ -15,6 +15,7 @@ import { SaveDriveScreen } from './src/SaveDriveScreen'
 import { CommentsScreen } from './src/CommentsScreen'
 import { ViewDrivesScreen } from './src/ViewDrivesScreen'
 import { StatisticsScreen } from './src/StatisticsScreen'
+import { NewDriveScreen } from './src/NewDriveScreen'
 
 // import { RecommendForm } from './RecommendForm'
 // import ReactDOM from 'react-dom'
@@ -33,10 +34,11 @@ export default function App () {
           options={{headerLeft: null, headerBackTitle: 'Log out'}}/>
         <Stack.Screen name="Recommendations" component={RecommendScreen} 
           options={{title: 'Get Recommendation'}}/>
+        <Stack.Screen name="NewDrive" component={NewDriveScreen} 
+          options={{title: 'New Drive'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
-          options={{title: 'Record Drive'}}/>
-        <Stack.Screen name="ViewDrives" component={ViewDrivesScreen}
-          options={{title: 'View Drives'}}/>  
+          //Nulling headerLeft removes navigation back, since info shouldn't be changed
+          options={{/*headerLeft: null,*/ title: 'Record Drive'}}/>
         <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
         <Stack.Screen name="Comments" component={CommentsScreen}
           options={{title: 'Comments'}}/>
@@ -184,5 +186,6 @@ Old background green: '#1ddf6e'
 New background green: '#66cc99'
 Button blue: '#80add6'
 Textbox half-opacity white: 'rgba(255,255,255,.5)'
+Button half-opacity black: 'rgba(150,150,150,.5)'
 Old reject-drive red: `rgba(203, 59, 59, 1)`
 */

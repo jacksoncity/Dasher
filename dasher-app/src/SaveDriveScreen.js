@@ -67,8 +67,12 @@ export function SaveDriveScreen ({ navigation }) {
             />
           }/>
         <TouchableOpacity onPress={handleSubmit(saveComments)} style={{backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+          <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save Comment</Text>
         </TouchableOpacity> 
+
+        <TouchableOpacity onPress={() => navigation.navigate('Main')} style={{backgroundColor: 'rgba(150,150,150,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>  Back to Main  </Text>
+        </TouchableOpacity>
       </View>
     )
   }

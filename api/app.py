@@ -168,9 +168,9 @@ def get_recommendation():
         message['message'] = 'Not enough recorded drives to make a predictions'
         return jsonify({"message": message}), 201
     elif(drive_len < 50):
-        message['message'] = 'Prediction may be innacurate'
+        message['message'] = 'Based on < 50 drives; prediction may be innacurate'
     else:
-        message['message'] = 'None'
+        message['message'] = ' '
 
     #Getting the user's rate to send back
     overallRate = 0
@@ -236,6 +236,8 @@ def accept_drive():
     #committing the drive here so it doesn't interfere with previous loop
     db.session.add(to_save)
     db.session.commit()
+
+    return "done", 201
 
 '''
 Method to actually store the times from the drive passed by the user through the 'Record Drive' function
@@ -360,49 +362,51 @@ def get_statistics():
     current_user = current_user[0]
 
     stat_list = Drive.query.filter_by(username=current_user.username).all()
-    statistics = []
+    #statistics = []
 
     def get_pay():
         overallPay = 0
         for stat in stat_list:
             overallPay = overallPay + stat.pay
 
-        message = str(round(overallPay, 2))
-        return jsonify({'message': message})
+        return str(round(overallPay, 2))
         
     def get_distance():
         overallDis = 0
         for stat in stat_list:
             overallDis = overallDis + stat.distance
 
-        message = str(round(overallDis, 2))
-        return jsonify({'message': message})
+        return str(round(overallDis, 2))
    
     def get_trips():
-        message = str(len(stat_list))
-        return jsonify({'message': message})
+        return str(len(stat_list))
 
     def get_delivTime():
         overallDelivTime = 0
         for stat in stat_list:
-            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60) #end and start are NULL so can't be typed need to fix
+            overallDelivTime = overallDelivTime + ((stat.end - stat.start).total_seconds() / 60)
         trips = len(stat_list)
         avgDelivTime = overallDelivTime / trips
 
-        message = str(round(avgDelivTime, 2))
-        return jsonify({'message': message})
+        return str(round(avgDelivTime, 2))
 
-    def get_rate():
-        
+    def get_rate():       
         overallRate = 0
         for stat in stat_list:
-            overallRate = overallRate + stat.rate #rate=NULL for some reason therefore can't be typed need to figure out why
+            overallRate = overallRate + stat.rate
         trips = len(stat_list)
         avgRate = overallRate/trips
 
-        message = str(round(avgRate, 2))
-        
-        return jsonify({'message': message})
+        return str(round(avgRate, 2))
+
+    message = {}
+    message["pay"] = get_pay()
+    message["distance"] = get_distance()
+    message["trips"] = get_trips()
+    message["avgTime"] = get_delivTime()
+    message["avgRate"] = get_rate()
+
+    return jsonify({'message': message}), 201
 
 '''
     statistics.append({
@@ -590,11 +594,11 @@ def delete_drive():
     to_delete = Drive.query.filter_by(id=input_data['id']).first()
 
     if (to_delete == None):
-        return jsonify({'message': 'could not delete comment'})
+        return jsonify({'message': 'could not delete drive'})
     else:
         db.session.delete(to_delete)
         db.session.commit()
-        return jsonify({'message': 'comment deleted'}), 201
+        return jsonify({'message': 'drive deleted'}), 201
 
 '''
 This method is just to put in dummy data so that it can be used for testing and such things like that
