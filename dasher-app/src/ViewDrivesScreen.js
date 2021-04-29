@@ -3,7 +3,7 @@ import React, { useEffect, useState, Component } from 'react'
 import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
 import { Trash2 } from 'react-feather';
 
-export function CommentsScreen ({ navigation }) {
+export function ViewDrivesScreen ({ navigation }) {
   const [scrollList, setScrollList] = useState({})
 
     useEffect ( () => {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 150,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     backgroundColor: 'white',
     color: 'black',
     borderRadius: 5,

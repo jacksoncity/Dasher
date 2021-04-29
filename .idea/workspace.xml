@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="478d4a3d-119b-4cbc-8ad5-ab662ba44f83" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/api/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/api/database.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dasher-app/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/dasher-app/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dasher-app/src/CommentsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/dasher-app/src/CommentsScreen.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1rpFjsb9Hon8veEerNjrYktLvCg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="478d4a3d-119b-4cbc-8ad5-ab662ba44f83" name="Default Changelist" comment="" />
+      <created>1619665264808</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1619665264808</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="0" y="23" width="982" height="708" key="SettingsEditor" timestamp="1619665344407">
+      <screen x="0" y="23" width="1280" height="708" />
+    </state>
+    <state x="0" y="23" width="982" height="708" key="SettingsEditor/0.23.1280.708@0.23.1280.708" timestamp="1619665344407" />
+  </component>
+</project>
