@@ -79,7 +79,7 @@ export function StatisticsScreen ({ navigation }) {
       backgroundColor: 'white',
       // marginHorizontal: 10,
       marginVertical: 15,
-      marginTop: 25,
+      marginTop: 30,
       //borderColor: 'gray',
         borderWidth: 1,
       paddingHorizontal: 10,
