@@ -98,7 +98,7 @@ export function StatisticsScreen ({ navigation }) {
       margin: 0,
       alignContent: 'center',
       textAlign: 'center',
-      padding: 5,
+      padding: 7,
       borderWidth: 1,
       borderColor: 'black'
     },
@@ -109,7 +109,7 @@ export function StatisticsScreen ({ navigation }) {
       margin: 0,
       alignContent: 'center',
       textAlign: 'center',
-      padding: 5,     
+      padding: 7,     
       borderWidth: 1,
       borderColor: 'black'
     },
