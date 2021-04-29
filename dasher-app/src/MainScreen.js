@@ -62,7 +62,7 @@ export function MainScreen ({ navigation }) {
     buttonBasic: {
         backgroundColor: 'white',
         // marginHorizontal: 10,
-        // marginVertical: 15,
+        marginVertical: 15,
         marginTop: 10,
         //borderColor: 'gray',
           borderWidth: 1,
@@ -80,7 +80,7 @@ export function MainScreen ({ navigation }) {
         paddingHorizontal: 5,
         borderRadius: 7
     },
-    buttonSpecial: { //Currently identical to buttonBasic
+    buttonSpecial: {
         //backgroundColor: '#8ebce7',
         //backgroundColor: '#94bfe7',
         //backgroundColor: '#072A42',

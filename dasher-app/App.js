@@ -181,5 +181,6 @@ Old background green: '#1ddf6e'
 New background green: '#66cc99'
 Button blue: '#80add6'
 Textbox half-opacity white: 'rgba(255,255,255,.5)'
+Button half-opacity black: 'rgba(150,150,150,.5)'
 Old reject-drive red: `rgba(203, 59, 59, 1)`
 */

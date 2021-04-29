@@ -14,7 +14,8 @@ export function RecommendScreen({ navigation }) {
     //Variables to print prediction and message
     const [newPrediction, setNewPrediction] = useState(`__`);
     const [newMessage, setNewMessage] = useState(``);
-    const [newPercentage, setNewPercentage] = useState(`__`);
+    const [newPercentage, setNewPercentage] = useState(``);
+    const [newRate, setNewRate] = useState('__')
     
     const onSubmit = async (data) => { 
       // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -43,7 +44,8 @@ export function RecommendScreen({ navigation }) {
       //Set variables for later printing
       setNewPrediction(Math.round(prediction * 100) / 100)
       setNewMessage(message)
-      setNewPercentage(Math.round(rate / prediction) * 100)
+      setNewRate((Math.round(rate * 100) / 100))
+      setNewPercentage(Math.round((((prediction / rate) * 100) * 10)) / 10)
     }
   
     function refresh() {
@@ -129,9 +131,8 @@ export function RecommendScreen({ navigation }) {
         </View>
      
         <Text style={styles.text}>{`Prediction: $${newPrediction}/hour`}</Text>
-        <Text style={styles.text}>{`(${newPercentage}% of your average rate)`}</Text>
-        <Text style={styles.label}>{`Notes: ${newMessage}`}</Text>
-        <Text style={styles.label}>  </Text>
+        <Text style={styles.label}>{`(${newPercentage}% of your average rate $${newRate})`}</Text>
+        <Text style={styles.label}>{`${newMessage}`}</Text>
   
         <View>
         <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
@@ -204,5 +205,11 @@ export function RecommendScreen({ navigation }) {
         padding: 7,
         paddingHorizontal: 20,
         borderRadius: 5
+    },
+    text: {
+      fontSize: 20,
+      color: 'black',
+      margin: 5,
+      alignContent: 'center'
     },
 })
