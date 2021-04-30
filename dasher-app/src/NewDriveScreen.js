@@ -112,7 +112,7 @@ export function NewDriveScreen({ navigation }) {
             marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
             borderWidth: 1, borderRadius: 20}}>
             <Text style={{fontSize: 17, color: 'black', marginHorizontal: 10, 
-            marginVertical: 10, paddingHorizontal: 5}}>Accept Drive</Text>    
+            marginVertical: 10, paddingHorizontal: 5}}>Begin Drive</Text>    
         </TouchableOpacity>
   
         <TouchableOpacity onPress={() => refresh()}
@@ -120,7 +120,7 @@ export function NewDriveScreen({ navigation }) {
             marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
             borderWidth: 1, borderRadius: 20, borderColor: 'black'}}>
             <Text style={{fontSize: 17, color: 'black', marginHorizontal: 10, 
-            marginVertical: 10, paddingHorizontal: 5}} >  Clear Form</Text>
+            marginVertical: 10, paddingHorizontal: 5}} >Clear Form</Text>
         </TouchableOpacity>
         </View>
     

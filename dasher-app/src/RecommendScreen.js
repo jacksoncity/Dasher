@@ -16,6 +16,24 @@ export function RecommendScreen({ navigation }) {
     const [newMessage, setNewMessage] = useState(``);
     const [newPercentage, setNewPercentage] = useState(`__`);
     const [newRate, setNewRate] = useState('__')
+
+    useEffect ( () => {
+      async function fetchData() {
+        const response = await fetch("http://localhost:5000/get_statistics")
+        .then((response) => response.json())
+        .then(data => {
+            return data;
+        });
+        console.log("Rate: " + response.message.avgRate)
+
+        const avgRate = response.message.avgRate
+        console.log("Rate received")
+    
+        //Set rate variable for later printing
+        setNewRate(avgRate)
+      }
+      fetchData();
+    }, [])
     
     const onSubmit = async (data) => { 
       // Once handleSubmit validates the inputs in onPress in button, this code is executed
