@@ -47,6 +47,7 @@ export function SaveDriveScreen ({ navigation }) {
                 props.onChange(value)
               }} 
               ref={restaurantInputRef}
+              maxLength={30}
             />
           }/>
         <Text style={{textAlign: 'left'}}>Comments</Text>
@@ -64,6 +65,7 @@ export function SaveDriveScreen ({ navigation }) {
               }} 
               multiline={true}
               ref={commentText}
+              maxLength={125}
             />
           }/>
         <TouchableOpacity onPress={handleSubmit(saveComments)} style={{backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>

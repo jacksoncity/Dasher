@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   textbox: {
     backgroundColor: 'rgba(255,255,255,.5)',
       height: 60,
-      width: 250,
+      width: 350,
       marginTop: 10,
       // marginBottom: 5,
       borderRadius: 5,

@@ -1,10 +1,11 @@
 import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
-import { StatusBar } from 'expo-status-bar'
+// import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { StyleSheet, StatusBar, TouchableOpacity, FlatList} from 'react-native'
+import { NavigationContainer, NavigationHelpersContext } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+// import { Home, Navigation } from 'react-feather';
 
 import { LoginScreen } from './src/LoginScreen'
 import { SignupScreen } from './src/SignupScreen'
@@ -17,16 +18,15 @@ import { ViewDrivesScreen } from './src/ViewDrivesScreen'
 import { StatisticsScreen } from './src/StatisticsScreen'
 import { NewDriveScreen } from './src/NewDriveScreen'
 
-// import { RecommendForm } from './RecommendForm'
-// import ReactDOM from 'react-dom'
-// import { State } from 'react-native-gesture-handler'
-
 const Stack = createStackNavigator()
 
 export default function App () {
+
+
   return (
-	<NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+	  <NavigationContainer>
+      <Stack.Navigator 
+          initialRouteName="Home" >
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Main" component={MainScreen} 
@@ -39,12 +39,14 @@ export default function App () {
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
           //Nulling headerLeft removes navigation back, since info shouldn't be changed
           options={{/*headerLeft: null,*/ title: 'Record Drive'}}/>
-        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
-        <Stack.Screen name="Comments" component={CommentsScreen}
-          options={{title: 'Comments'}}/>
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen}
+          options={{title: 'Add Comments'}}/>
+        <Stack.Screen name="Comments" component={CommentsScreen} />
+        <Stack.Screen name="ViewDrives" component={ViewDrivesScreen}
+          options={{title: 'View Drives'}}/>
         <Stack.Screen name="Statistics" component={StatisticsScreen} />
       </Stack.Navigator>
-  </NavigationContainer>
+    </NavigationContainer>
   )
 }
 

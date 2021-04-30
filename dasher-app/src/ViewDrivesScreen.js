@@ -8,75 +8,37 @@ export function ViewDrivesScreen ({ navigation }) {
 
     useEffect ( () => {
       async function fetchData() {
-        const response = await fetch("http://localhost:5000/get_comments", {
+        const response = await fetch("http://localhost:5000/get_drives", {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
           }
         }).then((response) => response.json())
-        const list = response.comments // an array of comments (restaurant name and comment)
+        const list = response.drives // an array of comments (restaurant name and comment)
         console.log(list)
 
         setScrollList(list)
       }
       fetchData();
     }, [])
-    // if the text is longer than what can be displayed, cut it short with ...
-    const deleteItem = async (id) => {
-      // send back the whole item and it will delete that comment
-      const toDelete = (scrollList.filter(function(item){
-        return item.comment_id == id;
-      }).map(function({comment, comment_id, restaurant_name}){
-         return {comment, comment_id, restaurant_name};
-      })).pop()
 
-      const response = await fetch("http://localhost:5000/delete_comment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(toDelete)
-      }).then((response) => response.json())
-      if (response.message == "comment deleted") {
-        alert("Comment successfully deleted")
-        setScrollList(scrollList.filter(function(item){
-          return item.comment_id != id;
-        }).map(function({comment, comment_id, restaurant_name}){
-          return {comment, comment_id, restaurant_name};
-        }))
-      } else {
-        alert("Failed to delete comment")
-      }
-    }
+    const [totalTime, setTT] = useState()
 
     return (
       <View style={styles.container}>
       <FlatList
-          keyExtractor = {item => item.comment_id.toString()}  
+          keyExtractor = {item => item.id.toString()}  
           data={scrollList}
           renderItem = {item => (
             <TouchableOpacity 
               style={styles.textbox} >
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.restaurant} onPress={() => navigation.navigate('Main')}>{item.item.restaurant_name}</Text>
-                <TouchableOpacity onPress={() => deleteItem(item.item.comment_id)}>
-                  <Trash2
-                    name="trash-2"
-                    color='black'
-                    size={15}
-                  />
-                </TouchableOpacity>
+                <Text style={styles.driveTitle} onPress={() => navigation.navigate('Main')}>{item.item.restaurant_name} - {item.item.start.substr(8, 3)} {item.item.start.substr(5, 2)}, {item.item.start.substr(12, 4)}</Text>
               </View>
-              <Text style={styles.comment}>{item.item.comment}</Text>
+              <Text style={styles.comment}>Overall Time: {(Math.abs(item.item.end.substr(17, 2)-item.item.start.substr(17,2)))}:{(Math.abs(item.item.end.substr(20, 2)-item.item.start.substr(20,2)))}:{(Math.abs(item.item.end.substr(23, 2) - item.item.start.substr(23, 2)))}</Text>
+              <Text style={styles.comment}>Pay: ${item.item.pay}</Text>
             </TouchableOpacity>
             )} />
-      <TouchableOpacity
-       onPress={() => navigation.navigate('SaveDrive')} 
-      >
-        <Text style={styles.button}>
-          Add comment
-        </Text>
-      </TouchableOpacity>
       </View>
     );
 }
@@ -110,8 +72,8 @@ const styles = StyleSheet.create({
   },
   textbox: {
     backgroundColor: 'rgba(255,255,255,.5)',
-      height: 60,
-      width: 250,
+      height: 80,
+      width: 350,
       marginTop: 10,
       // marginBottom: 5,
       borderRadius: 5,
@@ -129,13 +91,16 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20,
       borderRadius: 5
   },
-  restaurant: {
+  driveTitle: {
     fontSize: 14,
     color: 'black',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginBottom: 5,
+    marginTop: 5
   },
   comment: {
     fontSize: 12,
-    color: 'black'
+    color: 'black',
+    marginBottom: 5
   }
 })
