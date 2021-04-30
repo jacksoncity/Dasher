@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState, Component } from 'react'
 import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
-import { Trash2 } from 'react-feather';
+import { Edit2, Trash2 } from 'react-feather';
 
 export function CommentsScreen ({ navigation }) {
   const [scrollList, setScrollList] = useState({})
@@ -21,7 +21,32 @@ export function CommentsScreen ({ navigation }) {
       }
       fetchData();
     }, [])
-    // if the text is longer than what can be displayed, cut it short with ...
+/**
+    const editItem = async (id) => {
+      const toDelete = (scrollList.filter(function(item){
+        return item.comment_id == id;
+      }).map(function({comment, comment_id, restaurant_name}){
+         return {comment, comment_id, restaurant_name};
+      })).pop()
+
+      const response = await fetch("http://localhost:5000/edit_comment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(toDelete)
+      }).then((response) => response.json())
+      if (response.message == "comment deleted") {
+        alert("Comment successfully deleted")
+        setScrollList(scrollList.filter(function(item){
+          return item.comment_id != id;
+        }).map(function({comment, comment_id, restaurant_name}){
+          return {comment, comment_id, restaurant_name};
+        }))
+      }
+    }
+    */
+
     const deleteItem = async (id) => {
       // send back the whole item and it will delete that comment
       const toDelete = (scrollList.filter(function(item){
@@ -59,6 +84,13 @@ export function CommentsScreen ({ navigation }) {
               style={styles.textbox} >
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={styles.restaurant} onPress={() => navigation.navigate('Main')}>{item.item.restaurant_name}</Text>
+                <TouchableOpacity onPress={() => editItem(item.item.comment_id)}>
+                  <Edit2
+                    name="trash-2"
+                    color='black'
+                    size={15}
+                  />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => deleteItem(item.item.comment_id)}>
                   <Trash2
                     name="trash-2"

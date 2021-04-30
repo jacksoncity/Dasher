@@ -34,7 +34,7 @@ export default function App () {
           //Nulling headerLeft removes navigation back to login screen
           options={{headerLeft: null}}/>
         <Stack.Screen name="Recommendations" component={RecommendScreen} 
-          options={{title: 'Get Recommendation', headerTintColor: 'black'}}/>
+          options={{title: 'Get Recommendations', headerTintColor: 'black'}}/>
         <Stack.Screen name="NewDrive" component={NewDriveScreen} 
           options={{title: 'New Drive', headerTintColor: 'black'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
