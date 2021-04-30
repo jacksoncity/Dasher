@@ -84,13 +84,7 @@ export function CommentsScreen ({ navigation }) {
               style={styles.textbox} >
               <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={styles.restaurant} onPress={() => navigation.navigate('Main')}>{item.item.restaurant_name}</Text>
-                <TouchableOpacity onPress={() => editItem(item.item.comment_id)}>
-                  <Edit2
-                    name="trash-2"
-                    color='black'
-                    size={15}
-                  />
-                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => deleteItem(item.item.comment_id)}>
                   <Trash2
                     name="trash-2"
