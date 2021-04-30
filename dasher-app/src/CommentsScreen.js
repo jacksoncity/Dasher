@@ -103,7 +103,9 @@ export function CommentsScreen ({ navigation }) {
             </TouchableOpacity>
             )} />
       <TouchableOpacity
-       onPress={() => navigation.navigate('SaveDrive')} 
+      //To debug: Why does new comment not appear when navigating back from AddComment?
+       //onPress={() => navigation.navigate('AddComment')}
+       onPress={() => navigation.navigate('SaveDrive')}
       >
         <Text style={styles.button}>
           Add comment

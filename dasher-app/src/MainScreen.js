@@ -16,6 +16,7 @@ export function MainScreen ({ navigation }) {
 
         <Text style={styles.title}>
         Main Menu</Text>
+        
         <TouchableOpacity
           onPress={() => navigation.navigate('Recommendations')}
           style={styles.buttonBasic}>
@@ -36,7 +37,7 @@ export function MainScreen ({ navigation }) {
         <TouchableOpacity
           onPress={ () => navigation.navigate('Comments')}
           style={styles.buttonBasic}>
-          <Text style={styles.button}>View/edit comments</Text>
+          <Text style={styles.button}>         Comments         </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => logout()}
