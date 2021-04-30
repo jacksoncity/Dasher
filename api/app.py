@@ -166,6 +166,7 @@ def get_recommendation():
     #Creating messages based on how many drives the user has made
     if(drive_len < 10):
         message['message'] = 'Not enough recorded drives to make a predictions'
+        message['rate'] = 0
         return jsonify({"message": message}), 201
     elif(drive_len < 50):
         message['message'] = 'Based on < 50 drives; prediction may be innacurate'
