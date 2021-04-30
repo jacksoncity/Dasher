@@ -14,6 +14,26 @@ export function RecommendScreen({ navigation }) {
     //Variables to print prediction and message
     const [newPrediction, setNewPrediction] = useState(`__`);
     const [newMessage, setNewMessage] = useState(``);
+    const [newPercentage, setNewPercentage] = useState(`__`);
+    const [newRate, setNewRate] = useState('__')
+
+    useEffect ( () => {
+      async function fetchData() {
+        const response = await fetch("http://localhost:5000/get_statistics")
+        .then((response) => response.json())
+        .then(data => {
+            return data;
+        });
+        console.log("Rate: " + response.message.avgRate)
+
+        const avgRate = response.message.avgRate
+        console.log("Rate received")
+    
+        //Set rate variable for later printing
+        setNewRate(avgRate)
+      }
+      fetchData();
+    }, [])
     
     const onSubmit = async (data) => { 
       // Once handleSubmit validates the inputs in onPress in button, this code is executed
@@ -36,11 +56,35 @@ export function RecommendScreen({ navigation }) {
       
       const prediction = response.message.prediction
       const message = response.message.message
-      console.log("message: " + message+ ", prediction: " + prediction)
+      const rate = response.message.rate
+      console.log("message: " + message+ ", prediction: " + prediction + ", rate: " + rate)
   
       //Set variables for later printing
       setNewPrediction(Math.round(prediction * 100) / 100)
       setNewMessage(message)
+      setNewRate((Math.round(rate * 100) / 100))
+      setNewPercentage(Math.round((((prediction / rate) * 100) * 10)) / 10)
+    }
+
+    const onAccept = async (data) => {
+      // Once handleSubmit validates the inputs in onPress in button, this code is executed
+      /**
+      const json = JSON.parse(JSON.stringify(data))
+      const restaurant = json["restaurant"]
+      const distance = json["distance"]
+      const pay = json["pay"]
+      const drive = {restaurant, distance, pay}
+      console.log(drive)
+      const response = await fetch("http://localhost:5000/accept_drive", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(drive)
+      })
+      */
+      console.log("Drive sent")
+      navigation.navigate('RecordDrive')
     }
   
     function refresh() {
@@ -117,20 +161,17 @@ export function RecommendScreen({ navigation }) {
           <TouchableOpacity
             // handleSubmit validates inputs before calling onSubmit
             onPress={handleSubmit(onSubmit)}
-  
-            //TO DO: OnPress will also enable the accept and reject drive buttons
-  
             style={styles.buttonSpecial}>
           <Text style={ styles.button}>Get Recommendation</Text>
         </TouchableOpacity>
         </View>
      
         <Text style={styles.text}>{`Prediction: $${newPrediction}/hour`}</Text>
-        <Text style={styles.label}>{`Notes: ${newMessage}`}</Text>
-        <Text style={styles.label}>  </Text>
+        <Text style={styles.label}>{`(${newPercentage}% of your average rate $${newRate})`}</Text>
+        <Text style={styles.label}>{`${newMessage}`}</Text>
   
         <View>
-        <TouchableOpacity onPress={() => navigation.navigate('RecordDrive')}
+        <TouchableOpacity onPress={handleSubmit(onAccept)}
             style={{backgroundColor: 'white',
             marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5,
             borderWidth: 1, borderRadius: 20}}>
@@ -166,6 +207,20 @@ export function RecommendScreen({ navigation }) {
         marginVertical: 10,
         borderRadius: 10
     },
+    buttonSpecial: {
+      //backgroundColor: '#8ebce7',
+      //backgroundColor: '#94bfe7',
+      //backgroundColor: '#072A42',
+      backgroundColor: 'white',
+      color: 'white',
+      fontSize: 20,
+      marginHorizontal: 10,
+      marginVertical: 15,
+      borderColor: 'black',
+        borderWidth: 1,
+      paddingHorizontal: 5,
+      borderRadius: 7
+  },
     textbox: {
         backgroundColor: 'rgba(255,255,255,.5)',
           height: 40,
@@ -186,5 +241,11 @@ export function RecommendScreen({ navigation }) {
         padding: 7,
         paddingHorizontal: 20,
         borderRadius: 5
+    },
+    text: {
+      fontSize: 20,
+      color: 'black',
+      margin: 5,
+      alignContent: 'center'
     },
 })

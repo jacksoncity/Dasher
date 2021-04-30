@@ -12,7 +12,9 @@ import { MainScreen } from './src/MainScreen'
 import { RecommendScreen } from './src/RecommendScreen'
 import { RecordDriveScreen } from './src/RecordDriveScreen'
 import { SaveDriveScreen } from './src/SaveDriveScreen'
+import { CommentsScreen } from './src/CommentsScreen'
 import { StatisticsScreen } from './src/StatisticsScreen'
+import { NewDriveScreen } from './src/NewDriveScreen'
 
 // import { RecommendForm } from './RecommendForm'
 // import ReactDOM from 'react-dom'
@@ -25,21 +27,28 @@ export default function App () {
 	<NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} 
+          options={{headerTintColor: 'black'}}/>
         <Stack.Screen name="Main" component={MainScreen} 
           //Nulling headerLeft removes navigation back to login screen
-          options={{headerLeft: null, headerBackTitle: 'Log out'}}/>
+          options={{headerLeft: null}}/>
         <Stack.Screen name="Recommendations" component={RecommendScreen} 
-          options={{title: 'Get Recommendation'}}/>
+          options={{title: 'Get Recommendation', headerTintColor: 'black'}}/>
+        <Stack.Screen name="NewDrive" component={NewDriveScreen} 
+          options={{title: 'New Drive', headerTintColor: 'black'}}/>
         <Stack.Screen name="RecordDrive" component={RecordDriveScreen} 
-          options={{title: 'Record Drive'}}/>
-        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} />
-        <Stack.Screen name="Statistics" component={StatisticsScreen} />
+          //Nulling headerLeft removes navigation back, since info shouldn't be changed
+          options={{/*headerLeft: null,*/ title: 'Record Drive'}}/>
+        <Stack.Screen name="SaveDrive" component={SaveDriveScreen} 
+          options={{headerTintColor: 'black'}}/>
+        <Stack.Screen name="Comments" component={CommentsScreen}
+          options={{title: 'Comments', headerTintColor: 'black'}}/>
+        <Stack.Screen name="Statistics" component={StatisticsScreen} 
+          options={{headerTintColor: 'black'}}/>
       </Stack.Navigator>
   </NavigationContainer>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -179,5 +188,6 @@ Old background green: '#1ddf6e'
 New background green: '#66cc99'
 Button blue: '#80add6'
 Textbox half-opacity white: 'rgba(255,255,255,.5)'
+Button half-opacity black: 'rgba(150,150,150,.5)'
 Old reject-drive red: `rgba(203, 59, 59, 1)`
 */

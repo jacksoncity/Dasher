@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import { Image, StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import car from './assets/car3.png';
 
 // Main menu screen
 export function MainScreen ({ navigation }) {
@@ -8,9 +9,11 @@ export function MainScreen ({ navigation }) {
       /*await*/ fetch("http://localhost:5000/logout")
       navigation.navigate('Login')
     }
-  
+   
     return (
       <View style={styles.container}>
+        <Image source={car} style={{ width: 150, height: 70 }} />  
+
         <Text style={styles.title}>
         Main Menu</Text>
         <TouchableOpacity
@@ -18,20 +21,22 @@ export function MainScreen ({ navigation }) {
           style={styles.buttonBasic}>
           <Text style={styles.button}>Get recommendation</Text>
         </TouchableOpacity>
+        
         <TouchableOpacity
-          onPress={() => navigation.navigate('RecordDrive')}
+          onPress={() => navigation.navigate('NewDrive')}
           style={styles.buttonBasic}>
           <Text style={styles.button}>  Record a new drive  </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => navigation.navigate('Statistics')}
           style={styles.buttonBasic}>
-          <Text style={styles.button}>      View statistics      </Text>
+          <Text style={styles.button}>  Stats & past drives  </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          // onPress={() => navigation.navigate('Recommendations')}
+          onPress={ () => navigation.navigate('Comments')}
           style={styles.buttonBasic}>
-          <Text style={styles.button}>View/edit past drives</Text>
+          <Text style={styles.button}>View/edit comments</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => logout()}
@@ -58,8 +63,9 @@ export function MainScreen ({ navigation }) {
     },
     buttonBasic: {
         backgroundColor: 'white',
-        marginHorizontal: 10,
+        // marginHorizontal: 10,
         marginVertical: 15,
+        marginTop: 10,
         //borderColor: 'gray',
           borderWidth: 1,
         paddingHorizontal: 10,
@@ -76,7 +82,7 @@ export function MainScreen ({ navigation }) {
         paddingHorizontal: 5,
         borderRadius: 7
     },
-    buttonSpecial: { //Currently identical to buttonBasic
+    buttonSpecial: {
         //backgroundColor: '#8ebce7',
         //backgroundColor: '#94bfe7',
         //backgroundColor: '#072A42',

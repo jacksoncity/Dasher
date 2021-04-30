@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import React, { useEffect, useState, Component } from 'react'
-import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import { Image, StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import car from './assets/car3.png';
 
 // Login screen
 export function LoginScreen ({ navigation }) {
@@ -47,6 +48,8 @@ export function LoginScreen ({ navigation }) {
   
     return (
       <View style={styles.container}>
+        <Image source={car} style={{ width: 150, height: 70 }} /> 
+
         <View>
           <Text style={styles.title}>Welcome!</Text>
           <Text style={styles.label}>Username</Text>

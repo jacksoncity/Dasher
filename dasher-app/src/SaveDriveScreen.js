@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
-// import React, { useEffect, useState, Component } from 'react'
+import React, { useEffect, useState, Component } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 
 export function SaveDriveScreen ({ navigation }) {
@@ -11,10 +11,10 @@ export function SaveDriveScreen ({ navigation }) {
     const saveComments = async (data) => {
       // call save comments api here
       const json = JSON.parse(JSON.stringify(data))
+      console.log(json)
       const restaurant_name = json["restaurant_name"]
       const comment = json["comment"]
       const comm = {restaurant_name, comment}
-      console.log(JSON.stringify(comm))
       const response = await fetch("http://localhost:5000/add_comment", {
         method: "POST",
         headers: {
@@ -22,11 +22,13 @@ export function SaveDriveScreen ({ navigation }) {
         },
         body: JSON.stringify(comm)
       })
-  
       console.log(response);
-  
-      // alert('Comments successfully saved!')
-      // navigation.navigate('Main')
+      if (response.status === 201) {
+        alert('Comments successfully saved!')
+        navigation.navigate('Main')
+      } else {
+          alert('Error in comment saving... Please make sure you filled in both fields to save comment.')
+      }
     }
   
     return (
@@ -65,8 +67,12 @@ export function SaveDriveScreen ({ navigation }) {
             />
           }/>
         <TouchableOpacity onPress={handleSubmit(saveComments)} style={{backgroundColor: 'white', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
-          <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save</Text>
+          <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>Save Comment</Text>
         </TouchableOpacity> 
+
+        <TouchableOpacity onPress={() => navigation.navigate('Main')} style={{backgroundColor: 'rgba(150,150,150,.5)', marginHorizontal: 5, marginVertical: 10, paddingHorizontal: 5, borderWidth: 1, borderRadius: 20}}>
+          <Text style={{fontSize: 20, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 5, color: 'black'}}>  Back to Main  </Text>
+        </TouchableOpacity>
       </View>
     )
   }
