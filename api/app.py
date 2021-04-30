@@ -527,6 +527,7 @@ This is a method that will return all of the comments that the current user has 
 the attributes comment, commment_id, and restuarant_name
 '''
 @app.route('/get_comments', methods=['GET'])
+@cross_origin()
 def get_comments():
 
     #Find current user
@@ -553,6 +554,7 @@ the attributes "id", "start", "restaurant_arrival", "restaurant_leave", "end", "
     "distance", "rate", "restaurant_name"
 '''
 @app.route('/get_drives', methods=['GET'])
+@cross_origin()
 def get_drives():
     
     #Find current user

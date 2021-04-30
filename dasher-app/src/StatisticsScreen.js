@@ -52,7 +52,7 @@ export function StatisticsScreen ({ navigation }) {
 
         <View>
         <TouchableOpacity
-          //onPress={ () => navigation.navigate('Drives')}
+          onPress={ () => navigation.navigate('ViewDrives')}
           style={styles.buttonBasic}>
           <Text style={styles.button}>View/edit past drives</Text>
         </TouchableOpacity>

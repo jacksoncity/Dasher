@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler'
-import { useForm, Controller } from 'react-hook-form'
 import React, { useEffect, useState, Component } from 'react'
 import { StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
 import { Trash2 } from 'react-feather';
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 150,
     marginTop: 10,
-    marginBottom: 5,
+    marginBottom: 10,
     backgroundColor: 'white',
     color: 'black',
     borderRadius: 5,
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
   textbox: {
     backgroundColor: 'rgba(255,255,255,.5)',
       height: 60,
-      width: 250,
+      width: 350,
       marginTop: 10,
       // marginBottom: 5,
       borderRadius: 5,

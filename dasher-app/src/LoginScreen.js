@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler'
 import { useForm, Controller } from 'react-hook-form'
 import React, { useEffect, useState, Component } from 'react'
-import { Image, StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, FlatList} from 'react-native'
+import { Image, StyleSheet, Button, Text, View, Alert, TextInput, TouchableOpacity, StatusBar, Platform,} from 'react-native'
 import car from './assets/car3.png';
+// import * as SplashScreen from 'expo-splash-screen';
+// import * as Font from 'expo-font';
 
 // Login screen
 export function LoginScreen ({ navigation }) {
@@ -45,10 +47,38 @@ export function LoginScreen ({ navigation }) {
     }
   
     const onError = (errors, e) => console.log(errors, e)
+    /** 
+    useEffect(() => {
+      async function prepare() {
+        try {
+          // Keep the splash screen visible while we fetch resources
+          await SplashScreen.preventAutoHideAsync();
+          // Artifically delayed by 2 seconds
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        } catch (e) {
+          console.warn(e);
+        } finally {
+          // Tell the application to render
+          setAppIsReady(true);
+        }
+      }
+      prepare();
+    }, []);
+  
+    const onLayoutRootView = useCallback(async () => {
+      if (appIsReady) {
+        await SplashScreen.hideAsync();
+      }
+    }, [appIsReady]);
+  
+    if (!appIsReady) {
+      return null;
+    }
+    */
   
     return (
       <View style={styles.container}>
-        <Image source={car} style={{ width: 150, height: 70 }} /> 
+        <Image source={car} style={{ width: 150, height: 70, marginTop: 10}} /> 
 
         <View>
           <Text style={styles.title}>Welcome!</Text>

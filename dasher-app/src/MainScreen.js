@@ -12,7 +12,7 @@ export function MainScreen ({ navigation }) {
    
     return (
       <View style={styles.container}>
-        <Image source={car} style={{ width: 150, height: 70 }} />  
+        <Image source={car} style={{ width: 150, height: 70, marginTop:10 }} />  
 
         <Text style={styles.title}>
         Main Menu</Text>
